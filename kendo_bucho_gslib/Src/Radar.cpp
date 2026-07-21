@@ -1,0 +1,82 @@
+#include "Radar.h"
+#include "IWorld.h"
+#include "Actor.h"
+#include "Assets.h"
+
+// レーダーの画面上の表示位置
+const Vector2 RadarPosition{ 16.0f, 20.0f };
+// レーダーの画像サイズ
+const float RadarSize{ 256.0f };
+// レーダーの範囲（プレーヤー位置から-20～20の範囲）
+const float RadarRange{ 20.0f };
+// グラウンドのサイズ
+const float GroundSize{ 21.0f };
+
+// コンストラクタ
+Radar::Radar(IWorld* world) {
+    world_ = world;
+    tag_ = "RadarTag";
+    name_ = "Radar";
+    enable_collider_ = false; // 衝突判定をしない
+}
+
+// 描画
+void Radar::draw_gui() const {
+    // レーダーの背景を描画
+    static const Color back_color{ 1.0f, 1.0f, 1.0f, 0.5f }; // 半透明の指定
+    Graphics::draw_sprite2d(Texture_Radar, RadarPosition, NULL, NULL, &back_color, NULL, 0.0f);
+    // プレーヤーの検索
+    Actor* player = world_->find_actor("Player");
+    // レーダーの座標系に変換する行列
+    Matrix4x4 radar_matrix{ Matrix4x4::identity()};
+    if (player != nullptr) {
+        // プレーヤーの逆行列を取得（プレーヤーの位置を基準とする座標を計算するため）
+        radar_matrix = player->transform().world_to_local_matrix();
+    }
+    // レーダーの上方向をプレーヤーの進行方向に合わせる
+    radar_matrix *= Matrix4x4::rotate_y(180.0f);
+    // グラウンドの外枠を表示
+    for (float i = -GroundSize; i <= GroundSize; i += 1.0f) {
+        // 枠の点の色（水色）
+        static const Color frame_color{ 0.0f, 1.0f, 1.0f, 1.0f };
+        // 4辺の点を描画
+        draw_point(radar_matrix.multiply_point(Vector3{ i, 0.0f, -GroundSize }), frame_color);
+        draw_point(radar_matrix.multiply_point(Vector3{ i, 0.0f,  GroundSize }), frame_color);
+        draw_point(radar_matrix.multiply_point(Vector3{ -GroundSize, 0.0f, i }), frame_color);
+        draw_point(radar_matrix.multiply_point(Vector3{ GroundSize, 0.0f, i }), frame_color);
+    }
+    // 敵の位置を描画
+    for (Actor* enemy : world_->find_actor_with_tag("EnemyTag")) {
+        // 敵の点の色（緑）
+        static const Color enemy_color{ 0.0f, 1.0f, 0.0f, 1.0f };
+        // 敵の点を描画
+        draw_point(radar_matrix.multiply_point(enemy->transform().position()), enemy_color);
+    }
+    // プレーヤーの点の色（赤）
+    static const Color player_color{ 1.0f, 0.0f, 0.0f, 1.0f };
+    // プレーヤーの位置を描画（プレーヤーの点は原点）
+    draw_point(Vector3{ 0.0f, 0.0f, 0.0f }, player_color);
+}
+
+// レーダー内の点を描画
+void Radar::draw_point(const Vector3& position, const Color& color) const {
+    // レーダーの2D座標にして正規化する(表示範囲を-1.0～1.0の座標に変換)
+    Vector2 normalized_position{ position.x / RadarRange,  position.z / RadarRange };
+    // レーダーの範囲外は描画しない
+    if (normalized_position.x < -1.0f || normalized_position.x > 1.0f
+        || normalized_position.y < -1.0f || normalized_position.y > 1.0f) {
+        return;
+    }
+    // レーダーの画像サイズの半分(128ピクセル)
+    const float RadarHalfSize{ RadarSize / 2.0f };
+    // レーダーの画像サイズに合わせて拡大する(-128～128)
+    Vector2 point_position = normalized_position * RadarHalfSize;
+    // 原点（プレーヤーの位置）がレーダーの中央になるように補正(0～256)
+    point_position += Vector2{ RadarHalfSize, RadarHalfSize };
+    // レーダーの表示位置に合わせて平行移動
+    point_position += RadarPosition;
+    // 点の画像の中心位置を補正する（画像の中央が原点になるように）
+    static const Vector2 center{ 4.0f, 4.0f };
+    // 点の画像を描画
+    Graphics::draw_sprite2d(Texture_RadarPoint, point_position, NULL, &center, &color, NULL, 0.0f);
+}
