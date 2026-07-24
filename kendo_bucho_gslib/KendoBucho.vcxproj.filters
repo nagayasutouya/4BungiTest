@@ -183,10 +183,13 @@
     <ClCompile Include="Src\GTLib\Physics\Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Sibungi\Quadtree.cpp">
+    <ClCompile Include="Src\Sibungi\QuadTree.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Sibungi\QuadtreeManager.cpp">
+    <ClCompile Include="Src\Sibungi\QuadTreeManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Sibungi\MotornOrder.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -392,10 +395,13 @@
     <ClInclude Include="Src\GTLib\Physics\Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Sibungi\Quadtree.h">
+    <ClInclude Include="Src\Sibungi\QuadTree.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Sibungi\QuadtreeManager.h">
+    <ClInclude Include="Src\Sibungi\QuadTreeManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Sibungi\MotornOrder.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

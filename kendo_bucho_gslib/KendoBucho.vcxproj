@@ -220,8 +220,9 @@
     <ClCompile Include="Src\Result.cpp" />
     <ClCompile Include="Src\SceneManager.cpp" />
     <ClCompile Include="Src\Score.cpp" />
-    <ClCompile Include="Src\Sibungi\Quadtree.cpp" />
-    <ClCompile Include="Src\Sibungi\QuadtreeManager.cpp" />
+    <ClCompile Include="Src\Sibungi\MotornOrder.cpp" />
+    <ClCompile Include="Src\Sibungi\QuadTree.cpp" />
+    <ClCompile Include="Src\Sibungi\QuadTreeManager.cpp" />
     <ClCompile Include="Src\Timer.cpp" />
     <ClCompile Include="Src\TitleScene.cpp" />
     <ClCompile Include="Src\World.cpp" />
@@ -291,8 +292,9 @@
     <ClInclude Include="Src\SceneManager.h" />
     <ClInclude Include="Src\SceneNull.h" />
     <ClInclude Include="Src\Score.h" />
-    <ClInclude Include="Src\Sibungi\Quadtree.h" />
-    <ClInclude Include="Src\Sibungi\QuadtreeManager.h" />
+    <ClInclude Include="Src\Sibungi\MotornOrder.h" />
+    <ClInclude Include="Src\Sibungi\QuadTree.h" />
+    <ClInclude Include="Src\Sibungi\QuadTreeManager.h" />
     <ClInclude Include="Src\Timer.h" />
     <ClInclude Include="Src\TitleScene.h" />
     <ClInclude Include="Src\World.h" />
