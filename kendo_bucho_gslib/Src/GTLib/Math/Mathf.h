@@ -20,6 +20,9 @@ namespace Mathf {
     int CLAMP(int current, int min, int max);
     //â‘Î’l
     int ABS(int a);
+    //æ
+    int nth_power(int target, int n);
+    float nth_power(float target, int n);
 }
 
 #endif

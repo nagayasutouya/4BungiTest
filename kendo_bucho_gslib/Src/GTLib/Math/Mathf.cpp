@@ -24,3 +24,16 @@ int Mathf::CLAMP(int current, int min, int max) { return Mathf::Max(min, Mathf::
 
 //â‘Î’l
 int Mathf::ABS(int a) { return (a > 0) ? a : -a; }
+
+//æ
+int Mathf::nth_power(int target, int n) {
+	int result = target;
+	for (int i = 1; i < n; i++)result *= target;
+	return result;
+}
+//æ
+float Mathf::nth_power(float target, int n) {
+	float result = target;
+	for (int i = 1; i < n; i++)result *= target;
+	return result;
+}
