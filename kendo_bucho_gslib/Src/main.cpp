@@ -2,7 +2,7 @@
 #include "SceneManager.h"
 #include "GamePlayScene.h"
 #include "TitleScene.h"
-#include "Sibungi/Quadtree.h"
+#include "Sibungi/QuadTreeManager.h"
 
 class MyGame : public Game {
 public:
@@ -14,22 +14,22 @@ public:
         Graphics::initialize(graphics_device_);
         // パイプラインステートの基本設定
         PipelineSetup::setup_defaults();
-        //scene_manager_.add("TitleScene", new TitleScene());
-        //scene_manager_.add("GamePlayScene", new GamePlayScene());
-        //scene_manager_.change("TitleScene");
-        test.morton_order();
+        scene_manager_.add("TitleScene", new TitleScene());
+        scene_manager_.add("GamePlayScene", new GamePlayScene());
+        scene_manager_.change("TitleScene");
+        MotornOrder::instance()->set_space_size(Rect{-20.0f,20.0f,20.0f,-20.0f });
     }
     //　更新
     void update(float delta_time) override {
         // ワールドクラスの更新
         float delta_frame = delta_time * 60.0f;
-        //scene_manager_.update(delta_frame);
+        scene_manager_.update(delta_frame);
     }
     // 描画
     void draw() override {
         // シーン開始
         Graphics::begin_scene(0.5f, 0.5f, 1.0f, 1.0f);
-        //scene_manager_.draw();
+        scene_manager_.draw();
         // シーン終了
         Graphics::end_scene();
     }
@@ -41,7 +41,6 @@ public:
 private:
     // シーンマネージャー
     SceneManager scene_manager_;
-    QuadTree test;
 };
 
 int main() {

@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include <string>
+#include "Sibungi/QuadTreeManager.h"
 
 class Actor;
 
@@ -47,6 +48,7 @@ public:
 private:
     // アクターリスト
     std::list<Actor*> actors_;
+    QuadTreeManager quadtree_;
 };
 
 #endif

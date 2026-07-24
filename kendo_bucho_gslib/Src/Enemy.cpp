@@ -39,6 +39,7 @@ void Enemy::update(float delta_time) {
     mesh_.update(delta_time);
     // s—ñ‚ğİ’è
     mesh_.transform(transform_.local_to_world_matrix());
+    dis_=(world_->find_actor("Player")->transform().position()-transform_.position()).magnitude();
 }
 
 // •`‰æ
@@ -49,6 +50,7 @@ void Enemy::draw() const {
     }
     // Õ“Ë”»’è‚Ì•`‰æ
     collider().draw();
+    printf("%f", dis_);
 }
 
 // Õ“Ëˆ—

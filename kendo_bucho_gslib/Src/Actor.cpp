@@ -78,3 +78,9 @@ Vector3 Actor::velocity() const {
 BoundingSphere Actor::collider() const {
 	return collider_.transform(transform_.local_to_world_matrix());
 }
+
+void Actor::add_space() {
+	QuadTreeObj<Actor>* obj = new QuadTreeObj<Actor>{};
+	obj->obj = this;
+	obj_=obj;
+}

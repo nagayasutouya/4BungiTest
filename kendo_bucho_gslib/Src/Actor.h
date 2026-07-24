@@ -4,6 +4,7 @@
 #include "GTLib/GTLib.h"
 #include <string>
 #include "BoundingSphere.h"
+#include "Sibungi/QuadTreeManager.h"
 
 class IWorld;
 
@@ -48,7 +49,9 @@ public:
 	Vector3 velocity() const;
 	// 衝突判定データを取得
 	BoundingSphere collider() const;
-
+	//空間データ
+	void add_space();
+	QuadTreeObj<Actor>* space()const { return obj_; }
 	// コピー禁止
 	Actor(const Actor& other) = delete;
 	Actor& operator = (const Actor& other) = delete;
@@ -70,6 +73,8 @@ protected:
 	BoundingSphere	collider_;
 	// 死亡フラグ
 	bool			dead_{ false };
+	//空間接続用
+	QuadTreeObj<Actor>* obj_{nullptr};
 };
 
 #endif

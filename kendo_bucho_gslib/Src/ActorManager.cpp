@@ -8,6 +8,7 @@ ActorManager::~ActorManager() {
 
 // アクターの追加
 void ActorManager::add(Actor* actor) {
+    actor->add_space();
     actors_.push_back(actor);
 }
 
@@ -21,7 +22,7 @@ void ActorManager::update(float delta_time) {
 // アクターの遅延更新
 void ActorManager::late_update(float delta_time) {
     for (auto actor : actors_) {
-        actor->late_update(delta_time);
+        quadtree_.change_space(actor->space(),MotornOrder::instance()->morton_order(Rect{actor->transform().position().x-actor->collider().radius,actor->transform().position().z - actor->collider().radius,actor->transform().position().x + actor->collider().radius,actor->transform().position().z + actor->collider().radius }));
     }
 }
 
@@ -48,11 +49,12 @@ void ActorManager::draw_gui() const {
 
 // アクターの衝突判定
 void ActorManager::collide() {
-    for (auto i = actors_.begin(); i != actors_.end(); ++i) {
-        for (auto j = std::next(i); j != actors_.end(); ++j) {
-            (*i)->collide(**j);
-        }
-    }
+    quadtree_.update();
+    //for (auto i = actors_.begin(); i != actors_.end(); ++i) {
+    //    for (auto j = std::next(i); j != actors_.end(); ++j) {
+    //        (*i)->collide(**j);
+    //    }
+    //}
 }
 
 // 死亡しているアクターの削除
