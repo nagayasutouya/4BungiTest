@@ -89,6 +89,7 @@ void GamePlayScene::start() {
     state_ = State::Playing;
     //　シーン終了フラグの初期化
     is_end_ = false;
+    world_.initialze(0,Rect{-20.0f,20.0f,20.0f,-20.0f});
 }
 
 // 更新

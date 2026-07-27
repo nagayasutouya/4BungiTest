@@ -146,3 +146,7 @@ Timer& World::timer() {
 bool World::is_game_over() const {
 	return timer_.is_timeout(); // ŠÔØ‚ê‚©H
 }
+//‰Šú‰»
+void World::initialze(GTUINT layer_num, Rect field_size) {
+	actors_.initialize(layer_num, field_size);
+}

@@ -35,6 +35,7 @@ public:
 	void die();
 	// 衝突しているか？
 	bool is_collide(const Actor& other) const;
+	bool enable_collider()const { return enable_collider_; }
 	// 死亡しているか？
 	bool is_dead() const;
 	// 名前を取得
@@ -52,6 +53,8 @@ public:
 	//空間データ
 	void add_space();
 	QuadTreeObj<Actor>* space()const { return obj_; }
+	//サイズ
+	Rect space_check_size();
 	// コピー禁止
 	Actor(const Actor& other) = delete;
 	Actor& operator = (const Actor& other) = delete;

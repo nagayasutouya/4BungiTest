@@ -42,6 +42,8 @@ public:
     void send_message(const std::string& message, void* param);
     // Á‹
     void clear();
+    //‰Šú‰»
+    void initialize(GTUINT layer_num, Rect field_size);
     // ƒRƒs[‹Ö~
     ActorManager(const ActorManager&) = delete;
     ActorManager& operator = (const ActorManager&) = delete;

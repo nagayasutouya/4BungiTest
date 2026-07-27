@@ -1,8 +1,6 @@
 #include"QuadTree.h"
 
-QuadTreeSpace::QuadTreeSpace(int id) :space_id_{ id }{
-	printf("ID:%d\n", id); 
-}
+QuadTreeSpace::QuadTreeSpace(int id) :space_id_{ id }{}
 QuadTreeSpace::~QuadTreeSpace(){
 	clear();
 }
@@ -29,7 +27,7 @@ void QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 bool QuadTreeSpace::removed(QuadTreeObj<Actor>* target) {
 	//—£’E‚·‚é‚â‚Â‚ªæ“ª‚¾‚Á‚½‚ç•ÏX
 	if (first_object_ == target) {
-		first_object_ = first_object_->n_obj();
+		first_object_ = first_object_->n_obj;
 	}
 	return true;
 }

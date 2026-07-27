@@ -22,7 +22,7 @@ void ActorManager::update(float delta_time) {
 // アクターの遅延更新
 void ActorManager::late_update(float delta_time) {
     for (auto actor : actors_) {
-        quadtree_.change_space(actor->space(),MotornOrder::instance()->morton_order(Rect{actor->transform().position().x-actor->collider().radius,actor->transform().position().z - actor->collider().radius,actor->transform().position().x + actor->collider().radius,actor->transform().position().z + actor->collider().radius }));
+        quadtree_.change_space(actor->space_check_size(), actor->space());
     }
 }
 
@@ -49,12 +49,11 @@ void ActorManager::draw_gui() const {
 
 // アクターの衝突判定
 void ActorManager::collide() {
-    quadtree_.creat_collide_list();
-    //for (auto i = actors_.begin(); i != actors_.end(); ++i) {
-    //    for (auto j = std::next(i); j != actors_.end(); ++j) {
-    //        (*i)->collide(**j);
-    //    }
-    //}
+    GTUINT size=quadtree_.creat_collide_list(actors_);
+    //リストをもとにチェック
+    for (GTUINT i = 0; i < size; i += 2) {
+        quadtree_.collide_list()[i]->collide(*quadtree_.collide_list()[i + 1]);
+    }
 }
 
 // 死亡しているアクターの削除
@@ -119,4 +118,9 @@ void ActorManager::clear() {
         delete actor;
     }
     actors_.clear();
+}
+
+//初期化
+void ActorManager::initialize(GTUINT layer_num, Rect field_size) {
+    quadtree_.initialize(field_size);
 }

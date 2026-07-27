@@ -11,7 +11,7 @@ void QuadTreeManager::change_space(Rect object_pos,QuadTreeObj<Actor>* target){
 	//êŠo‚·
 	int space = MotornOrder::instance()->morton_order(object_pos);
 	//Žw’è‹óŠÔ“à‚È‚ç“o˜^
-	if (space >= 0 && (unsigned)space <= space_num_max_) {
+	if (space >= 0 && space <= space_num_max_) {
 		creat_space((GTDWORD)space);
 		space_array_[space]->add_obj(target);
 	}

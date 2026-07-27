@@ -26,8 +26,8 @@ struct QuadTreeObj {
 		return true;
 	}
 	void docking_p_and_n() {//‘OŒã‚ð‚­‚Á‚Â‚¯‚é
-		if (p_obj_ != nullptr)p_obj_->n_obj(n_obj_);
-		if (n_obj_ != nullptr)n_obj_->p_obj(p_obj_);
+		if (p_obj != nullptr)p_obj->n_obj=n_obj;
+		if (n_obj != nullptr)n_obj->p_obj=p_obj;
 	}
 };
 

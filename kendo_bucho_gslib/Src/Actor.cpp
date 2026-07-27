@@ -84,3 +84,8 @@ void Actor::add_space() {
 	obj->obj = this;
 	obj_=obj;
 }
+//ÉTÉCÉY
+Rect Actor::space_check_size() {
+	float rad = collider().radius;
+	return Rect{ transform_.position().x - rad,transform_.position().z + rad,transform_.position().x + rad,transform_.position().z - rad };
+}
