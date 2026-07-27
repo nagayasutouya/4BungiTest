@@ -18,6 +18,7 @@ public:
         scene_manager_.add("GamePlayScene", new GamePlayScene());
         scene_manager_.change("TitleScene");
         MotornOrder::instance()->set_space_size(Rect{-20.0f,20.0f,20.0f,-20.0f });
+        Sound::set_master_volume(0.1f);
     }
     //@XV
     void update(float delta_time) override {
