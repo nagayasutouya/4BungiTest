@@ -3,22 +3,11 @@
 
 #include"GTLib/GTLib.h"
 
-typedef unsigned short GTWORD;
-typedef unsigned short GTDWORD;
-
-class QuadTree;
+class QuadTreeSpace;
 
 struct Short2 {
 	GTWORD x = 0;
 	GTWORD y = 0;
-};
-
-template<class T>
-struct QuadTreeObj {
-	QuadTree* space=nullptr;//空間
-	T* obj = nullptr;//本体
-	QuadTreeObj* p_obj = nullptr;//前
-	QuadTreeObj* n_obj = nullptr;//次
 };
 
 class MotornOrder {
@@ -48,7 +37,7 @@ private:
 	GTDWORD morton_num(Short2 pos) { return morton_num(pos.x, pos.y); }//空間番号を出す
 	GTDWORD bit_shift(GTWORD n);//空間番号出すためのbit演算
 	//四角単位
-	unsigned int object_in_morton_num(Short2 left_top, Short2 right_bottom);//オブジェクトがどのレイヤーのどの空間に属すか
+	int object_in_morton_num(Short2 left_top, Short2 right_bottom);//オブジェクトがどのレイヤーのどの空間に属すか
 private:
 	Rect space_size_{0.0f,0.0f,0.0f,0.0f};//空間の大きさ
 	Vector2 side_length_{ 0.0f,0.0f };//最小空間の辺のサイズ

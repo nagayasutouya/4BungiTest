@@ -1,23 +1,34 @@
 #ifndef QUADTREE_MANAGER_H_
 #define QUADTREE_MANAGER_H_
 
-#include "QuadTree.h"
+#include "QuadTreeSpace.h"
 #include <vector>
 #include <list>
+class  CQuadTree;
+class Actor;
 
 class QuadTreeManager {
 public:
 	QuadTreeManager();
 	~QuadTreeManager() { clear(); }
-	void change_space(QuadTreeObj<Actor>* target, int space_id=-1);//別空間へ移動する
-	QuadTree* find_space(int space_id = -1);//空間が存在するかチェック
-	void update();//当たり判定のチェック
+	void initialize(GTUINT  layer_num, Rect field_size);//初期化
+	void add_object(Rect object_pos, QuadTreeObj<Actor>& target);//オブジェクトを空間に登録
+	GTUINT make_collide_list(list<Actor*> actors);//チェックリストの作成
+	vector<Actor*>collide_list()const { return collide_list_; }//チェックリスト
 private:
-	void one_space_loop(int id, int& checked_space_count, vector<bool>& check, QuadTreeObj<Actor>* parent_col);//一空間の処理
-	void collide(QuadTreeObj<Actor>* col);//当たり判定を取る
+	void creat_space(GTDWORD id);//新しく空間をつくる
+	void one_space_collide(GTDWORD id,vector<Actor*>&collide_list,list<Actor*>&parents);//1空間のチェックリストを作る
 	void clear();//データ削除
 private:
-	vector<unique_ptr<QuadTree>> space_;//空間管理
+	const GTUINT SpaceCount{ 85 };
+	QuadTreeSpace* space_array_[85];
+	Vector2 field_origin_point_{ 0.0f,0.0f };//空間の初期地点
+	Vector2 field_size_{0.0f,0.0f};//空間の縦横
+	Vector2 space_size_{ 0.0f,0.0f };//小空間1つの縦横
+	GTUINT layer_num_max_{ 0 };//分割数
+	vector<int> space_in_layer_;//1レイヤーにどれだけのスペースがはいるか
+	GTUINT space_num_max_{ 0 };//全空間のトータル数
+	vector<Actor*>collide_list_;//当たり判定チェックリスト
 };
 
 #endif

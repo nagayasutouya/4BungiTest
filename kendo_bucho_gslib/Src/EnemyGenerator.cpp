@@ -12,6 +12,7 @@ EnemyGenerator::EnemyGenerator(IWorld* world) {
     world_ = world;
     tag_   = "EnemyGeneratorTag";
     name_  = "EnemyGenerator";
+    enable_collider_ = false;
 }
 
 // XV

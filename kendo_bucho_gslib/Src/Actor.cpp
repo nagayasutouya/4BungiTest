@@ -37,6 +37,14 @@ void Actor::collide(Actor& other) {
 // 死亡する
 void Actor::die() {
 	dead_ = true;
+	clear();
+}
+
+void Actor::clear() {
+	obj_->remove();
+	obj_->clear();
+	delete obj_;
+	obj_ = nullptr;
 }
 
 // 衝突しているか？
@@ -81,6 +89,13 @@ BoundingSphere Actor::collider() const {
 
 void Actor::add_space() {
 	QuadTreeObj<Actor>* obj = new QuadTreeObj<Actor>{};
-	obj->obj = this;
+	obj->obj(this);
 	obj_=obj;
+}
+
+//サイズ
+Rect Actor::space_check_size()const{
+	float rad = collider().radius;
+	printf("Name:%s Rad:%f PosX:%f PosZ:%f",name_.c_str(),rad,transform_.position().x,transform_.position().z);
+	return Rect{transform_.position().x-rad,transform_.position().z + rad,transform_.position().x + rad,transform_.position().z - rad };
 }
