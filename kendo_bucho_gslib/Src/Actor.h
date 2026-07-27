@@ -14,7 +14,7 @@ public:
 	// コンストラクタ
 	Actor() = default;
 	// 仮想デストラクタ
-	virtual ~Actor() = default;
+	~Actor();
 	// 更新
 	virtual void update(float delta_time);
 	// 遅延更新
@@ -33,6 +33,8 @@ public:
 	void collide(Actor& other);
 	// 死亡する
 	void die();
+	//削除
+	void clear();
 	// 衝突しているか？
 	bool is_collide(const Actor& other) const;
 	bool enable_collider()const { return enable_collider_; }

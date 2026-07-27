@@ -1,5 +1,9 @@
 #include "Actor.h"
 
+Actor::~Actor() {
+	clear();
+}
+
 // XV
 void Actor::update(float delta_time) { }
 
@@ -33,7 +37,13 @@ void Actor::collide(Actor& other) {
 		}
 	}
 }
-
+//íœ
+void Actor::clear() {
+	obj_->remove();
+	obj_->clear();
+	delete obj_;
+	obj_ = nullptr;
+}
 // Ž€–S‚·‚é
 void Actor::die() {
 	dead_ = true;

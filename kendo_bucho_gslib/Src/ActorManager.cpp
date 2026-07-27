@@ -115,6 +115,7 @@ void ActorManager::send_message(const std::string& message, void* param) {
 // Á‹Ž
 void ActorManager::clear() {
     for (auto actor : actors_) {
+        actor->clear();
         delete actor;
     }
     actors_.clear();
