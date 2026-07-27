@@ -2,7 +2,6 @@
 #include "SceneManager.h"
 #include "GamePlayScene.h"
 #include "TitleScene.h"
-#include "Sibungi/QuadTreeManager.h"
 
 class MyGame : public Game {
 public:
@@ -17,7 +16,7 @@ public:
         scene_manager_.add("TitleScene", new TitleScene());
         scene_manager_.add("GamePlayScene", new GamePlayScene());
         scene_manager_.change("TitleScene");
-        MotornOrder::instance()->set_space_size(Rect{-20.0f,20.0f,20.0f,-20.0f });
+
     }
     //@XV
     void update(float delta_time) override {

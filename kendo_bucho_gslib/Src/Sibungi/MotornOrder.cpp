@@ -3,7 +3,7 @@
 //モートン序列順に分割した空間のどこにあたるか
 int MotornOrder::morton_order(Rect pos){
 	//空間の範囲外なら-1を返す
-	if (pos.right<space_size_.left||pos.bottom>space_size_.top||pos.left>space_size_.right||pos.top<space_size_.bottom)return -1;
+	if (pos.right<space_size_.left || pos.bottom>space_size_.top || pos.left > space_size_.right || pos.top < space_size_.bottom)return -1;
 	//空間番号割り振り用に正規化
 	Short2 t1, t2;
 	t1.x = (GTWORD)((pos.left - space_size_.left) / side_length_.x);
@@ -16,7 +16,7 @@ int MotornOrder::morton_order(Rect pos){
 	t1.y = Mathf::CLAMP(t1.y, s_min, s_max);
 	t2.x = Mathf::CLAMP(t2.x, s_min, s_max);
 	t2.y = Mathf::CLAMP(t2.y, s_min, s_max);
-	printf("%d,%d,%d,%d\n", t1.x, t1.y, t2.x, t2.y);
+	//printf("%d,%d,%d,%d\n", t1.x, t1.y, t2.x, t2.y);
 	return object_in_morton_num(t1, t2);
 }
 //空間番号を出す
@@ -32,7 +32,7 @@ GTDWORD MotornOrder::bit_shift(GTWORD n) {
 	return (n | (n << 1)) & 0x55555555;
 }
 //オブジェクトがどのレイヤーのどの空間に属すか
-unsigned int MotornOrder::object_in_morton_num(Short2 left_top, Short2 right_bottom) {
+int MotornOrder::object_in_morton_num(Short2 left_top, Short2 right_bottom) {
 	//オブジェクトが干渉している左上の空間を出す
 	GTDWORD lt = morton_num(left_top.x, left_top.y);
 	//オブジェクトが干渉している右下の空間を出す
@@ -59,6 +59,7 @@ unsigned int MotornOrder::object_in_morton_num(Short2 left_top, Short2 right_bot
 	int morton_num = (rb >> (shift_count * 2));//レイヤー分け状態の番号出す
 	int layer_add = Mathf::nth_power(4, layer);
 	morton_num += (layer_add - 1) / 3;//レイヤー分けをなくす
+	//printf("Motorn:%d\n",morton_num);
 	return morton_num;
 }
 //空間のサイズを登録
