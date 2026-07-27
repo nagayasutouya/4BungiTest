@@ -35,6 +35,7 @@ public:
 	void die();
 	// 衝突しているか？
 	bool is_collide(const Actor& other) const;
+	bool enable_collider()const { return enable_collider_; }
 	// 死亡しているか？
 	bool is_dead() const;
 	// 名前を取得
@@ -52,27 +53,31 @@ public:
 	//空間データ
 	void add_space();
 	QuadTreeObj<Actor>* space()const { return obj_; }
+	//サイズ
+	Rect space_check_size()const;
+	//リセット
+	void clear();
 	// コピー禁止
 	Actor(const Actor& other) = delete;
 	Actor& operator = (const Actor& other) = delete;
-
+	
 protected:
 	// ワールド
-	IWorld*			world_{ nullptr };
+	IWorld*	world_{ nullptr };
 	// タグ名
-	std::string		tag_;
+	std::string tag_;
 	// 名前
-	std::string		name_;
+	std::string name_;
 	// トランスフォーム
-	Transform		transform_;
+	Transform transform_;
 	// 移動量
-	Vector3		velocity_{ 0.0f, 0.f, 0.0f };
+	Vector3	velocity_{ 0.0f, 0.f, 0.0f };
 	// 衝突判定が有効か？
-	bool			enable_collider_{ true };
+	bool enable_collider_{ true };
 	// 衝突判定
 	BoundingSphere	collider_;
 	// 死亡フラグ
-	bool			dead_{ false };
+	bool dead_{ false };
 	//空間接続用
 	QuadTreeObj<Actor>* obj_{nullptr};
 };

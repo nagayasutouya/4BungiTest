@@ -50,7 +50,6 @@ void Enemy::draw() const {
     }
     // Õ“Ë”»’è‚Ì•`‰æ
     collider().draw();
-    printf("%f", dis_);
 }
 
 // Õ“Ëˆ—

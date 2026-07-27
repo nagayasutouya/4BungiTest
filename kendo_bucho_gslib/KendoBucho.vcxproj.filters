@@ -183,7 +183,7 @@
     <ClCompile Include="Src\GTLib\Physics\Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Sibungi\QuadTree.cpp">
+    <ClCompile Include="Src\Sibungi\QuadTreeSpace.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\Sibungi\QuadTreeManager.cpp">
@@ -395,13 +395,16 @@
     <ClInclude Include="Src\GTLib\Physics\Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Sibungi\QuadTree.h">
+    <ClInclude Include="Src\Sibungi\QuadTreeSpace.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Sibungi\QuadTreeManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Sibungi\MotornOrder.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Sibungi\QuadTreeObj.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

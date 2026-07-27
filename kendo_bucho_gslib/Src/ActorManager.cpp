@@ -22,7 +22,7 @@ void ActorManager::update(float delta_time) {
 // アクターの遅延更新
 void ActorManager::late_update(float delta_time) {
     for (auto actor : actors_) {
-        quadtree_.change_space(actor->space(),MotornOrder::instance()->morton_order(Rect{actor->transform().position().x-actor->collider().radius,actor->transform().position().z - actor->collider().radius,actor->transform().position().x + actor->collider().radius,actor->transform().position().z + actor->collider().radius }));
+       if(actor->enable_collider())quadtree_.add_object(actor->space_check_size(), *actor->space());
     }
 }
 
@@ -49,12 +49,14 @@ void ActorManager::draw_gui() const {
 
 // アクターの衝突判定
 void ActorManager::collide() {
-    quadtree_.update();
-    //for (auto i = actors_.begin(); i != actors_.end(); ++i) {
-    //    for (auto j = std::next(i); j != actors_.end(); ++j) {
-    //        (*i)->collide(**j);
-    //    }
-    //}
+    //衝突判定リストを作成
+    GTUINT size=quadtree_.make_collide_list(actors_);
+    printf("Size:%d\n", size);
+    //リストをもとにチェック
+    for (GTUINT i = 0; i < size; i += 2) {
+        quadtree_.collide_list()[i]->collide(*quadtree_.collide_list()[i+1]);
+        printf("%s:%d %s:%d\n", quadtree_.collide_list()[i]->name().c_str(), quadtree_.collide_list()[i]->space()->space()->space_id(), quadtree_.collide_list()[i + 1]->name().c_str(), quadtree_.collide_list()[i + 1]->space()->space()->space_id());
+    }
 }
 
 // 死亡しているアクターの削除
@@ -116,7 +118,13 @@ void ActorManager::send_message(const std::string& message, void* param) {
 // 消去
 void ActorManager::clear() {
     for (auto actor : actors_) {
+        actor->clear();
         delete actor;
     }
     actors_.clear();
+}
+
+//初期化
+void ActorManager::initialize(GTUINT layer_num,Rect field_size) {
+    quadtree_.initialize(layer_num,field_size);
 }
