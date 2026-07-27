@@ -15,10 +15,10 @@ void World::update(float delta_time) {
 	actors_.update(delta_time);
 	// アクターの衝突
 	actors_.collide();
-	// アクターの遅延更新
-	actors_.late_update(delta_time);
 	// アクターの消去
 	actors_.remove();
+	// アクターの遅延更新
+	actors_.late_update(delta_time);
 	// カメラの更新
 	camera_->update(delta_time);
 	// ライトの更新

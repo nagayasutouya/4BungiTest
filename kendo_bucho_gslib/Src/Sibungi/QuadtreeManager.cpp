@@ -7,7 +7,7 @@ void QuadTreeManager::initialize(GTUINT  layer_num, Rect field_size) {//初期化
 	for (GTUINT i = 1; i < layer_num; i++)space_in_layer_.push_back(space_in_layer_[i - 1] * 4);//４つずつ増やしてく
 	space_num_max_ = (space_in_layer_[layer_num - 1] - 1) / 3;
 	//分割の最大数を超えれないように
-	if (space_num_max_ >= SpaceCount)return;
+	if (space_num_max_ > SpaceCount)return;
 	//配列の先頭保存
 	//space_array_ = new QuadTreeSpace();
 	//ZeroMemory(space_array_, sizeof(QuadTreeSpace) * space_num_max_);
@@ -20,13 +20,13 @@ void QuadTreeManager::initialize(GTUINT  layer_num, Rect field_size) {//初期化
 	layer_num_max_ = layer_num;
 }
 //オブジェクトを空間に登録
-void QuadTreeManager::add_object(Rect object_pos, QuadTreeObj<Actor>& target){
+void QuadTreeManager::add_object(Rect object_pos, QuadTreeObj<Actor>* target){
 	//場所出す
 	int space = MotornOrder::instance()->morton_order(object_pos);
 	//指定空間内なら登録
-	if (space>=0&&(unsigned)space < space_num_max_) {
+	if (space>=0&&(unsigned)space <= space_num_max_) {
 		creat_space((GTDWORD)space);
-		space_array_[(GTDWORD)space]->add_obj(&target);
+		space_array_[space]->add_obj(target);
 	}
 }
 //空間の作成

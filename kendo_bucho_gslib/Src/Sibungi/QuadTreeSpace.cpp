@@ -1,5 +1,5 @@
 #include"QuadTreeSpace.h"
-
+#include"Actor.h"
 QuadTreeSpace::QuadTreeSpace(int id) :space_id_{ id }{}
 QuadTreeSpace::~QuadTreeSpace(){
 	clear();
@@ -8,6 +8,7 @@ QuadTreeSpace::~QuadTreeSpace(){
 bool QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 	//すでにこの空間にいるか空っぽならばいばい
 	if (add->space() == this || add->obj() == nullptr)return false;
+	printf("Name:%s,Add:%d\n", add->obj()->name().c_str(), space_id_);
 	if (first_object_ != nullptr) {
 		//先頭のオブジェクトに接続
 		first_object_->p_obj(add);
@@ -18,6 +19,8 @@ bool QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 		//先頭に登録
 		first_object_ = add;
 	}
+	//前空間から離脱
+	add->remove();
 	//空間を保存
 	add->space(this);
 	return true;
