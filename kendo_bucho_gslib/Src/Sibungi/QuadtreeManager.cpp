@@ -94,10 +94,10 @@ void QuadTreeManager::collide(QuadTreeObj<Actor>* col){
 				col->obj->collide(*p_col->obj);
 				p_col = p_col->p_obj;
 			}
-			//次の末尾チェック
-			col = col->p_obj;
 			if (col != nullptr)p_col = col->p_obj;
 		}
+		//次の末尾チェック
+		col = col->p_obj;
 	}
 }
 //データ削除
