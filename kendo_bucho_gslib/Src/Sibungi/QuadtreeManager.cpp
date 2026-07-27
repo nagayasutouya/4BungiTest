@@ -37,26 +37,27 @@ GTUINT QuadTreeManager::creat_collide_list(list<Actor*> actors) {
 }
 //一空間の処理
 void QuadTreeManager::one_space_loop(int id,vector<Actor*>& collide_list, list<Actor*>& parents) {
+	printf("Space%d:\n",id);
 	//当たり判定チェックリスト追加
 	list<Actor*>::iterator it;
 	//先頭を取得
 	QuadTreeObj<Actor>* col = space_array_[id]->first_object();
 	//オブジェクトがあれば当たり判定を取る
 	while (col != nullptr) {
+		printf("Chack1\n");
 		QuadTreeObj<Actor>* n_col = col->n_obj;
 		//末尾につくまで
 		while (n_col != nullptr) {
-			//リストに追加
-			collide_list.push_back(col->obj);
-			collide_list.push_back(n_col->obj);
+			//衝突判定チェック
+			col->obj->collide(*n_col->obj);
 			//次のへ
 			n_col = n_col->p_obj;
 		}
+		printf("Chack2\n");
 		//次は親空間と
-		for (it = parents.begin(); it != parents.end(); it++) {
-			//リストに追加
-			collide_list.push_back(col->obj);
-			collide_list.push_back(*it);
+		for (auto &actor:parents) {
+			//衝突判定チェック
+			col->obj->collide(*actor);
 		}
 		//次のチェック
 		col = col->n_obj;
@@ -69,6 +70,7 @@ void QuadTreeManager::one_space_loop(int id,vector<Actor*>& collide_list, list<A
 	for (GTDWORD i = 0; i < 4; i++) {
 		//子のID
 		next_space = id * 4 + 1 + i;
+		printf("Set\n");
 		//空間があるかチェック
 		if (next_space < (GTDWORD)space_num_max_ && space_array_[next_space]) {
 			//1度だけ親オブジェ群を保存

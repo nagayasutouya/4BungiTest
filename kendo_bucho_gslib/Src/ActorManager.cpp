@@ -51,9 +51,9 @@ void ActorManager::draw_gui() const {
 void ActorManager::collide() {
     GTUINT size=quadtree_.creat_collide_list(actors_);
     //リストをもとにチェック
-    for (GTUINT i = 0; i < size; i += 2) {
-        quadtree_.collide_list()[i]->collide(*quadtree_.collide_list()[i + 1]);
-    }
+    //for (GTUINT i = 0; i < size; i += 2) {
+    //    quadtree_.collide_list()[i]->collide(*quadtree_.collide_list()[i + 1]);
+    //}
 }
 
 // 死亡しているアクターの削除

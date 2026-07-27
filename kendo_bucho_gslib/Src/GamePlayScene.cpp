@@ -57,7 +57,7 @@ void GamePlayScene::start() {
     Sound::load_bgm(Sound_PlayingBGM, "Assets/sound/kendo.wav", true);
     // リザルト用BGMの読み込み
     Sound::load_bgm(Sound_ResultBGM, "Assets/sound/ed.wav", true);
-
+    Sound::set_master_volume(0.1f);
     // BGMの再生
     Sound::play(Sound_PlayingBGM);
     // 開始効果音（いくぜ！の掛け声）
