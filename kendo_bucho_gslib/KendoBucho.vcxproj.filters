@@ -404,6 +404,9 @@
     <ClInclude Include="Src\Sibungi\MotornOrder.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Sibungi\QuadTreeObj.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Mesh.hlsl" />

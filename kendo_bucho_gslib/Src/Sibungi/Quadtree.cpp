@@ -1,49 +1,39 @@
 #include"QuadTree.h"
 
-QuadTree::QuadTree(int id) :space_id_{ id }{
+QuadTreeSpace::QuadTreeSpace(int id) :space_id_{ id }{
 	printf("ID:%d\n", id); 
 }
-QuadTree::~QuadTree(){
+QuadTreeSpace::~QuadTreeSpace(){
 	clear();
 }
 //空間に追加
-void QuadTree::add_obj(QuadTreeObj<Actor>* add){
-	object_count_++;
-	if (last_object_ != nullptr) {
-		//末尾のオブジェクトに接続
-		last_object_->n_obj = add;
-		add->p_obj = last_object_;
+void QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
+	//すでにこの空間にいるか空っぽならばいばい
+	if (add->space == this || add->obj == nullptr)return;
+	if (first_object_ != nullptr) {
+		//先頭のオブジェクトに接続
+		first_object_->p_obj=add;
+		add->n_obj=first_object_;
+		first_object_ = add;
 	}
 	else {
 		//先頭に登録
-		first_object_ = last_object_ = add;
+		first_object_ = add;
 	}
-	//自分が末尾になる
-	change_last(add);
+	//前空間から離脱
+	add->remove();
+	//空間を保存
+	add->space=this;
 }
-//末尾変更
-void QuadTree::change_last(QuadTreeObj<Actor>* change) {
-	last_object_ = change;
-}
-//空間から離脱
-void QuadTree::remove_obj() { 
-	object_count_--;
-	//だれもいなくなった
-	if (object_count_ <= 0) {
-		first_object_ = nullptr;
-		last_object_ = nullptr;
-		object_count_ = 0;
+//離脱通知の受け取り
+bool QuadTreeSpace::removed(QuadTreeObj<Actor>* target) {
+	//離脱するやつが先頭だったら変更
+	if (first_object_ == target) {
+		first_object_ = first_object_->n_obj();
 	}
+	return true;
 }
 //データ削除
-void QuadTree::clear(){
-	last_object_ = nullptr;
-	object_count_ = 0;
-}
-//子空間登録
-void QuadTree::set_child(int child){
-	if (current_child_count_ >= 4)return;
-	children_[current_child_count_] = child;
-	current_child_count_++;
-	printf("親空間：%dに子空間：%dが加わった\n", space_id_, child);
+void QuadTreeSpace::clear(){
+	first_object_ = nullptr;
 }

@@ -3,22 +3,11 @@
 
 #include"GTLib/GTLib.h"
 
-typedef unsigned short GTWORD;
-typedef unsigned short GTDWORD;
-
-class QuadTree;
+class QuadTreeSpace;
 
 struct Short2 {
 	GTWORD x = 0;
 	GTWORD y = 0;
-};
-
-template<class T>
-struct QuadTreeObj {
-	QuadTree* space=nullptr;//‹óŠÔ
-	T* obj = nullptr;//–{‘Ì
-	QuadTreeObj* p_obj = nullptr;//‘O
-	QuadTreeObj* n_obj = nullptr;//ŽŸ
 };
 
 class MotornOrder {

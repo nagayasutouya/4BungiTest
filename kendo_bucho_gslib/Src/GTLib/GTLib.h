@@ -12,4 +12,8 @@
 #include "Sound/Sound.h"
 #include "Input/Input.h"
 
+typedef unsigned short GTWORD;
+typedef unsigned short GTDWORD;
+typedef unsigned int GTUINT;
+
 #endif

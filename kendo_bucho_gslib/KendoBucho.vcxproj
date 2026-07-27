@@ -295,6 +295,7 @@
     <ClInclude Include="Src\Sibungi\MotornOrder.h" />
     <ClInclude Include="Src\Sibungi\QuadTree.h" />
     <ClInclude Include="Src\Sibungi\QuadTreeManager.h" />
+    <ClInclude Include="Src\Sibungi\QuadTreeObj.h" />
     <ClInclude Include="Src\Timer.h" />
     <ClInclude Include="Src\TitleScene.h" />
     <ClInclude Include="Src\World.h" />

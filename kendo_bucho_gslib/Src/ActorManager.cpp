@@ -49,7 +49,7 @@ void ActorManager::draw_gui() const {
 
 // アクターの衝突判定
 void ActorManager::collide() {
-    quadtree_.update();
+    quadtree_.creat_collide_list();
     //for (auto i = actors_.begin(); i != actors_.end(); ++i) {
     //    for (auto j = std::next(i); j != actors_.end(); ++j) {
     //        (*i)->collide(**j);
