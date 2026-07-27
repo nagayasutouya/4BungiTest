@@ -54,7 +54,7 @@ public:
 	void add_space();
 	QuadTreeObj<Actor>* space()const { return obj_; }
 	//サイズ
-	Rect space_check_size()const;
+	Rect space_check_size();
 	//リセット
 	void clear();
 	// コピー禁止

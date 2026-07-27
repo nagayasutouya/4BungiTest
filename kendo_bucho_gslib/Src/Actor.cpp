@@ -94,8 +94,7 @@ void Actor::add_space() {
 }
 
 //ÉTÉCÉY
-Rect Actor::space_check_size()const{
+Rect Actor::space_check_size(){
 	float rad = collider().radius;
-	printf("Name:%s Rad:%f PosX:%f PosZ:%f",name_.c_str(),rad,transform_.position().x,transform_.position().z);
 	return Rect{transform_.position().x-rad,transform_.position().z + rad,transform_.position().x + rad,transform_.position().z - rad };
 }
