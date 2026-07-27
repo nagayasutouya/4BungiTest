@@ -12,7 +12,7 @@ public:
 	QuadTreeManager();
 	~QuadTreeManager() { clear(); }
 	void initialize(GTUINT  layer_num, Rect field_size);//初期化
-	void add_object(Rect object_pos, QuadTreeObj<Actor>& target);//オブジェクトを空間に登録
+	void add_object(Rect object_pos, QuadTreeObj<Actor>* target);//オブジェクトを空間に登録
 	GTUINT make_collide_list(list<Actor*> actors);//チェックリストの作成
 	vector<Actor*>collide_list()const { return collide_list_; }//チェックリスト
 private:

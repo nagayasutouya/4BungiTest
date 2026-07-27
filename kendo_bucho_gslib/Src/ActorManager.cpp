@@ -22,7 +22,7 @@ void ActorManager::update(float delta_time) {
 // アクターの遅延更新
 void ActorManager::late_update(float delta_time) {
     for (auto actor : actors_) {
-       if(actor->enable_collider())quadtree_.add_object(actor->space_check_size(), *actor->space());
+       if(actor->enable_collider())quadtree_.add_object(actor->space_check_size(), actor->space());
     }
 }
 
@@ -54,8 +54,8 @@ void ActorManager::collide() {
     printf("Size:%d\n", size);
     //リストをもとにチェック
     for (GTUINT i = 0; i < size; i += 2) {
-        quadtree_.collide_list()[i]->collide(*quadtree_.collide_list()[i+1]);
         printf("%s:%d %s:%d\n", quadtree_.collide_list()[i]->name().c_str(), quadtree_.collide_list()[i]->space()->space()->space_id(), quadtree_.collide_list()[i + 1]->name().c_str(), quadtree_.collide_list()[i + 1]->space()->space()->space_id());
+        quadtree_.collide_list()[i]->collide(*quadtree_.collide_list()[i+1]);
     }
 }
 
