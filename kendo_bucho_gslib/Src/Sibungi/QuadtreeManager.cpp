@@ -5,6 +5,7 @@ QuadTreeManager::QuadTreeManager() {}
 void QuadTreeManager::initialize(Rect field_size) {//初期化
 	space_num_max_ = 85;
 	MotornOrder::instance()->set_space_size(field_size);
+	log_.set_propaty("LocalLog/" + log_.current_day() + '/' + "QuadTreeManager" + '/' + log_.creat_file_name("QuadTreeManager"), true,-1);
 }
 //別空間へ移動する
 void QuadTreeManager::change_space(Rect object_pos,QuadTreeObj<Actor>* target){
@@ -27,40 +28,46 @@ void QuadTreeManager::creat_space(GTDWORD id) {
 	}
 }
 //モートン序列の更新と当たり判定のチェック
-GTUINT QuadTreeManager::creat_collide_list(list<Actor*> actors) {
-	collide_list_.clear();
-	//誰もいない
-	if (space_array_[0] == nullptr)return 0;
-	list<Actor*>ParentsObjects;
-	one_space_loop(0,collide_list_,ParentsObjects);
-	return (GTUINT)collide_list_.size();
+void QuadTreeManager::collide() {
+	//空間ないなら無視
+	if (space_array_[0] == nullptr)return;
+	one_space_loop(0, nullptr,check_start_);
+	check_start_++;
 }
 //一空間の処理
-void QuadTreeManager::one_space_loop(int id,vector<Actor*>& collide_list, list<Actor*>& parents) {
-	printf("Space%d:\n",id);
-	//当たり判定チェックリスト追加
-	list<Actor*>::iterator it;
+void QuadTreeManager::one_space_loop(int id, QuadTreeObj<Actor>* parent_end, int check) {
+	char buf[512];
+	snprintf(buf,sizeof(buf),"%d:Space%d",check,id);
+	log_.creat_log(buf);
+	//今チェックする空間
+	QuadTreeSpace* current= space_array_[id];
 	//先頭を取得
-	QuadTreeObj<Actor>* col = space_array_[id]->first_object();
+	QuadTreeObj<Actor>* col = current->first_object();
+	//親空間のオブジェ群と接続
+	if (parent_end != nullptr && col != nullptr) {
+		snprintf(buf, sizeof(buf), "Docking");
+		log_.creat_log(buf);
+		//別のと接続してたら切る
+		disconnect_next_obj(parent_end);
+		parent_end->n_obj = col;
+		col->p_obj = parent_end;
+	}
+	//現在地を末尾に変更
+	col = current->last_object();
 	//オブジェクトがあれば当たり判定を取る
 	while (col != nullptr) {
-		printf("Chack1\n");
-		QuadTreeObj<Actor>* n_col = col->n_obj;
-		//末尾につくまで
-		while (n_col != nullptr) {
-			//衝突判定チェック
-			col->obj->collide(*n_col->obj);
+		QuadTreeObj<Actor>* p_col = col->p_obj;
+		//先頭につくまで
+		while (p_col != nullptr) {
+			snprintf(buf, sizeof(buf), "Chack:%s,%s", col->obj->name().c_str(), p_col->obj->name().c_str());
+			log_.creat_log(buf);
+			//衝突判定
+			col->obj->collide(*p_col->obj);
 			//次のへ
-			n_col = n_col->p_obj;
-		}
-		printf("Chack2\n");
-		//次は親空間と
-		for (auto &actor:parents) {
-			//衝突判定チェック
-			col->obj->collide(*actor);
+			p_col = p_col->p_obj;
 		}
 		//次のチェック
-		col = col->n_obj;
+		col = col->p_obj;
 	}
 	//子があるならそっちへ移動
 	bool has_child = false;
@@ -70,29 +77,14 @@ void QuadTreeManager::one_space_loop(int id,vector<Actor*>& collide_list, list<A
 	for (GTDWORD i = 0; i < 4; i++) {
 		//子のID
 		next_space = id * 4 + 1 + i;
-		printf("Set\n");
 		//空間があるかチェック
 		if (next_space < (GTDWORD)space_num_max_ && space_array_[next_space]) {
-			//1度だけ親オブジェ群を保存
-			if (!has_child) {
-				col = space_array_[id]->first_object();
-				while (col != nullptr) {
-					parents.push_back(col->obj);
-					obj_num++;
-					col = col->n_obj;
-				}
-			}
-			has_child = true;
 			//子空間に移動
-			one_space_loop(next_space, collide_list, parents);
+			one_space_loop(next_space,current->last_object(),check);
 		}
 	}
-	//子の周回が終わったら親群を解散
-	if (has_child) {
-		for (GTDWORD i = 0; i < obj_num; i++) {
-			parents.pop_back();
-		}
-	}
+	//親空間との連結を削除
+	if (parent_end != nullptr)disconnect_next_obj(parent_end);
 }
 //データ削除
 void QuadTreeManager::clear() {
@@ -102,4 +94,9 @@ void QuadTreeManager::clear() {
 			space_array_[i] = nullptr;
 		}
 	}
+}
+//対象オブジェの末尾接続をきる
+void QuadTreeManager::disconnect_next_obj(QuadTreeObj<Actor>* target){
+	if (target->n_obj != nullptr)target->n_obj->p_obj = nullptr;
+	target->n_obj = nullptr;
 }

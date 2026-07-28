@@ -58,11 +58,16 @@ public:
 	//初期化
 	void initialze(GTUINT layer_num, Rect field_size);
 
+	//デバッグ用
+	virtual int actor_id()override { return id_++; };
+	virtual int tick()const override { return tick_; }
+
 	// コピー禁止
 	World(const World& other) = delete;
 	World& operator = (const World& other) = delete;
 
 private:
+	int id_{0};
 	// アクターマネージャー
 	ActorManager	actors_;
 	// ライト
@@ -75,6 +80,7 @@ private:
 	Score			score_;
 	// 制限時間
 	Timer			timer_;
+	int tick_{0};
 };
 
 #endif

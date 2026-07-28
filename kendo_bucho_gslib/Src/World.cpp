@@ -25,6 +25,7 @@ void World::update(float delta_time) {
 	light_->update(delta_time);
 	// タイマの更新
 	timer_.update(delta_time);
+	tick_++;
 }
 
 // 描画

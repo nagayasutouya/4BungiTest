@@ -20,7 +20,9 @@ Enemy::Enemy(IWorld* world, const Vector3& position) :
     motion_loop_{ true },
     state_{ State::Spawn } {
     world_ = world;
-    name_ = "Enemy";
+    char n[512];
+    snprintf(n, sizeof(n), "Enemy%d", world->actor_id());
+    name_ = n;
     tag_ = "EnemyTag";
     collider_ = BoundingSphere{ 0.5f, Vector3{0.0f, 0.8f, 0.0f} };
     transform_.position(position);

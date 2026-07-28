@@ -39,14 +39,20 @@ void Actor::collide(Actor& other) {
 }
 //削除
 void Actor::clear() {
-	obj_->remove();
-	obj_->clear();
-	delete obj_;
-	obj_ = nullptr;
+	//データ残ってたら消す
+	if (obj_ != nullptr) {
+		obj_->remove();
+		obj_->clear();
+		delete obj_;
+		obj_ = nullptr;
+	}
 }
 // 死亡する
 void Actor::die() {
 	dead_ = true;
+	//死んだらリストから排除したいけど　排除すると次のサーチ対象ポインタが消滅する
+	obj_->remove();
+	obj_->clear();
 }
 
 // 衝突しているか？

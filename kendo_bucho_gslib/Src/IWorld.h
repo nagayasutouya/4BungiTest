@@ -27,6 +27,9 @@ public:
 	virtual void send_message(const std::string& message, void* param = nullptr) = 0;
 	// スコアの加算
 	virtual void add_score(int score) = 0;
+	//デバッグ
+	virtual int actor_id() = 0;
+	virtual int tick()const = 0;
 
 	// フィールドの取得
 	virtual Field* field() = 0;
