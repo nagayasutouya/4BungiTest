@@ -31,11 +31,12 @@ void QuadTreeManager::creat_space(GTDWORD id) {
 void QuadTreeManager::collide() {
 	//空間ないなら無視
 	if (space_array_[0] == nullptr)return;
-	one_space_loop(0, nullptr,check_start_);
+	list<Actor*>parent;
+	one_space_loop(0,parent ,check_start_);
 	check_start_++;
 }
 //一空間の処理
-void QuadTreeManager::one_space_loop(int id, list<Actor*>parent/*QuadTreeObj<Actor>* parent_end*/, int check) {
+void QuadTreeManager::one_space_loop(int id, list<Actor*>&parent/*QuadTreeObj<Actor>* parent_end*/, int check) {
 	char buf[512];
 	snprintf(buf,sizeof(buf),"%d:Space%d\n",check,id);
 	log_.creat_log(buf);
@@ -75,6 +76,11 @@ void QuadTreeManager::one_space_loop(int id, list<Actor*>parent/*QuadTreeObj<Act
 			//次のへ
 			if(p_col!=nullptr)p_col = p_col->p_obj();
 		}
+		//次は親空間と
+		for (auto& actor : parent) {
+			//衝突判定チェック
+			col->obj()->collide(*actor);
+		}
 		//次のチェック
 		if(col!=nullptr)col = col->p_obj();
 	}
@@ -88,12 +94,27 @@ void QuadTreeManager::one_space_loop(int id, list<Actor*>parent/*QuadTreeObj<Act
 		next_space = id * 4 + 1 + i;
 		//空間があるかチェック
 		if (next_space < (GTDWORD)space_num_max_ && space_array_[next_space]) {
+			//1度だけ親オブジェ群を保存
+			if (!has_child) {
+				col = space_array_[id]->first_object();
+				while (col != nullptr) {
+					parent.push_back(col->obj());
+					obj_num++;
+					col = col->n_obj();
+				}
+			}
+			has_child = true;
 			//子空間に移動
-			one_space_loop(next_space,/*current->last_object()*/,check);
+			one_space_loop(next_space,parent/*current->last_object()*/,check);
 		}
 	}
 	//親空間との連結を削除
 	//if (parent_end != nullptr)disconnect_next_obj(parent_end);
+	if (has_child) {
+		for (GTDWORD i = 0; i < obj_num; i++) {
+			parent.pop_back();
+		}
+	}
 }
 //データ削除
 void QuadTreeManager::clear() {
