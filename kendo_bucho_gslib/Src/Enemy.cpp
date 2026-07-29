@@ -22,6 +22,7 @@ Enemy::Enemy(IWorld* world, const Vector3& position) :
     world_ = world;
     char n[512];
     snprintf(n, sizeof(n), "Enemy%d", world->actor_id());
+    printf("ê∂ê¨:%s\n",n);
     name_ = n;
     tag_ = "EnemyTag";
     collider_ = BoundingSphere{ 0.5f, Vector3{0.0f, 0.8f, 0.0f} };

@@ -31,6 +31,7 @@ void Actor::collide(Actor& other) {
 	if (enable_collider_ && other.enable_collider_) {
 		// 衝突判定をする
 		if (is_collide(other)) {
+			printf("当たった:%s\n",name_.c_str());
 			// 衝突した場合は、お互いに衝突リアクションをする
 			react(other);
 			other.react(*this);
@@ -45,14 +46,16 @@ void Actor::clear() {
 		obj_->clear();
 		delete obj_;
 		obj_ = nullptr;
+		printf("データ削除\n");
 	}
 }
 // 死亡する
 void Actor::die() {
 	dead_ = true;
 	//死んだらリストから排除したいけど　排除すると次のサーチ対象ポインタが消滅する
-	obj_->remove();
-	obj_->clear();
+	//obj_->remove();
+	//obj_->clear();
+	printf("死亡:%s\n",name_.c_str());
 }
 
 // 衝突しているか？
@@ -97,7 +100,7 @@ BoundingSphere Actor::collider() const {
 
 void Actor::add_space() {
 	QuadTreeObj<Actor>* obj = new QuadTreeObj<Actor>{};
-	obj->obj = this;
+	obj->obj(this);
 	obj_=obj;
 }
 //サイズ

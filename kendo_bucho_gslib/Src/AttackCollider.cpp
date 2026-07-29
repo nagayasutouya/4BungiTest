@@ -19,6 +19,7 @@ AttackCollider::AttackCollider(IWorld* world, const BoundingSphere& collider,
 	transform_.position(collider.center);
 	// Õ“Ë”»’è‚ğ–³Œø‚É‚·‚é
 	enable_collider_ = false;
+	printf("¶¬:%s\n", name_.c_str());
 }
 
 // XV

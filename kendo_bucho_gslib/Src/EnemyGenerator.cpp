@@ -3,7 +3,7 @@
 #include "Enemy.h"
 
 //Å‘åoŒ»”
-const int EnemyMaxCount{ 1 };
+const int EnemyMaxCount{ 20 };
 // oŒ»ŠÔŠu
 const float GenerateInterval{ 1.0f };
 

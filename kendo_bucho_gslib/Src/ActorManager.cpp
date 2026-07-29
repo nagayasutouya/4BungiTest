@@ -1,5 +1,6 @@
 #include "ActorManager.h"
 #include "Actor.h"
+#include <iostream>
 
 // デストラクタ
 ActorManager::~ActorManager() {
@@ -22,7 +23,11 @@ void ActorManager::update(float delta_time) {
 // アクターの遅延更新
 void ActorManager::late_update(float delta_time) {
     for (auto actor : actors_) {
-        if(actor->enable_collider()&&!actor->is_dead())quadtree_.change_space(actor->space_check_size(), actor->space());
+        if (actor->enable_collider() && !actor->is_dead()) {
+            std::cout << "チェックリスト追加:" << actor->name().c_str() << ":" << &actor<<std::endl;
+            quadtree_.change_space(actor->space_check_size(), actor->space());
+            printf("前:%s　次:%s\n", (actor->space()->p_obj() != nullptr) ? actor->space()->p_obj()->obj()->name().c_str():"NULL", (actor->space()->n_obj() != nullptr) ? actor->space()->n_obj()->obj()->name().c_str() : "NULL");
+        }
     }
 }
 
@@ -58,6 +63,7 @@ void ActorManager::remove() {
         if ((*i)->is_dead()) {
             delete *i;
             i = actors_.erase(i);
+            printf("削除\n");
         } else {
             ++i;
         }

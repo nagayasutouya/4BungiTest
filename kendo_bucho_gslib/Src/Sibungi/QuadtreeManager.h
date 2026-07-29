@@ -19,7 +19,7 @@ public:
 	void collide();//当たり判定のチェック
 	vector<Actor*>collide_list()const { return collide_list_; }
 private:
-	void one_space_loop(int id, QuadTreeObj<Actor>* parent_col,int check);//一空間の処理
+	void one_space_loop(int id, /*QuadTreeObj<Actor>* parent_col*/list<Actor*>parent,int check);//一空間の処理
 	void disconnect_next_obj(QuadTreeObj<Actor>* target);//対象オブジェの末尾接続をきる
 	void clear();//データ削除
 private:

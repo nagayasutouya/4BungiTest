@@ -35,39 +35,48 @@ void QuadTreeManager::collide() {
 	check_start_++;
 }
 //一空間の処理
-void QuadTreeManager::one_space_loop(int id, QuadTreeObj<Actor>* parent_end, int check) {
+void QuadTreeManager::one_space_loop(int id, list<Actor*>parent/*QuadTreeObj<Actor>* parent_end*/, int check) {
 	char buf[512];
-	snprintf(buf,sizeof(buf),"%d:Space%d",check,id);
+	snprintf(buf,sizeof(buf),"%d:Space%d\n",check,id);
 	log_.creat_log(buf);
+	printf(buf);
 	//今チェックする空間
 	QuadTreeSpace* current= space_array_[id];
 	//先頭を取得
 	QuadTreeObj<Actor>* col = current->first_object();
 	//親空間のオブジェ群と接続
-	if (parent_end != nullptr && col != nullptr) {
-		snprintf(buf, sizeof(buf), "Docking");
-		log_.creat_log(buf);
-		//別のと接続してたら切る
-		disconnect_next_obj(parent_end);
-		parent_end->n_obj = col;
-		col->p_obj = parent_end;
-	}
+	//if (parent_end != nullptr && col != nullptr) {
+	//	snprintf(buf, sizeof(buf), "Docking\n");
+	//	log_.creat_log(buf);
+	//	printf(buf);
+	//	//別のと接続してたら切る
+	//	disconnect_next_obj(parent_end);
+	//	parent_end->n_obj(col);
+	//	col->p_obj(parent_end);
+	//}
 	//現在地を末尾に変更
 	col = current->last_object();
 	//オブジェクトがあれば当たり判定を取る
 	while (col != nullptr) {
-		QuadTreeObj<Actor>* p_col = col->p_obj;
+		printf("チェック開始\n");
+		QuadTreeObj<Actor>* p_col = col->p_obj();
 		//先頭につくまで
 		while (p_col != nullptr) {
-			snprintf(buf, sizeof(buf), "Chack:%s,%s", col->obj->name().c_str(), p_col->obj->name().c_str());
+			if (col == nullptr)break;
+			printf("設定\n");
+			Actor* col_obj = col->obj();
+			Actor* p_col_obj = p_col->obj();
+			printf("設定完了\n");
+			snprintf(buf, sizeof(buf), "Chack:%s,%s\n", col_obj->name().c_str(), p_col_obj->name().c_str());
 			log_.creat_log(buf);
+			printf(buf);
 			//衝突判定
-			col->obj->collide(*p_col->obj);
+			col_obj->collide(*p_col_obj);
 			//次のへ
-			p_col = p_col->p_obj;
+			if(p_col!=nullptr)p_col = p_col->p_obj();
 		}
 		//次のチェック
-		col = col->p_obj;
+		if(col!=nullptr)col = col->p_obj();
 	}
 	//子があるならそっちへ移動
 	bool has_child = false;
@@ -80,11 +89,11 @@ void QuadTreeManager::one_space_loop(int id, QuadTreeObj<Actor>* parent_end, int
 		//空間があるかチェック
 		if (next_space < (GTDWORD)space_num_max_ && space_array_[next_space]) {
 			//子空間に移動
-			one_space_loop(next_space,current->last_object(),check);
+			one_space_loop(next_space,/*current->last_object()*/,check);
 		}
 	}
 	//親空間との連結を削除
-	if (parent_end != nullptr)disconnect_next_obj(parent_end);
+	//if (parent_end != nullptr)disconnect_next_obj(parent_end);
 }
 //データ削除
 void QuadTreeManager::clear() {
@@ -97,6 +106,6 @@ void QuadTreeManager::clear() {
 }
 //対象オブジェの末尾接続をきる
 void QuadTreeManager::disconnect_next_obj(QuadTreeObj<Actor>* target){
-	if (target->n_obj != nullptr)target->n_obj->p_obj = nullptr;
-	target->n_obj = nullptr;
+	if (target->n_obj() != nullptr)target->n_obj()->p_obj(nullptr);
+	target->n_obj(nullptr);
 }
