@@ -16,7 +16,6 @@ int MotornOrder::morton_order(Rect pos){
 	t1.y = Mathf::CLAMP(t1.y, s_min, s_max);
 	t2.x = Mathf::CLAMP(t2.x, s_min, s_max);
 	t2.y = Mathf::CLAMP(t2.y, s_min, s_max);
-	printf("%d,%d,%d,%d\n", t1.x, t1.y, t2.x, t2.y);
 	return object_in_morton_num(t1, t2);
 }
 //‹óŠÔ”Ô†‚ğo‚·

@@ -1,7 +1,6 @@
 #include"QuadTree.h"
 
 QuadTree::QuadTree(int id) :space_id_{ id }{
-	printf("ID:%d\n", id); 
 }
 QuadTree::~QuadTree(){
 	clear();
@@ -45,5 +44,4 @@ void QuadTree::set_child(int child){
 	if (current_child_count_ >= 4)return;
 	children_[current_child_count_] = child;
 	current_child_count_++;
-	printf("親空間：%dに子空間：%dが加わった\n", space_id_, child);
 }
