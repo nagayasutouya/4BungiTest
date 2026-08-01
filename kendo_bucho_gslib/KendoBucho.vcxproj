@@ -179,6 +179,7 @@
     <ClCompile Include="Src\EnemyGenerator.cpp" />
     <ClCompile Include="Src\Field.cpp" />
     <ClCompile Include="Src\GamePlayScene.cpp" />
+    <ClCompile Include="Src\GTLib\Data\GenreName.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\Game.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\Graphics.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\BufferAndPool\ConstantBuffer.cpp" />
@@ -261,6 +262,9 @@
     <ClInclude Include="Src\EnemyGenerator.h" />
     <ClInclude Include="Src\Field.h" />
     <ClInclude Include="Src\GamePlayScene.h" />
+    <ClInclude Include="Src\GTLib\Data\AssetsStructs.h" />
+    <ClInclude Include="Src\GTLib\Data\DefineVector.h" />
+    <ClInclude Include="Src\GTLib\Data\GenreName.h" />
     <ClInclude Include="Src\GTLib\Graphics\Game.h" />
     <ClInclude Include="Src\GTLib\Graphics\Graphics.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BlendState.h" />
