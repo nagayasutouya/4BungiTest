@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include <string>
+#include "Sibungi/QuadtreeManager.h"
 
 class Actor;
 
@@ -46,7 +47,9 @@ public:
     ActorManager& operator = (const ActorManager&) = delete;
 private:
     // アクターリスト
-    std::list<Actor*> actors_;
+    std::list<QuadTreeObj<Actor>*> actors_;
+    //四分木
+    QuadTreeManager quad_tree_;
 };
 
 #endif
