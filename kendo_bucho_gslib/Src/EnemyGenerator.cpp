@@ -3,16 +3,15 @@
 #include "Enemy.h"
 
 //最大出現数
-const int EnemyMaxCount{ 2000 };
+const int EnemyMaxCount{ 1 };
 // 出現間隔
-const float GenerateInterval{ 1.0f };
+const float GenerateInterval{ 5.0f };
 
 // コンストラクタ
 EnemyGenerator::EnemyGenerator(IWorld* world) {
     world_ = world;
     tag_   = "EnemyGeneratorTag";
     name_  = "EnemyGenerator";
-    enable_collider_ = false;
 }
 
 // 更新

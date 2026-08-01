@@ -89,8 +89,6 @@ void GamePlayScene::start() {
     state_ = State::Playing;
     //　シーン終了フラグの初期化
     is_end_ = false;
-    //フィールドサイズの設定
-    world_.initialze(5,Rect{-20,20,20,-20});
 }
 
 // 更新

@@ -2,8 +2,6 @@
 
 //モートン序列順に分割した空間のどこにあたるか
 int MotornOrder::morton_order(Rect pos){
-	//空間の範囲外なら-1を返す
-	if (pos.right<space_size_.left || pos.bottom>space_size_.top || pos.left > space_size_.right || pos.top < space_size_.bottom)return -1;
 	//空間番号割り振り用に正規化
 	Short2 t1, t2;
 	t1.x = (GTWORD)((pos.left - space_size_.left) / side_length_.x);

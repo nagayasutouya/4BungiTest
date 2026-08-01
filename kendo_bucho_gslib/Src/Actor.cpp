@@ -36,15 +36,8 @@ void Actor::collide(Actor& other) {
 
 // 死亡する
 void Actor::die() {
+	printf("死亡:%s\n",name_.c_str());
 	dead_ = true;
-	clear();
-}
-
-void Actor::clear() {
-	obj_->remove();
-	obj_->clear();
-	delete obj_;
-	obj_ = nullptr;
 }
 
 // 衝突しているか？
@@ -85,16 +78,4 @@ Vector3 Actor::velocity() const {
 // 衝突判定データを取得
 BoundingSphere Actor::collider() const {
 	return collider_.transform(transform_.local_to_world_matrix());
-}
-
-void Actor::add_space() {
-	QuadTreeObj<Actor>* obj = new QuadTreeObj<Actor>{};
-	obj->obj(this);
-	obj_=obj;
-}
-
-//サイズ
-Rect Actor::space_check_size(){
-	float rad = collider().radius;
-	return Rect{transform_.position().x-rad,transform_.position().z + rad,transform_.position().x + rad,transform_.position().z - rad };
 }

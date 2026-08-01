@@ -15,10 +15,10 @@ void World::update(float delta_time) {
 	actors_.update(delta_time);
 	// アクターの衝突
 	actors_.collide();
-	// アクターの消去
-	actors_.remove();
 	// アクターの遅延更新
 	actors_.late_update(delta_time);
+	// アクターの消去
+	actors_.remove();
 	// カメラの更新
 	camera_->update(delta_time);
 	// ライトの更新
@@ -145,9 +145,4 @@ Timer& World::timer() {
 // ゲームオーバーか？
 bool World::is_game_over() const {
 	return timer_.is_timeout(); // 時間切れか？
-}
-
-//初期化
-void World::initialze(GTUINT layer_num, Rect field_size) {
-	actors_.initialize(layer_num, field_size);
 }
