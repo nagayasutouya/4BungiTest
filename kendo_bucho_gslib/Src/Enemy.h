@@ -55,7 +55,6 @@ private:
     float           state_timer_{ 0.0f };
     // 点滅タイマ
     float           blink_timer_{ 0.0f };
-    float dis_{ 0.0f };
 };
 
 #endif

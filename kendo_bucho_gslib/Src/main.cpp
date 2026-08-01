@@ -16,16 +16,18 @@ public:
         scene_manager_.add("TitleScene", new TitleScene());
         scene_manager_.add("GamePlayScene", new GamePlayScene());
         scene_manager_.change("TitleScene");
-
     }
     //　更新
     void update(float delta_time) override {
+        if (Input::get_key_down('P'))stop_ = (stop_) ? false : true;
+        if (stop_)return;
         // ワールドクラスの更新
         float delta_frame = delta_time * 60.0f;
         scene_manager_.update(delta_frame);
     }
     // 描画
     void draw() override {
+        if (stop_)return;
         // シーン開始
         Graphics::begin_scene(0.5f, 0.5f, 1.0f, 1.0f);
         scene_manager_.draw();
@@ -40,6 +42,7 @@ public:
 private:
     // シーンマネージャー
     SceneManager scene_manager_;
+    bool stop_{false};
 };
 
 int main() {

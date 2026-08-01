@@ -56,9 +56,6 @@ public:
 	// ゲームオーバーか？
 	bool is_game_over() const;
 
-	//初期化
-	void initialze(GTUINT layer_num, Rect field_size);
-
 	// コピー禁止
 	World(const World& other) = delete;
 	World& operator = (const World& other) = delete;

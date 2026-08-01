@@ -4,7 +4,7 @@
 #include <list>
 #include <vector>
 #include <string>
-#include "Sibungi/QuadTreeManager.h"
+#include "Sibungi/QuadtreeManager.h"
 
 class Actor;
 
@@ -42,15 +42,14 @@ public:
     void send_message(const std::string& message, void* param);
     // 消去
     void clear();
-    //初期化
-    void initialize(GTUINT layer_num,Rect field_size);
     // コピー禁止
     ActorManager(const ActorManager&) = delete;
     ActorManager& operator = (const ActorManager&) = delete;
 private:
     // アクターリスト
-    std::list<Actor*> actors_;
-    QuadTreeManager quadtree_;
+    std::list<QuadTreeObj<Actor>*> actors_;
+    //四分木
+    QuadTreeManager quad_tree_;
 };
 
 #endif
