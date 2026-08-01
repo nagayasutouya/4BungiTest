@@ -183,7 +183,6 @@
     <ClCompile Include="Src\GTLib\Physics\Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Src\Sibungi\QuadTreeSpace.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -193,7 +192,6 @@
     <ClCompile Include="Src\Sibungi\MotornOrder.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-=======
     <ClCompile Include="Src\Sibungi\MotornOrder.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -266,7 +264,6 @@
     <ClCompile Include="Src\GTLib\Data\GenreName.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
->>>>>>> Ver2.0
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Actor.h">
@@ -470,7 +467,6 @@
     <ClInclude Include="Src\GTLib\Physics\Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="Src\Sibungi\QuadTreeSpace.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -483,7 +479,6 @@
     <ClInclude Include="Src\Sibungi\QuadTreeObj.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-=======
     <ClInclude Include="Src\Sibungi\MotornOrder.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -571,7 +566,6 @@
     <ClInclude Include="Src\GTLib\Data\GenreName.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
->>>>>>> Ver2.0
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Mesh.hlsl" />
