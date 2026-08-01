@@ -36,6 +36,7 @@ void Actor::collide(Actor& other) {
 
 // Ž€–S‚·‚é
 void Actor::die() {
+	printf("Ž€–S:%s\n",name_.c_str());
 	dead_ = true;
 	clear();
 }
