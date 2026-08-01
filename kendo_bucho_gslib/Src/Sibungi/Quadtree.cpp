@@ -12,6 +12,8 @@ void QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 		printf("èúäO:%s\n",(add==nullptr|| add->obj() == nullptr)?"NULL":add->obj()->name().c_str());
 		return;
 	}
+	//ëOãÛä‘Ç©ÇÁó£íE
+	add->remove();
 	//ãÛÇ»ÇÁ
 	if (last_object_ == nullptr && first_object_ == nullptr) {
 		//êÊì™Ç…ìoò^
@@ -23,8 +25,6 @@ void QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 		add->p_obj(last_object_);
 		last_object_ = add;
 	}
-	//ëOãÛä‘Ç©ÇÁó£íE
-	add->remove();
 	//ãÛä‘Çï€ë∂
 	add->space(this);
 }
