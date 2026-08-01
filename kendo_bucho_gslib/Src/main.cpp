@@ -16,7 +16,6 @@ public:
         scene_manager_.add("TitleScene", new TitleScene());
         scene_manager_.add("GamePlayScene", new GamePlayScene());
         scene_manager_.change("TitleScene");
-
     }
     //@XV
     void update(float delta_time) override {

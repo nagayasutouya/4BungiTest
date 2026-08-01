@@ -8,20 +8,6 @@ QuadTreeSpace::~QuadTreeSpace(){
 bool QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 	//すでにこの空間にいるか空っぽならばいばい
 	if (add->space() == this || add->obj() == nullptr)return false;
-<<<<<<< HEAD
-	printf("Name:%s,Add:%d\n", add->obj()->name().c_str(), space_id_);
-	//前空間から離脱
-	add->remove();
-	if (first_object_ != nullptr) {
-		//先頭のオブジェクトに接続
-		first_object_->p_obj(add);
-		add->n_obj(first_object_);
-		first_object_ = add;
-	}
-	else {
-		//先頭に登録
-		first_object_ = add;
-=======
 	printf("空間に加入:%d:%s\n",space_id_,add->obj()->name().c_str());
 	//前空間から離脱
 	add->remove();
@@ -36,7 +22,6 @@ bool QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 		//先頭に登録
 		first_object_= last_object_ = add;
 		printf("先頭に加入\n");
->>>>>>> Ver2.0
 	}
 	//空間を保存
 	add->space(this);
@@ -45,14 +30,6 @@ bool QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 //データ削除
 void QuadTreeSpace::clear(){
 	space_id_ = 0;
-<<<<<<< HEAD
-}
-//離脱通知の受け取り
-bool QuadTreeSpace::removed(QuadTreeObj<Actor>*target){
-	//離脱するやつが先頭だったら変更
-	if (first_object_ == target) {
-		first_object_ = first_object_->n_obj();
-=======
 	first_object_ = nullptr;
 }
 //離脱通知の受け取り
@@ -73,7 +50,6 @@ bool QuadTreeSpace::removed(QuadTreeObj<Actor>*target,bool forced){
 		printf("先頭変更:%d:%s\n", space_id_, (first_object_ == nullptr) ? "NULL" : first_object_->obj()->name().c_str());
 		first_object_ = first_object_->n_obj();
 		printf("先頭変更後:%d:%s\n", space_id_, (first_object_ == nullptr) ? "NULL" : first_object_->obj()->name().c_str());
->>>>>>> Ver2.0
 	}
 	return true;
 }

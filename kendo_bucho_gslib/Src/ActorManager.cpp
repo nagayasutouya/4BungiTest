@@ -8,12 +8,7 @@ ActorManager::~ActorManager() {
 
 // アクターの追加
 void ActorManager::add(Actor* actor) {
-<<<<<<< HEAD
-    actor->add_space();
-    actors_.push_back(actor);
-=======
     actors_.push_back(quad_tree_.add_actor(actor));
->>>>>>> Ver2.0
 }
 
 // アクターの更新
@@ -26,11 +21,7 @@ void ActorManager::update(float delta_time) {
 // アクターの遅延更新
 void ActorManager::late_update(float delta_time) {
     for (auto actor : actors_) {
-<<<<<<< HEAD
-       if(actor->enable_collider())quadtree_.add_object(actor->space_check_size(), actor->space());
-=======
         actor->obj()->late_update(delta_time);
->>>>>>> Ver2.0
     }
 }
 
@@ -57,20 +48,10 @@ void ActorManager::draw_gui() const {
 
 // アクターの衝突判定
 void ActorManager::collide() {
-<<<<<<< HEAD
-    //衝突判定リストを作成
-    GTUINT size=quadtree_.make_collide_list(actors_);
-    printf("Size:%d\n", size);
-    //リストをもとにチェック
-    for (GTUINT i = 0; i < size; i += 2) {
-        printf("%s:%d %s:%d\n", quadtree_.collide_list()[i]->name().c_str(), quadtree_.collide_list()[i]->space()->space()->space_id(), quadtree_.collide_list()[i + 1]->name().c_str(), quadtree_.collide_list()[i + 1]->space()->space()->space_id());
-        quadtree_.collide_list()[i]->collide(*quadtree_.collide_list()[i+1]);
-=======
     for (auto actor : actors_) {
         if (actor->obj() != nullptr) {
             quad_tree_.entry_object_to_space(actor->obj()->transform().position(), actor->obj()->collider().radius, actor);
         }
->>>>>>> Ver2.0
     }
     quad_tree_.collide();
 }
@@ -136,13 +117,7 @@ void ActorManager::send_message(const std::string& message, void* param) {
 // 消去
 void ActorManager::clear() {
     for (auto actor : actors_) {
-        actor->clear();
         delete actor;
     }
     actors_.clear();
-}
-
-//初期化
-void ActorManager::initialize(GTUINT layer_num,Rect field_size) {
-    quadtree_.initialize(layer_num,field_size);
 }

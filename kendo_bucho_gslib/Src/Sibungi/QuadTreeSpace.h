@@ -17,18 +17,12 @@ public:
 	int space_id()const { return space_id_; }//空間番号
 	QuadTreeObj<Actor>* first_object()const { return first_object_; }//先頭のオブジェクト
 	void first_object(QuadTreeObj<Actor>* change) { first_object_= change; }//先頭のオブジェクト変更
-<<<<<<< HEAD
-	bool removed(QuadTreeObj<Actor>*target);//離脱通知の受け取り
-private:
-	QuadTreeObj<Actor>* first_object_{ nullptr };//先頭
-=======
 	QuadTreeObj<Actor>* last_object()const { return last_object_; }//末尾のオブジェクト
 	void last_object(QuadTreeObj<Actor>* change) { last_object_ = change; }//末尾のオブジェクト変更
 	bool removed(QuadTreeObj<Actor>*target,bool forced);//離脱通知の受け取り
 private:
 	QuadTreeObj<Actor>* first_object_{ nullptr };//先頭
 	QuadTreeObj<Actor>* last_object_{ nullptr };//末尾
->>>>>>> Ver2.0
 	int space_id_{ 0 };//空間の番号
 };
 

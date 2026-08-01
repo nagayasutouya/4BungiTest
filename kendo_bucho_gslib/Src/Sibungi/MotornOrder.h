@@ -9,11 +9,7 @@ struct Short2 {
 	GTWORD x = 0;
 	GTWORD y = 0;
 };
-<<<<<<< HEAD
-
-=======
 //ここは計算のみにしてデータの保存はなしにする
->>>>>>> Ver2.0
 class MotornOrder {
 public:
 	MotornOrder(){}
@@ -43,13 +39,8 @@ private:
 	//四角単位
 	int object_in_morton_num(Short2 left_top, Short2 right_bottom);//オブジェクトがどのレイヤーのどの空間に属すか
 private:
-<<<<<<< HEAD
-	Rect space_size_{0.0f,0.0f,0.0f,0.0f};//空間の大きさ
-	Vector2 side_length_{ 0.0f,0.0f };//最小空間の辺のサイズ
-=======
 	Rect space_size_{-20.0f,20.0f,20.0f,-20.0f};//空間の大きさ
 	Vector2 side_length_{ 5.0f,5.0f };//最小空間の辺のサイズ
->>>>>>> Ver2.0
 };
 
 #endif
