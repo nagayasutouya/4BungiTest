@@ -2,8 +2,6 @@
 #define QUADTREE_MANAGER_H_
 
 #include "QuadTreeSpace.h"
-#include <vector>
-#include <list>
 class QuadTreeSpace;
 class Actor;
 using namespace std;

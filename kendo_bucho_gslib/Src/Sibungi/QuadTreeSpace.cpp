@@ -8,7 +8,7 @@ QuadTreeSpace::~QuadTreeSpace(){
 bool QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 	//‚·‚Å‚É‚±‚Ì‹óŠÔ‚É‚¢‚é‚©‹ó‚Á‚Û‚È‚ç‚Î‚¢‚Î‚¢
 	if (add->space() == this || add->obj() == nullptr)return false;
-	printf("‹óŠÔ‚É‰Á“ü:%d:%s\n",space_id_,add->obj()->name().c_str());
+	//printf("‹óŠÔ‚É‰Á“ü:%d:%s\n",space_id_,add->obj()->name().c_str());
 	//‘O‹óŠÔ‚©‚ç—£’E
 	add->remove();
 	if (last_object_ != nullptr) {
@@ -16,12 +16,12 @@ bool QuadTreeSpace::add_obj(QuadTreeObj<Actor>* add){
 		last_object_->n_obj(add);
 		add->p_obj(last_object_);
 		last_object_ = add;
-		printf("––”ö‚É‰Á“ü\n");
+		//printf("––”ö‚É‰Á“ü\n");
 	}
 	else {
 		//æ“ª‚É“o˜^
 		first_object_= last_object_ = add;
-		printf("æ“ª‚É‰Á“ü\n");
+		//printf("æ“ª‚É‰Á“ü\n");
 	}
 	//‹óŠÔ‚ð•Û‘¶
 	add->space(this);
@@ -36,20 +36,20 @@ void QuadTreeSpace::clear(){
 bool QuadTreeSpace::removed(QuadTreeObj<Actor>*target,bool forced){
 	//•Ê‹óŠÔ‚©–³Œø‚È‚ç–³Ž‹
 	if (target == nullptr || (!forced&&target->space() != this)) {
-		printf("—£’EƒLƒƒƒ“ƒZƒ‹:%d:%s\n", space_id_, (target == nullptr) ? "NULL" : target->obj()->name().c_str());
+		//printf("—£’EƒLƒƒƒ“ƒZƒ‹:%d:%s\n", space_id_, (target == nullptr) ? "NULL" : target->obj()->name().c_str());
 		return false;
 	}
 	//—£’E‚·‚é‚â‚Â‚ª––”ö‚¾‚Á‚½‚ç•ÏX
 	if (last_object_==target) {
-		printf("––”ö•ÏX:%d:%s\n", space_id_, (last_object_ == nullptr) ? "NULL" : last_object_->obj()->name().c_str());
+		//printf("––”ö•ÏX:%d:%s\n", space_id_, (last_object_ == nullptr) ? "NULL" : last_object_->obj()->name().c_str());
 		last_object_ = last_object_->p_obj();
-		printf("––”ö•ÏXŒã:%d:%s\n", space_id_, (last_object_ == nullptr) ? "NULL" : last_object_->obj()->name().c_str());
+		//printf("––”ö•ÏXŒã:%d:%s\n", space_id_, (last_object_ == nullptr) ? "NULL" : last_object_->obj()->name().c_str());
 	}
 	//—£’E‚·‚é‚â‚Â‚ªæ“ª‚¾‚Á‚½‚ç•ÏX
 	if (first_object_ == target) {
-		printf("æ“ª•ÏX:%d:%s\n", space_id_, (first_object_ == nullptr) ? "NULL" : first_object_->obj()->name().c_str());
+		//printf("æ“ª•ÏX:%d:%s\n", space_id_, (first_object_ == nullptr) ? "NULL" : first_object_->obj()->name().c_str());
 		first_object_ = first_object_->n_obj();
-		printf("æ“ª•ÏXŒã:%d:%s\n", space_id_, (first_object_ == nullptr) ? "NULL" : first_object_->obj()->name().c_str());
+		//printf("æ“ª•ÏXŒã:%d:%s\n", space_id_, (first_object_ == nullptr) ? "NULL" : first_object_->obj()->name().c_str());
 	}
 	return true;
 }

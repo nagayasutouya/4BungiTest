@@ -61,7 +61,7 @@ void ActorManager::remove() {
     for (auto i = actors_.begin(); i != actors_.end(); ) {
         if ((*i)->obj()->is_dead()) {
             (*i)->clear();
-            printf("íœ\n");
+            //printf("íœ\n");
             delete *i;
             i = actors_.erase(i);
         } else {
