@@ -10,7 +10,7 @@ QuadTreeObj<Actor>* QuadTreeManager::add_actor(Actor* actor) {
 void QuadTreeManager::collide(){	
 	//誰もいないなら無視
 	if (space_array_[0] == nullptr)return;
-	printf("チェック開始\n");
+	//printf("チェック開始\n");
 	//当たり判定チェック開始
 	one_space_collide(0, nullptr);
 }
@@ -22,7 +22,7 @@ void QuadTreeManager::one_space_collide(int space_id, QuadTreeObj<Actor>*parent_
 	if (current_space != nullptr) {
 		//先頭を取得
 		QuadTreeObj<Actor>*current_obj = current_space->first_object();
-		printf("Space:%d First:%s\n",current_space->space_id(),(current_obj==nullptr)?"NULL" : current_obj->obj()->name().c_str());
+		//printf("Space:%d First:%s\n",current_space->space_id(),(current_obj==nullptr)?"NULL" : current_obj->obj()->name().c_str());
 		//上位レイヤーの空間の末尾オブジェがあったら
 		if (current_obj!=nullptr&&parent_last_obj != nullptr) {
 			//お互いの接続部分を一応初期化
@@ -34,7 +34,7 @@ void QuadTreeManager::one_space_collide(int space_id, QuadTreeObj<Actor>*parent_
 		}
 		//末尾へ移動
 		current_obj = current_space->last_object();
-		printf("Space:%d Last:%s\n", current_space->space_id(), (current_obj == nullptr) ? "NULL" : current_obj->obj()->name().c_str());
+		//printf("Space:%d Last:%s\n", current_space->space_id(), (current_obj == nullptr) ? "NULL" : current_obj->obj()->name().c_str());
 		//先頭までサーチ
 		while (current_obj != nullptr) {
 			//一個前とチェック
@@ -74,18 +74,18 @@ void QuadTreeManager::one_space_collide(int space_id, QuadTreeObj<Actor>*parent_
 		//子との接続を解除
 		if (current_space->first_object() != nullptr) {
 			current_space->first_object()->p_obj(nullptr);
-			printf("親解除:%d Last:%s\n", current_space->space_id(), (current_space->first_object()->obj() == nullptr) ? "NULL" : current_space->first_object()->obj()->name().c_str());
+			//printf("親解除:%d Last:%s\n", current_space->space_id(), (current_space->first_object()->obj() == nullptr) ? "NULL" : current_space->first_object()->obj()->name().c_str());
 		}
 		if (current_space->last_object() != nullptr) {
 			current_space->last_object()->n_obj(nullptr);
-			printf("子解除:%d Last:%s\n", current_space->space_id(), (current_space->last_object()->obj() == nullptr) ? "NULL" : current_space->last_object()->obj()->name().c_str());
+			//printf("子解除:%d Last:%s\n", current_space->space_id(), (current_space->last_object()->obj() == nullptr) ? "NULL" : current_space->last_object()->obj()->name().c_str());
 		}
 	}
 }
 //空間の作成
 void QuadTreeManager::creat_space(GTDWORD id) {
 	while (!space_array_[id]) {
-		printf("CreatSpace:%d\n",(int)id);
+		//printf("CreatSpace:%d\n",(int)id);
 		//空間作成
 		space_array_[id] = new QuadTreeSpace(id);
 		id = (id - 1) >> 2;
