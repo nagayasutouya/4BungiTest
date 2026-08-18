@@ -192,6 +192,8 @@
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\GraphicsDevice.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Animation.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\AnimationSet.cpp" />
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceMesh.cpp" />
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceSkinnedMesh.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Mesh.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Skeleton.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\SkinnedMesh.cpp" />
@@ -280,6 +282,8 @@
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\GraphicsDevice.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Animation.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\AnimationSet.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceMesh.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceSkinnedMesh.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Mesh.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Skeleton.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\SkinnedMesh.h" />
