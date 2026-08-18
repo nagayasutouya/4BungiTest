@@ -265,6 +265,7 @@
     <ClInclude Include="Src\GTLib\Data\AssetsStructs.h" />
     <ClInclude Include="Src\GTLib\Data\DefineVector.h" />
     <ClInclude Include="Src\GTLib\Data\GenreName.h" />
+    <ClInclude Include="Src\GTLib\Data\InstanceComputeMatrix.h" />
     <ClInclude Include="Src\GTLib\Graphics\Game.h" />
     <ClInclude Include="Src\GTLib\Graphics\Graphics.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BlendState.h" />

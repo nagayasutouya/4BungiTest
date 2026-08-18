@@ -6,7 +6,7 @@
 //#include<sstream>
 //
 ////•¡”ƒ‹[ƒ‹‚É•ÏX‚·‚é
-//Editor::Editor(string name, string key, Rows rule, Rows data, vector<DevineRow> new_rule) :name_{ name }/*, data_{ data }, rule_{ rule }, new_rule_{ new_rule }*/ {
+//Editor::Editor(string name, string key, Rows rule, Rows data, vector<DevideRow> new_rule) :name_{ name }/*, data_{ data }, rule_{ rule }, new_rule_{ new_rule }*/ {
 //	key_=key;
 //	data_ = data;
 //	rule_ = rule; 

@@ -62,8 +62,8 @@ GraphicsDevice::~GraphicsDevice() {
 }
 
 // ルートシグネチャの作成
-RootSignature* GraphicsDevice::create_root_signature(UINT num_cbv, UINT num_srv, UINT num_sampler, const D3D12_STATIC_SAMPLER_DESC sampler[]) {
-    return new RootSignature(device_, num_cbv, num_srv, num_sampler, sampler);
+RootSignature* GraphicsDevice::create_root_signature(UINT num_cbv, UINT num_srv,UINT num_inline_srv,UINT num_sampler, const D3D12_STATIC_SAMPLER_DESC sampler[]) {
+    return new RootSignature(device_, num_cbv, num_srv,num_inline_srv ,num_sampler, sampler);
 }
 
 // パイプラインステートの作成
@@ -195,6 +195,18 @@ void GraphicsDevice::set_constant_buffer(UINT shader_register, const void* data,
         constant_buffer_pool_[current_back_buffer_]->upload(data, size));
 }
 
+// ストラクテッドバッファの設定
+void GraphicsDevice::set_structured_buffer(UINT shader_register, ConstantBuffer* constant_buffer) {
+    UINT root_index = root_signature_->cbv_root_index() + shader_register;
+    command_list_->SetGraphicsRootConstantBufferView(root_index,
+        constant_buffer->constant_buffer_view().BufferLocation);
+}
+
+//インラインSRVの設定
+void GraphicsDevice::set_shader_resource_view_inline(UINT shader_register, D3D12_GPU_VIRTUAL_ADDRESS srv_address){
+    UINT root_index = root_signature_->inline_srv_root_index() + shader_register;
+    command_list_->SetGraphicsRootShaderResourceView(root_index, srv_address);
+}
 
 // ディスクリプタヒープの設定
 void GraphicsDevice::set_descriptor_heaps() {
@@ -230,15 +242,15 @@ void GraphicsDevice::set_scissor_rect(float x, float y, float w, float h) {
 }
 
 // ポリゴンの描画（頂点インデックスあり）
-void GraphicsDevice::draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index, UINT start_vertex) {
+void GraphicsDevice::draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index, UINT start_vertex, UINT instance_count) {
     command_list_->IASetPrimitiveTopology(primitive);
-    command_list_->DrawIndexedInstanced(index_count, 1, start_index, start_vertex, 0);
+    command_list_->DrawIndexedInstanced(index_count, instance_count, start_index, start_vertex, 0);
 }
 
 // ポリゴンの描画（頂点インデックスなし）
-void GraphicsDevice::draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex) {
+void GraphicsDevice::draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex, UINT instance_count) {
     command_list_->IASetPrimitiveTopology(primitive);
-    command_list_->DrawInstanced(vertex_count, 1, start_vertex, 0);
+    command_list_->DrawInstanced(vertex_count, instance_count, start_vertex, 0);
 }
 
 // GPUの実行終了を待つ

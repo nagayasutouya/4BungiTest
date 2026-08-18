@@ -175,7 +175,7 @@
 //			if(rule_count_==0)window_count_.push_back(0);
 //		}
 //		col--;
-//		DevineRow drow;
+//		DevideRow drow;
 //		drow.input(name, rule_genre_list_.at(rule_count_), rule_genre_id_list_.at(rule_count_), true);
 //		rules_inf_.push_back(drow);
 //		rule_count_++;
