@@ -549,28 +549,28 @@ std::uint32_t Graphics::get_instance_skinned_mesh_pipeline_state() {
     return s_instance_skinned_mesh_pipeline_state_id;
 }
 // ローカル行列計算
-void Graphics::compute_local_matrices(std::uint32_t instance_skinned_mesh_id, int data_count, LocalMat local[]){
-    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+void Graphics::compute_local_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, int anim_id, float frame_no, Matrix4x4 local[]) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
     if (sm == nullptr) return;
-    sm->compute_local_matrices(data_count, local);
+    sm->compute_local_matrices(instance_id, anim_id, frame_no, local);
 }
 // ブレンドされたローカル行列計算
-void Graphics::compute_blended_matrices(std::uint32_t instance_skinned_mesh_id, int data_count, BlendedMat blended[]){
-    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+void Graphics::compute_blended_matrices_instance(std::uint32_t skinned_mesh_id,int instance_id,BlendedMat& mat,const float lerp_time) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
     if (sm == nullptr) return;
-    sm->compute_blended_matrices(data_count,blended);
+    sm->compute_blended_matrices(instance_id,mat.prev_motion, mat.prev_frame, mat.current_motion, mat.current_frame, mat.lerp/lerp_time, mat.local);
 }
 // ワールド行列計算
-void Graphics::compute_world_matrices(std::uint32_t instance_skinned_mesh_id, int data_count, WorldMat world[]){
-    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+void Graphics::compute_world_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
     if (sm == nullptr) return;
-    sm->compute_world_matrices(data_count,world);
+    sm->compute_world_matrices(instance_id, local, world, parent);
 }
-// インスタンススキニング行列計算
-void Graphics::compute_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id,int data_count, SkinnedMat skinned[]) {
-    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+// スキニング行列計算
+void Graphics::compute_skinned_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 world[], Matrix4x4 skinned[]) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
     if (sm == nullptr) return;
-    sm->compute_skinned_matrices(data_count,skinned);
+    sm->compute_skinned_matrices(instance_id, world, skinned);
 }
 // インスタンススキニング行列をセットする
 void Graphics::set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id, const Matrix4x4 instance_skinned[]) {
@@ -579,14 +579,13 @@ void Graphics::set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh
     sm->set_skinned_matrices(instance_skinned);
 }
 // スキンメッシュを描画する（事前に演算および行列セットが必要）
-void Graphics::draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count) {
+void Graphics::draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count,const InstanceObject* first_obj) {
     InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
     if (sm == nullptr) return;
     // パイプラインステートの設定
     set_pipeline_state(get_instance_skinned_mesh_pipeline_state());
-
     // 3D行列とライトの設定をGPUへ転送
-    apply_object_params();
+    sm->set_all_object_data(first_obj,instance_count);
     apply_camera_params();
     apply_light_params();
     // メッシュ描画

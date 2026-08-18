@@ -11,28 +11,28 @@ struct LocalMat {
 };
 //ローカルマトリックスをワールドマトリックスに
 struct WorldMat {
-    Matrix4x4* local = nullptr;
     Matrix4x4* world = nullptr;
     Matrix4x4 parent = Matrix4x4::identity();
 };
 //スキニング行列
 struct SkinnedMat {
-    const Matrix4x4* world = nullptr;
     Matrix4x4* skinned = nullptr;
 };
 //スキニングとワールドマトリックスをブレンド
 struct BlendedMat {
-    int anim_id1 = 0;
-    float frame1 = 0.0f;
-    int anim_id2 = 0;
-    float frame2 = 0.0f;
-    float weight = 0.0f;
+    bool is_empty = true;//このIDを使ってるオブジェクトの有無
+    int prev_motion = 0;
+    float prev_frame = 0.0f;
+    int current_motion = 0;
+    float current_frame = 0.0f;
+    float lerp = 0.0f;
+    bool loop = false;
     Matrix4x4* local = nullptr;
 };
 //HLSL用インスタンススキニングデータ
 struct InstanceObject {
-    Matrix4x4 world_;
-    unsigned int bone_offset_;
+    Matrix4x4 world_ = Matrix4x4::identity();
+    unsigned int bone_offset_=0;
 };
 
 #endif

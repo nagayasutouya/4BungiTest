@@ -54,3 +54,10 @@ void EnemyGenerator::generate() {
     }
     world_->add_actor(new Enemy(world_, position));
 }
+
+//一括描画
+void  EnemyGenerator::draw()const {
+
+}
+// メッセージ処理
+void  EnemyGenerator::handle_message(const std::string& message, void* param){}

@@ -1388,7 +1388,7 @@ palette when the palette doesn't have a required color is not supported. This is
 not supported on purpose: this is information loss which requires a color
 reduction algorithm that is beyond the scope of a PNG encoder (yes, RGB to gray
 is easy, but there are multiple ways if you want to give some channels more
-weight).
+lerp).
 
 By default, when decoding, you get the raw image in 32-bit RGBA or 24-bit RGB
 color, no matter what color type the PNG has. And by default when encoding,

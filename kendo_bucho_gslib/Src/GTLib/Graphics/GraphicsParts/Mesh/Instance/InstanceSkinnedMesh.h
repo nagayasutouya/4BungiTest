@@ -7,7 +7,6 @@
 #include "GTLib/Graphics/GraphicsParts/Mesh/AnimationSet.h"
 #include "GTLib/Graphics/GraphicsParts/BufferAndPool/ShaderResourceView.h"
 #include "GTLib/Data/InstanceComputeMatrix.h"
-#include "GTLib/Data/InstanceComputeMatrix.h"
 #include <vector>
 
 class GraphicsDevice;
@@ -24,13 +23,13 @@ public:
     void load(const std::string& mesh_path,const std::string& skeleton_path,const std::string& animation_path,int instance_count);
 
     // 指定アニメーション・フレームのローカル行列を計算する
-    void compute_local_matrices(int data_id, LocalMat local[]) const;
+    void compute_local_matrices(int instance_id,int anim_id, float frame_no, Matrix4x4 local[]) const;
     // ワールド行列を計算する
-    void compute_world_matrices(int data_count,WorldMat world[]) const;
+    void compute_world_matrices(int instance_id,const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent = Matrix4x4::identity()) const;
     // スキニング行列を計算する
-    void compute_skinned_matrices(int data_count,SkinnedMat skinned[]) const;
+    void compute_skinned_matrices(int instance_id, const Matrix4x4 world[], Matrix4x4 skinned[]) const;
     // 2つのアニメーションをブレンドした行列を計算する
-    void compute_blended_matrices(int data_count,BlendedMat blended[]) const;
+    void compute_blended_matrices(int instance_id, int anim_id1, float frame1,int anim_id2, float frame2,float weight, Matrix4x4 local[]) const;
 
     //描画数を変更する
     void set_current_instance_count(UINT current) { current_instance_count_ = current; }
@@ -39,7 +38,7 @@ public:
     // 全ボーンデータをセットする
     void set_all_bone_data(const Matrix4x4 bone[], int bone_count);
     // 全オブジェクトデータをセットする
-    void set_all_object_data(InstanceObject object[], int object_count);
+    void set_all_object_data(const InstanceObject object[], int object_count);
     // 描画する
     void draw(unsigned int instance_count) const;
 

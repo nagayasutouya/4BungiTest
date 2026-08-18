@@ -237,6 +237,7 @@
     <ClCompile Include="Src\GTLib\Util\SystemLog\PacketDebugWindow.cpp" />
     <ClCompile Include="Src\GTLib\Util\SystemLog\UtilLogFolder.cpp" />
     <ClCompile Include="Src\GTLib\Util\Util.cpp" />
+    <ClCompile Include="Src\InstanceTest\InstanceAnimatedMesh.cpp" />
     <ClCompile Include="Src\Light.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\NumberTexture.cpp" />
@@ -333,6 +334,7 @@
     <ClInclude Include="Src\GTLib\Util\SystemLog\PacketDebugWindow.h" />
     <ClInclude Include="Src\GTLib\Util\SystemLog\UtilLogFolder.h" />
     <ClInclude Include="Src\GTLib\Util\Util.h" />
+    <ClInclude Include="Src\InstanceTest\InstanceAnimatedMesh.h" />
     <ClInclude Include="Src\IScene.h" />
     <ClInclude Include="Src\IWorld.h" />
     <ClInclude Include="Src\Light.h" />

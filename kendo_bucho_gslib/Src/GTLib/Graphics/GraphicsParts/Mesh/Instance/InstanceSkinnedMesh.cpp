@@ -21,28 +21,20 @@ void InstanceSkinnedMesh::load(const std::string& mesh_path, const std::string& 
     instanse_count_ = instance_count;
 }
 // 指定アニメーション・フレームのローカル行列を計算する
-void InstanceSkinnedMesh::compute_local_matrices(int data_count,LocalMat local[]) const {
-    for (int i = 0; i < data_count; i++) {
-        skeletons_[i].compute_local_matrices(animation_set_.get(local[i].anim_id), local[i].frame_no, local[i].local);
-    }
+void InstanceSkinnedMesh::compute_local_matrices(int instance_id, int anim_id, float frame_no, Matrix4x4 local[]) const {
+    skeletons_[instance_id].compute_local_matrices(animation_set_.get(anim_id), frame_no, local);
 }
 // ワールド行列を計算する
-void InstanceSkinnedMesh::compute_world_matrices(int data_count, WorldMat world[]) const {
-    for (int i = 0; i < data_count; i++) {
-        skeletons_[i].compute_world_matrices(world[i].parent, world[i].local, world[i].world);
-    }
+void InstanceSkinnedMesh::compute_world_matrices(int instance_id,const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent) const {
+    skeletons_[instance_id].compute_world_matrices(parent, local, world);
 }
 // スキニング行列を計算する
-void InstanceSkinnedMesh::compute_skinned_matrices(int data_count, SkinnedMat skinned[]) const {
-    for (int i = 0; i < data_count; i++) {
-        skeletons_[i].compute_skinned_matrices(skinned[i].world, skinned[i].skinned);
-    }
+void InstanceSkinnedMesh::compute_skinned_matrices(int instance_id,const Matrix4x4 world[], Matrix4x4 skinned[]) const {
+    skeletons_[instance_id].compute_skinned_matrices(world, skinned);
 }
 // 2つのアニメーションをブレンドしたローカル行列を計算する
-void InstanceSkinnedMesh::compute_blended_matrices(int data_count, BlendedMat blended[]) const {
-    for (int i = 0; i < data_count; i++) {
-        skeletons_[i].compute_blended_matrices(animation_set_.get(blended[i].anim_id1), blended[i].frame1, animation_set_.get(blended[i].anim_id2), blended[i].frame2, blended[i].weight, blended[i].local);
-    }
+void InstanceSkinnedMesh::compute_blended_matrices(int instance_id, int anim_id1, float frame1, int anim_id2, float frame2, float weight, Matrix4x4 local[]) const {
+    skeletons_[instance_id].compute_blended_matrices(animation_set_.get(anim_id1), frame1,animation_set_.get(anim_id2), frame2,weight, local);
 }
 // スキニング行列をセットする
 void InstanceSkinnedMesh::set_skinned_matrices(const Matrix4x4 skinned[],int instanse_id) const {
@@ -53,7 +45,7 @@ void InstanceSkinnedMesh::set_all_bone_data(const Matrix4x4 bone[],int bone_coun
     bone_srv_.upload(bone ,bone_count ,current_instance_count_);
 }
 // 全オブジェクトデータをセットする
-void InstanceSkinnedMesh::set_all_object_data(InstanceObject object[],int object_count) {
+void InstanceSkinnedMesh::set_all_object_data(const InstanceObject object[],int object_count) {
     objects_srv_.upload(object,object_count,current_instance_count_);
 }
 // 描画する
