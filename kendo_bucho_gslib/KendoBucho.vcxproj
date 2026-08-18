@@ -192,6 +192,8 @@
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\GraphicsDevice.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Animation.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\AnimationSet.cpp" />
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceMesh.cpp" />
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceSkinnedMesh.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Mesh.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Skeleton.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\SkinnedMesh.cpp" />
@@ -235,6 +237,7 @@
     <ClCompile Include="Src\GTLib\Util\SystemLog\PacketDebugWindow.cpp" />
     <ClCompile Include="Src\GTLib\Util\SystemLog\UtilLogFolder.cpp" />
     <ClCompile Include="Src\GTLib\Util\Util.cpp" />
+    <ClCompile Include="Src\InstanceTest\InstanceAnimatedMesh.cpp" />
     <ClCompile Include="Src\Light.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\NumberTexture.cpp" />
@@ -265,6 +268,7 @@
     <ClInclude Include="Src\GTLib\Data\AssetsStructs.h" />
     <ClInclude Include="Src\GTLib\Data\DefineVector.h" />
     <ClInclude Include="Src\GTLib\Data\GenreName.h" />
+    <ClInclude Include="Src\GTLib\Data\InstanceComputeMatrix.h" />
     <ClInclude Include="Src\GTLib\Graphics\Game.h" />
     <ClInclude Include="Src\GTLib\Graphics\Graphics.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BlendState.h" />
@@ -279,6 +283,8 @@
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\GraphicsDevice.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Animation.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\AnimationSet.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceMesh.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceSkinnedMesh.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Mesh.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Skeleton.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\SkinnedMesh.h" />
@@ -328,6 +334,7 @@
     <ClInclude Include="Src\GTLib\Util\SystemLog\PacketDebugWindow.h" />
     <ClInclude Include="Src\GTLib\Util\SystemLog\UtilLogFolder.h" />
     <ClInclude Include="Src\GTLib\Util\Util.h" />
+    <ClInclude Include="Src\InstanceTest\InstanceAnimatedMesh.h" />
     <ClInclude Include="Src\IScene.h" />
     <ClInclude Include="Src\IWorld.h" />
     <ClInclude Include="Src\Light.h" />

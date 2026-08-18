@@ -34,13 +34,13 @@
 //	string file_name_ = "";
 //	string file_pass_ = "";
 //
-//	DevineRow current_data_;
+//	DevideRow current_data_;
 //	vector<int>window_count_;
 //
 //	//ルールの保存場所
 //	vector<string> rules_path_;//読み込みに使うパス
 //	VInt rule_genre_count_;//ジャンルの数
-//	vector<DevineRow> rules_inf_;//ルールの保存先
+//	vector<DevideRow> rules_inf_;//ルールの保存先
 //	Rows rule_genre_list_;//ルールが内包するジャンルのリスト
 //	vector<VInt> rule_genre_id_list_;//ルールが内包するジャンルのロード側IDリスト
 //	vector<VInt> rule_genre_draw_id_list_;//ルールが内包するジャンルの描画側IDリスト

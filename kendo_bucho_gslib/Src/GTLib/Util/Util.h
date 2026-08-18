@@ -20,7 +20,6 @@ namespace Util {
 	extern inline float PointInToSquare(float point_x, float point_y, const Vector2& left_top, const Vector2& right_bottom);	//対象の点が指定した四角形の範囲内にいるかどうか
 	extern inline float TargetDistance(const Vector3& target, const Vector3& from);	//ターゲット一体との距離を返す
 	extern inline float TargetDistance(const Vector2&target,const Vector2&from);	//ターゲット一体との距離を返す
-	extern inline float TargetDistance(Actor* target, Actor* from);	//ターゲット一体との距離を返す
 	extern inline Vector3 ToTarget(const Vector3& target_position, const Vector3& from_position);	//対象に向かって移動するベクトルを出してくれる
 	extern inline Vector2 ToTarget(const Vector2& target_position, const Vector2& from_position);	//対象に向かって移動するベクトルを出してくれる
 	extern inline bool IsOverLine(float target,float line,float add);//足し引きに関わらず一定のラインを超えたらTrue返す

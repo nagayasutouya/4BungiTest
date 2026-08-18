@@ -11,8 +11,9 @@
 CSVReader::CSVReader(const std::string& file_name) {
 	load(file_name);
 }
-
+//外部からデータを読み込む
 void CSVReader::load(const std::string& file_name, bool like_csv, bool creat) {
+	//ないフォルダとかを生成
 	if (creat) { creat_path(file_name); }
 	std::ifstream file{ file_name };
 	if (!file) {
@@ -32,7 +33,7 @@ void CSVReader::load(const std::string& file_name, bool like_csv, bool creat) {
 		rows_.push_back(row);
 	}
 }
-
+//一行を保存
 void CSVReader::save(const std::vector<std::string>& data, const std::string& name, const bool creat) {
 	std::ofstream ofs(name);
 	if (!ofs.is_open()) {
@@ -45,7 +46,7 @@ void CSVReader::save(const std::vector<std::string>& data, const std::string& na
 	}
 	ofs.close();
 }
-
+//複数の行を保存
 void CSVReader::save(const std::vector<std::vector<std::string>>& data, const std::string& name, const bool creat) {
 	std::ofstream ofs(name);
 	if (!ofs.is_open()&&!creat) {
@@ -59,40 +60,38 @@ void CSVReader::save(const std::vector<std::vector<std::string>>& data, const st
 	}
 	ofs.close();
 }
-
+//全データを返す
 const std::vector<std::vector<std::string>>CSVReader::get_rows()const{
 	return rows_;
 }
-
+//行を返す
 const std::vector<std::string>CSVReader::get_row(int row)const {
 	return rows_.at(row);
 }
-
+//一のデータを返す
 const std::string& CSVReader::get(int row, int column)const {
 	return rows_[row][column];
 }
-
+//一つのデータをintで返す
 int CSVReader::geti(int row, int column)const {
 	return stoi(get(row, column));
 }
-
+//一つのデータをfloatで返す
 float CSVReader::getf(int row, int column) const {
 	return stof(get(row, column));
 }
-
+//行数を返す
 int CSVReader::rows()const {
 	return (int)rows_.size();
 }
-
+//一行に入っているデータ数を返す
 int CSVReader::columns(int row)const {
 	return (int)rows_[row].size();
 }
-
 //フォルダを生成
 bool CSVReader::creat_folder(std::string folder_name){
 	return MAKE_DIR(folder_name.c_str());
 }
-
 //パスを分解してフォルダ生成
 void CSVReader::creat_path(std::string path){
 	std::vector<std::string> paths;

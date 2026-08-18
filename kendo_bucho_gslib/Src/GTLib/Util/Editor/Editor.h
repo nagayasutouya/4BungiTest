@@ -6,7 +6,7 @@
 ////ながそんをベースとしたデータを「読み込み、編集、書き出し」をするためのクラス
 //class Editor {
 //public:
-//	Editor(string name, string key, Rows rule, Rows data, vector<DevineRow> new_rule);
+//	Editor(string name, string key, Rows rule, Rows data, vector<DevideRow> new_rule);
 //	void update(float time=0);
 //	void clear(){}
 //	Rows result()const { return result_; }
@@ -30,7 +30,7 @@
 //	int new_rule_count_{ 0 };
 //	bool is_ini_{ false };//初期化フラグ
 //	vector<int> before_function_id_;//ファンクションＩＤの変更をチェックするやつ
-//	vector<DevineRow> new_rule_;
+//	vector<DevideRow> new_rule_;
 //	string key_ = "";
 //	Rows result_;//最終的にテキストファイルに保存するやつ
 //	bool is_closed_{ false };

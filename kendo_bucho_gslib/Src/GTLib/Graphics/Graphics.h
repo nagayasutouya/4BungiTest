@@ -8,7 +8,9 @@
 #include "GTLib/Math/Color.h"
 #include "GTLib/Math/Rect.h"
 #include "GraphicsParts/Mesh/Mesh.h"
-#include"GraphicsParts/Mesh/SkinnedMesh.h"
+#include "GraphicsParts/Mesh/SkinnedMesh.h"
+#include "GraphicsParts/Mesh/Instance/InstanceMesh.h"
+#include "GraphicsParts/Mesh/Instance/InstanceSkinnedMesh.h"
 #include <string>
 #include <cstdint>
 
@@ -59,13 +61,6 @@ namespace Graphics {
     // テクスチャ取得
     Texture* get_texture(std::uint32_t texture_id);
 
-    // メッシュ読み込み
-    Mesh* load_mesh(std::uint32_t mesh_id, const std::string& filename);
-    // メッシュ削除
-    void delete_mesh(std::uint32_t mesh_id);
-    // メッシュ取得
-    Mesh* get_mesh(std::uint32_t mesh_id);
-
     // ワールド行列の設定
     void set_world_matrix(const Matrix4x4& world);
     // ビュー行列の設定
@@ -79,17 +74,6 @@ namespace Graphics {
     void set_sprite2d_pipeline_state(std::uint32_t pipeline_state_id);
     // スプライトのパイプラインステートを取得
     std::uint32_t get_sprite2d_pipeline_state();
-
-    // 3Dスプライトのパイプラインステート設定
-    void set_sprite3d_pipeline_state(std::uint32_t pipeline_state_id);
-    // 3Dスプライトのパイプラインステート取得
-    std::uint32_t get_sprite3d_pipeline_state();
-
-    // メッシュのパイプラインステート設定
-    void set_mesh_pipeline_state(std::uint32_t pipeline_state_id);
-    // メッシュのパイプラインステート取得
-    std::uint32_t get_mesh_pipeline_state();
-
     // スプライト描画
     void draw_sprite2d(
         std::uint32_t texture_id,                           // テクスチャID
@@ -101,6 +85,10 @@ namespace Graphics {
         float angle = 0.0f                                  // 回転角度
     );
 
+    // 3Dスプライトのパイプラインステート設定
+    void set_sprite3d_pipeline_state(std::uint32_t pipeline_state_id);
+    // 3Dスプライトのパイプラインステート取得
+    std::uint32_t get_sprite3d_pipeline_state();
     // 3Dスプライト(ビルボード)描画
     void draw_sprite3d(
         std::uint32_t texture_id,                           // テクスチャID
@@ -112,9 +100,21 @@ namespace Graphics {
         float angle = 0.0f                                  // 回転角度
     );
 
+    //メッシュ
+    // メッシュ読み込み
+    Mesh* load_mesh(std::uint32_t mesh_id, const std::string& filename);
+    // メッシュ削除
+    void delete_mesh(std::uint32_t mesh_id);
+    // メッシュ取得
+    Mesh* get_mesh(std::uint32_t mesh_id);
+    // メッシュのパイプラインステート設定
+    void set_mesh_pipeline_state(std::uint32_t pipeline_state_id);
+    // メッシュのパイプラインステート取得
+    std::uint32_t get_mesh_pipeline_state();
     // メッシュ描画
     void draw_mesh(std::uint32_t mesh_id);
 
+    //スキニングメッシュ
     // スキニングメッシュ読み込み
     SkinnedMesh* load_skinned_mesh(std::uint32_t skinned_mesh_id,
         const std::string& mesh_file,
@@ -129,7 +129,6 @@ namespace Graphics {
     void set_skinned_mesh_pipeline_state(std::uint32_t pipeline_state_id);
     // スキニングメッシュのパイプラインステートを取得
     std::uint32_t get_skinned_mesh_pipeline_state();
-
     // ローカル行列計算
     void compute_local_matrices(std::uint32_t skinned_mesh_id,
         int anim_id, float frame_no, Matrix4x4 local[]);
@@ -145,17 +144,42 @@ namespace Graphics {
     // スキニング行列計算
     void compute_skinned_matrices(std::uint32_t skinned_mesh_id,
         const Matrix4x4 world[], Matrix4x4 skinned[]);
-
     // スキニング行列を設定する
     void set_skinned_matrices(std::uint32_t skinned_mesh_id, const Matrix4x4 skinned[]);
     // スキニングメッシュを描画する (事前にスキニング行列のセットが必要)
     void draw_skinned_mesh(std::uint32_t skinned_mesh_id);
-
     // 指定したスキンメッシュ・アニメーションの終了フレーム（時間）を返す
     float get_skinned_mesh_last_frame(std::uint32_t skinned_mesh_id, int anim_id);
     // 指定したスキンメッシュのボーン数を返す
     std::size_t get_skinned_mesh_bone_count(std::uint32_t skinned_mesh_id);
 
+    //インスタンススキニングメッシュ
+    // インスタンススキニングメッシュ読み込み
+    InstanceSkinnedMesh* load_instance_skinned_mesh(std::uint32_t skinned_mesh_id,const std::string& mesh_file,const std::string& skeleton_file,const std::string& animation_file, int instance_count=100);
+    // スキニングメッシュ削除
+    void delete_instance_skinned_mesh(std::uint32_t skinned_mesh_id);
+    // スキニングメッシュ取得
+    InstanceSkinnedMesh* get_instance_skinned_mesh(std::uint32_t skinned_mesh_id);
+    // スキニングメッシュのパイプラインステートを設定
+    void set_instance_skinned_mesh_pipeline_state(std::uint32_t pipeline_state_id);
+    // スキニングメッシュのパイプラインステートを取得
+    std::uint32_t get_instance_skinned_mesh_pipeline_state();
+    // ローカル行列計算
+    void compute_local_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, int anim_id, float frame_no, Matrix4x4 local[]);
+    // ブレンドされたローカル行列計算
+    void compute_blended_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, BlendedMat& mat, const float lerp_time);
+    // ワールド行列計算
+    void compute_world_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent);
+    // スキニング行列計算
+    void compute_skinned_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 world[], Matrix4x4 skinned[]);
+    // スキニング行列を設定する
+    void set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id, const Matrix4x4 instance_skinned[]);
+    // スキニングメッシュを描画する (事前にスキニング行列のセットが必要)
+    void draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id, unsigned int instance_count,const InstanceObject* first_obj);
+    // 指定したスキンメッシュ・アニメーションの終了フレーム（時間）を返す
+    float get_instance_skinned_mesh_last_frame(std::uint32_t instance_skinned_mesh_id, int anim_id);
+    // 指定したスキンメッシュのボーン数を返す
+    std::size_t get_instance_skinned_mesh_bone_count(std::uint32_t instance_skinned_mesh_id);
 
     // GPUの待機
     void wait_for_gpu();
@@ -169,7 +193,6 @@ namespace Graphics {
     void apply_camera_params();
     // ライトパラメータGPU転送
     void apply_light_params();
-
 }
 
 #endif
