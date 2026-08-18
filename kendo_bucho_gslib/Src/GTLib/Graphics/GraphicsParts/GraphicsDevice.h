@@ -36,7 +36,7 @@ public:
     ~GraphicsDevice();
 
     // ルートシグネチャの作成
-    RootSignature* create_root_signature(UINT num_cbv, UINT num_srv, UINT num_sampler, const D3D12_STATIC_SAMPLER_DESC sampler[]);
+    RootSignature* create_root_signature(UINT num_cbv, UINT num_srv, UINT num_inline_srv, UINT num_sampler, const D3D12_STATIC_SAMPLER_DESC sampler[]);
     // パイプラインステートの作成
     PipelineState* create_pipeline_state(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc);
     // 頂点バッファの作成
@@ -73,6 +73,10 @@ public:
     void set_constant_buffer(UINT shader_register, ConstantBuffer* constant_buffer);
     // コンスタントバッファの設定
     void set_constant_buffer(UINT shader_register, const void* data, UINT size);
+    // ストラクテッドバッファの設定
+    void set_structured_buffer(UINT shader_register, ConstantBuffer* constant_buffer);
+    //インラインSRVの設定
+    void set_shader_resource_view_inline(UINT shader_register, D3D12_GPU_VIRTUAL_ADDRESS srv_address);
 
     // ディスクリプタヒープの設定
     void set_descriptor_heaps();
@@ -84,10 +88,10 @@ public:
     // シザー矩形の設定
     void set_scissor_rect(float x, float y, float w, float h);
 
-    // ポリゴンの描画（頂点インデックスあり）
-    void draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index = 0, UINT start_vertex = 0);
-    // ポリゴンの描画（頂点インデックスなし）
-    void draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex = 0);
+    // ポリゴンの描画（頂点インデックスあり）(インスタンス数の設定可能)
+    void draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index = 0, UINT start_vertex = 0, UINT instance_count=1);
+    // ポリゴンの描画（頂点インデックスなし）(インスタンス数の設定可能)
+    void draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex = 0, UINT instance_count=1);
 
     // GPUの実行終了を待つ
     void wait_for_gpu() const;

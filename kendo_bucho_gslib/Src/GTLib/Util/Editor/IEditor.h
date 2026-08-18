@@ -56,7 +56,7 @@
 //	int new_rule_count_{ 0 };
 //	bool is_ini_{ false };//初期化フラグ
 //	vector<int> before_function_id_;//ファンクションＩＤの変更をチェックするやつ
-//	vector<DevineRow> new_rule_;
+//	vector<DevideRow> new_rule_;
 //};
 //
 //#endif

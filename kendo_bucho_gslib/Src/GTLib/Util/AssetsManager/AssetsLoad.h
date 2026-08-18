@@ -30,15 +30,15 @@ public:
 		assets_data_.clear();//読み込んだアセットデータを分割、保存する場所
 	};
 	//データを返す
-	std::unordered_map < std::string, DevineRow > assets_data()const { return assets_data_; }
-	DevineRow assets_data(std::string genre)const { return assets_data_.at(genre); }
+	std::unordered_map < std::string, DevideRow > assets_data()const { return assets_data_; }
+	DevideRow assets_data(std::string genre)const { return assets_data_.at(genre); }
 	Rows assets_data(std::string genre, int category){ return assets_data_.at(genre).get_rows(category); }
 	LoadPath<std::string> load_path()const { return load_path_; }
 	Row genre_name_list()const { return load_path_.genre_name_list(); }
 	//外部から読み込んだデータからアセットIDを探す
 	template<typename T>
 	AssetsData find_data(std::string genre,const T assets_name ) {
-		DevineRow dr = assets_data_.at(genre);
+		DevideRow dr = assets_data_.at(genre);
 		AssetsData result = find<T>(genre,dr, assets_name);
 		return result;
 	}
@@ -71,7 +71,7 @@ public:
 	//1ジャンルだけ読み込む
 	DefineAssetsLoad::Genre find_data_with_row(std::string genre){
 		DefineAssetsLoad::Genre result;
-		DevineRow data = assets_data(genre);
+		DevideRow data = assets_data(genre);
 		for (const auto& ss : data.data()) {
 			int catecory_id = ss.first;
 			result.insert(std::pair<int, DefineAssetsLoad::Category>(catecory_id,find_data_with_row(genre,catecory_id)));
@@ -117,13 +117,13 @@ public:
 	}
 
 private:
-	std::unordered_map < std::string, DevineRow > assets_data_;//読み込んだアセットデータを分割、保存する場所
+	std::unordered_map < std::string, DevideRow > assets_data_;//読み込んだアセットデータを分割、保存する場所
 	std::vector<AssetsData> used_assets_data_;
 	LoadPath<std::string> load_path_;
 private:
 	//IDもしくはアセット名を元にサーチ
 	template<typename T>
-	AssetsData find(std::string genre_id,DevineRow data,const T target) {
+	AssetsData find(std::string genre_id,DevideRow data,const T target) {
 		AssetsData result;
 		int cutegory_id = -1;
 		Rows rows;

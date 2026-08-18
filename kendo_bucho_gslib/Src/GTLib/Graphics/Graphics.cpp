@@ -61,7 +61,9 @@ namespace {
     std::unordered_map<std::uint32_t, std::unique_ptr<Mesh>> s_meshes;
     // スキニングメッシュ管理用マップ
     std::unordered_map<std::uint32_t, std::unique_ptr<SkinnedMesh>> s_skinned_meshes;
-
+    // インスタンススキニングメッシュ管理用マップ
+    std::unordered_map<std::uint32_t, std::unique_ptr<InstanceSkinnedMesh>>s_instance_skinned_meshes;
+    
     // スプライト用のパイプラインステートID
     std::uint32_t s_sprite2d_pipeline_state_id{ 0 };
     // 3Dスプライト用のパイプラインステートID
@@ -70,6 +72,8 @@ namespace {
     std::uint32_t s_mesh_pipeline_state_id{ 0 };
     // スキニングメッシュ用のパイプラインステートID
     std::uint32_t s_skinned_mesh_pipeline_state_id{ 0 };
+    // インスタンススキニングメッシュ用のパイプラインステートID
+    std::uint32_t s_instance_skinned_mesh_pipeline_state_id{0};
 
     // 3Dオブジェクト用パラメータ
     ObjectParams s_object_params{};
@@ -88,7 +92,7 @@ void Graphics::initialize(GraphicsDevice* device) {
     s_graphics_device = device;
     // ルートシグネチャの作成
     CD3DX12_STATIC_SAMPLER_DESC sampler{ 0, D3D12_FILTER_MIN_MAG_MIP_LINEAR };
-    s_root_signature = std::unique_ptr<RootSignature>(s_graphics_device->create_root_signature(8, 8, 1, &sampler));
+    s_root_signature = std::unique_ptr<RootSignature>(s_graphics_device->create_root_signature(8, 8, 2 ,1 ,&sampler));
 
     // オブジェクトパラメータの初期化
     s_object_params.world_matrix = Matrix4x4::identity();
@@ -177,37 +181,6 @@ void Graphics::delete_pipeline_state(std::uint32_t pipeline_state_id) {
     s_pipeline_states.erase(pipeline_state_id);
 }
 
-// テクスチャの読み込み
-Texture* Graphics::load_texture(std::uint32_t texture_id, const std::string& filename) {
-    // テクスチャ作成
-    Texture* texture = s_graphics_device->create_texture(filename);
-    // テクスチャの登録
-    s_textures[texture_id] = std::unique_ptr<Texture>(texture);
-    // テクスチャを返す
-    return texture;
-}
-// テクスチャ解放
-void Graphics::delete_texture(std::uint32_t texture_id) {
-    s_textures.erase(texture_id);
-}
-// テクスチャ取得
-Texture* Graphics::get_texture(std::uint32_t texture_id) {
-    auto it = s_textures.find(texture_id);
-    if (it != s_textures.end()) {
-        return it->second.get();
-    }
-    return nullptr;
-}
-
-// スプライトのパイプラインステートを設定
-void Graphics::set_sprite2d_pipeline_state(std::uint32_t pipeline_state_id) {
-    s_sprite2d_pipeline_state_id = pipeline_state_id;
-}
-// スプライトのパイプラインステートを取得
-std::uint32_t Graphics::get_sprite2d_pipeline_state() {
-    return s_sprite2d_pipeline_state_id;
-}
-
 // 3D行列の設定 (変数の更新)
 void Graphics::set_world_matrix(const Matrix4x4& world) {
     s_object_params.world_matrix = world;
@@ -248,48 +221,37 @@ void Graphics::apply_light_params() {
     s_graphics_device->set_constant_buffer(2, &s_light_params, sizeof(s_light_params));
     s_cb_light_dirty = false;
 }
-// 3Dスプライト用のパイプラインステート設定
-void Graphics::set_sprite3d_pipeline_state(std::uint32_t pipeline_state_id) {
-    s_sprite3d_pipeline_state_id = pipeline_state_id;
-}
-// 3Dスプライト用のパイプラインステート取得
-std::uint32_t Graphics::get_sprite3d_pipeline_state() {
-    return s_sprite3d_pipeline_state_id;
-}
 
-// メッシュの読み込み
-Mesh* Graphics::load_mesh(std::uint32_t mesh_id, const std::string& filename) {
-    // メッシュの作成
-    Mesh* mesh = new Mesh(s_graphics_device);
-    // メッシュの読み込み
-    mesh->load(filename);
-    // メッシュの登録
-    s_meshes[mesh_id] = std::unique_ptr<Mesh>(mesh);
-    // メッシュを返す
-    return mesh;
+// テクスチャの読み込み
+Texture* Graphics::load_texture(std::uint32_t texture_id, const std::string& filename) {
+    // テクスチャ作成
+    Texture* texture = s_graphics_device->create_texture(filename);
+    // テクスチャの登録
+    s_textures[texture_id] = std::unique_ptr<Texture>(texture);
+    // テクスチャを返す
+    return texture;
 }
-// メッシュ削除
-void Graphics::delete_mesh(std::uint32_t mesh_id) {
-    s_meshes.erase(mesh_id);
+// テクスチャ解放
+void Graphics::delete_texture(std::uint32_t texture_id) {
+    s_textures.erase(texture_id);
 }
-// メッシュ取得
-Mesh* Graphics::get_mesh(std::uint32_t mesh_id) {
-    // メッシュを返す
-    auto it = s_meshes.find(mesh_id);
-    if (it != s_meshes.end()) {
+// テクスチャ取得
+Texture* Graphics::get_texture(std::uint32_t texture_id) {
+    auto it = s_textures.find(texture_id);
+    if (it != s_textures.end()) {
         return it->second.get();
     }
     return nullptr;
 }
-// メッシュのパイプラインステート設定
-void Graphics::set_mesh_pipeline_state(std::uint32_t pipeline_state_id) {
-    s_mesh_pipeline_state_id = pipeline_state_id;
-}
-// メッシュのパイプラインステート取得
-std::uint32_t Graphics::get_mesh_pipeline_state() {
-    return s_mesh_pipeline_state_id;
-}
 
+// スプライトのパイプラインステートを設定
+void Graphics::set_sprite2d_pipeline_state(std::uint32_t pipeline_state_id) {
+    s_sprite2d_pipeline_state_id = pipeline_state_id;
+}
+// スプライトのパイプラインステートを取得
+std::uint32_t Graphics::get_sprite2d_pipeline_state() {
+    return s_sprite2d_pipeline_state_id;
+}
 // スプライト描画
 void Graphics::draw_sprite2d(
     std::uint32_t texture_id,                           // テクスチャID
@@ -344,6 +306,14 @@ void Graphics::draw_sprite2d(
     s_graphics_device->draw(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 4);
 }
 
+// 3Dスプライト用のパイプラインステート設定
+void Graphics::set_sprite3d_pipeline_state(std::uint32_t pipeline_state_id) {
+    s_sprite3d_pipeline_state_id = pipeline_state_id;
+}
+// 3Dスプライト用のパイプラインステート取得
+std::uint32_t Graphics::get_sprite3d_pipeline_state() {
+    return s_sprite3d_pipeline_state_id;
+}
 // 3Dスプライト(ビルボード)描画
 void Graphics::draw_sprite3d(
     std::uint32_t     texture_id,          // テクスチャＩＤ
@@ -403,6 +373,38 @@ void Graphics::draw_sprite3d(
     s_graphics_device->draw(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 4);
 }
 
+// メッシュの読み込み
+Mesh* Graphics::load_mesh(std::uint32_t mesh_id, const std::string& filename) {
+    // メッシュの作成
+    Mesh* mesh = new Mesh(s_graphics_device);
+    // メッシュの読み込み
+    mesh->load(filename);
+    // メッシュの登録
+    s_meshes[mesh_id] = std::unique_ptr<Mesh>(mesh);
+    // メッシュを返す
+    return mesh;
+}
+// メッシュ削除
+void Graphics::delete_mesh(std::uint32_t mesh_id) {
+    s_meshes.erase(mesh_id);
+}
+// メッシュ取得
+Mesh* Graphics::get_mesh(std::uint32_t mesh_id) {
+    // メッシュを返す
+    auto it = s_meshes.find(mesh_id);
+    if (it != s_meshes.end()) {
+        return it->second.get();
+    }
+    return nullptr;
+}
+// メッシュのパイプラインステート設定
+void Graphics::set_mesh_pipeline_state(std::uint32_t pipeline_state_id) {
+    s_mesh_pipeline_state_id = pipeline_state_id;
+}
+// メッシュのパイプラインステート取得
+std::uint32_t Graphics::get_mesh_pipeline_state() {
+    return s_mesh_pipeline_state_id;
+}
 // メッシュ描画
 void Graphics::draw_mesh(std::uint32_t mesh_id) {
     // メッシュを取得
@@ -434,12 +436,10 @@ SkinnedMesh* Graphics::load_skinned_mesh(
     s_skinned_meshes[skinned_mesh_id] = std::unique_ptr<SkinnedMesh>(sm);
     return sm;
 }
-
 // スキニングメッシュの読み込み
 void Graphics::delete_skinned_mesh(std::uint32_t skinned_mesh_id) {
     s_skinned_meshes.erase(skinned_mesh_id);
 }
-
 // スキニングメッシュ取得
 SkinnedMesh* Graphics::get_skinned_mesh(std::uint32_t skinned_mesh_id) {
     auto it = s_skinned_meshes.find(skinned_mesh_id);
@@ -448,17 +448,14 @@ SkinnedMesh* Graphics::get_skinned_mesh(std::uint32_t skinned_mesh_id) {
     }
     return nullptr;
 }
-
 // スキンメッシュのパイプラインステートを設定
 void Graphics::set_skinned_mesh_pipeline_state(std::uint32_t pipeline_state_id) {
     s_skinned_mesh_pipeline_state_id = pipeline_state_id;
 }
-
 // スキンメッシュのパイプラインステートを取得
 std::uint32_t Graphics::get_skinned_mesh_pipeline_state() {
     return s_skinned_mesh_pipeline_state_id;
 }
-
 // ローカル行列計算
 void Graphics::compute_local_matrices(std::uint32_t skinned_mesh_id,
     int anim_id, float frame_no, Matrix4x4 local[]) {
@@ -466,7 +463,6 @@ void Graphics::compute_local_matrices(std::uint32_t skinned_mesh_id,
     if (sm == nullptr) return;
     sm->compute_local_matrices(anim_id, frame_no, local);
 }
-
 // ブレンドされたローカル行列計算
 void Graphics::compute_blended_matrices(std::uint32_t skinned_mesh_id,
     int anim_id1, float frame1,
@@ -476,7 +472,6 @@ void Graphics::compute_blended_matrices(std::uint32_t skinned_mesh_id,
     if (sm == nullptr) return;
     sm->compute_blended_matrices(anim_id1, frame1, anim_id2, frame2, weight, local);
 }
-
 // ワールド行列計算
 void Graphics::compute_world_matrices(std::uint32_t skinned_mesh_id,
     const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent) {
@@ -484,7 +479,6 @@ void Graphics::compute_world_matrices(std::uint32_t skinned_mesh_id,
     if (sm == nullptr) return;
     sm->compute_world_matrices(local, world, parent);
 }
-
 // スキニング行列計算
 void Graphics::compute_skinned_matrices(std::uint32_t skinned_mesh_id,
     const Matrix4x4 world[], Matrix4x4 skinned[]) {
@@ -492,14 +486,12 @@ void Graphics::compute_skinned_matrices(std::uint32_t skinned_mesh_id,
     if (sm == nullptr) return;
     sm->compute_skinned_matrices(world, skinned);
 }
-
 // スキニング行列をセットする
 void Graphics::set_skinned_matrices(std::uint32_t skinned_mesh_id, const Matrix4x4 skinned[]) {
     SkinnedMesh* sm = get_skinned_mesh(skinned_mesh_id);
     if (sm == nullptr) return;
     sm->set_skinned_matrices(skinned);
 }
-
 // スキンメッシュを描画する（事前に演算および行列セットが必要）
 void Graphics::draw_skinned_mesh(std::uint32_t skinned_mesh_id) {
     SkinnedMesh* sm = get_skinned_mesh(skinned_mesh_id);
@@ -514,20 +506,104 @@ void Graphics::draw_skinned_mesh(std::uint32_t skinned_mesh_id) {
     // メッシュ描画
     sm->draw();
 }
-
 // アニメーションの終了フレームを返す
 float Graphics::get_skinned_mesh_last_frame(std::uint32_t skinned_mesh_id, int anim_id) {
     SkinnedMesh* sm = get_skinned_mesh(skinned_mesh_id);
     if (sm == nullptr) return 0.0f;
     return sm->last_frame(anim_id);
 }
-
 // 指定したスキニングメッシュのボーン数を返す
 std::size_t Graphics::get_skinned_mesh_bone_count(std::uint32_t skinned_mesh_id) {
     SkinnedMesh* sm = get_skinned_mesh(skinned_mesh_id);
     if (sm == nullptr) return 0;
     return sm->bone_count();
 }
+
+// インスタンススキニングメッシュの読み込み
+InstanceSkinnedMesh* Graphics::load_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id,const std::string& mesh_file,const std::string& skeleton_file,const std::string& animation_file,int instance_count) {
+    // インスタンススキニングメッシュの作成
+    InstanceSkinnedMesh* sm = new InstanceSkinnedMesh(s_graphics_device);
+    sm->load(mesh_file, skeleton_file, animation_file,instance_count);
+    // インスタンススキニングメッシュの登録
+    s_instance_skinned_meshes[instance_skinned_mesh_id] = std::unique_ptr<InstanceSkinnedMesh>(sm);
+    return sm;
+}
+// インスタンススキニングメッシュの読み込み
+void Graphics::delete_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id) {
+    s_instance_skinned_meshes.erase(instance_skinned_mesh_id);
+}
+// インスタンススキニングメッシュ取得
+InstanceSkinnedMesh* Graphics::get_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id) {
+    auto it = s_instance_skinned_meshes.find(instance_skinned_mesh_id);
+    if (it != s_instance_skinned_meshes.end()) {
+        return it->second.get();
+    }
+    return nullptr;
+}
+// スキンメッシュのパイプラインステートを設定
+void Graphics::set_instance_skinned_mesh_pipeline_state(std::uint32_t pipeline_state_id) {
+    s_instance_skinned_mesh_pipeline_state_id = pipeline_state_id;
+}
+// スキンメッシュのパイプラインステートを取得
+std::uint32_t Graphics::get_instance_skinned_mesh_pipeline_state() {
+    return s_instance_skinned_mesh_pipeline_state_id;
+}
+// ローカル行列計算
+void Graphics::compute_local_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, int anim_id, float frame_no, Matrix4x4 local[]) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
+    if (sm == nullptr) return;
+    sm->compute_local_matrices(instance_id, anim_id, frame_no, local);
+}
+// ブレンドされたローカル行列計算
+void Graphics::compute_blended_matrices_instance(std::uint32_t skinned_mesh_id,int instance_id,BlendedMat& mat,const float lerp_time) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
+    if (sm == nullptr) return;
+    sm->compute_blended_matrices(instance_id,mat.prev_motion, mat.prev_frame, mat.current_motion, mat.current_frame, mat.lerp/lerp_time, mat.local);
+}
+// ワールド行列計算
+void Graphics::compute_world_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
+    if (sm == nullptr) return;
+    sm->compute_world_matrices(instance_id, local, world, parent);
+}
+// スキニング行列計算
+void Graphics::compute_skinned_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 world[], Matrix4x4 skinned[]) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(skinned_mesh_id);
+    if (sm == nullptr) return;
+    sm->compute_skinned_matrices(instance_id, world, skinned);
+}
+// インスタンススキニング行列をセットする
+void Graphics::set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id, const Matrix4x4 instance_skinned[]) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+    if (sm == nullptr) return;
+    sm->set_skinned_matrices(instance_skinned);
+}
+// スキンメッシュを描画する（事前に演算および行列セットが必要）
+void Graphics::draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count,const InstanceObject* first_obj) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+    if (sm == nullptr) return;
+    // パイプラインステートの設定
+    set_pipeline_state(get_instance_skinned_mesh_pipeline_state());
+    // 3D行列とライトの設定をGPUへ転送
+    sm->set_all_object_data(first_obj,instance_count);
+    apply_camera_params();
+    apply_light_params();
+    // メッシュ描画
+    sm->draw(instance_count);
+}
+// アニメーションの終了フレームを返す
+float Graphics::get_instance_skinned_mesh_last_frame(std::uint32_t instance_skinned_mesh_id, int anim_id) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+    if (sm == nullptr) return 0.0f;
+    return sm->last_frame(anim_id);
+}
+// 指定したインスタンススキニングメッシュのボーン数を返す
+std::size_t Graphics::get_instance_skinned_mesh_bone_count(std::uint32_t instance_skinned_mesh_id) {
+    InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
+    if (sm == nullptr) return 0;
+    return sm->bone_count(0);
+}
+
 
 // GPUの待機
 void Graphics::wait_for_gpu() {

@@ -1,5 +1,4 @@
 #include"GTLib/Util/Util.h"
-#include"Actor.h"
 
 namespace Util {
 	//二つのベクター３をかけ合わせて各要素を足してfloatにする
@@ -65,13 +64,6 @@ namespace Util {
 		float x = (target.x - from.x);
 		float y = (target.y - from.y);
 		return sqrt(x * x + y * y);
-	}
-
-	float TargetDistance(Actor* target, Actor* from) {
-		float x = (target->transform().position().x - from->transform().position().x);
-		float y = (target->transform().position().y - from->transform().position().y);
-		float z = (target->transform().position().z - from->transform().position().z);
-		return sqrt(x * x + y * y + z * z);
 	}
 
 	Vector3 ToTarget(const Vector3& target_pos, const Vector3& from_pos) {

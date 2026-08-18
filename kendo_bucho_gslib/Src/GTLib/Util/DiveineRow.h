@@ -7,12 +7,12 @@
 #include "GTLib/Util/CSVReader.h"
 
 //読み込んだデータをジャンル毎に分割し保存するクラス 次使うときはunorderedをテンプレートにしたい
-class DevineRow {
+class DevideRow {
 
 public:
 
-	DevineRow() = default;
-	DevineRow(std::unordered_map<int, std::vector<std::vector<std::string>>> data);
+	DevideRow() = default;
+	DevideRow(std::unordered_map<int, std::vector<std::vector<std::string>>> data);
 
 	int rows(int key);//一タイプが内包する行数
 	int row(int key, int row);//一行のサイズ

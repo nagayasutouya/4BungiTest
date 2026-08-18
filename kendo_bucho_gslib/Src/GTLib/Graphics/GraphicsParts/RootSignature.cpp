@@ -3,14 +3,14 @@
 #include "d3dx12.h"
 
 // コンストラクタ
-RootSignature::RootSignature(ID3D12Device* device, UINT num_cbv, UINT num_srv, UINT num_sampler, const D3D12_STATIC_SAMPLER_DESC sampler[]) {
+RootSignature::RootSignature(ID3D12Device* device, UINT num_cbv, UINT num_srv,UINT num_inline_srv, UINT num_sampler, const D3D12_STATIC_SAMPLER_DESC sampler[]) {
     // シェーダーリソースビューのディスクリプタレンジの作成
-    std::vector<CD3DX12_DESCRIPTOR_RANGE> descriptor_ranges(num_srv);
+    std::vector<CD3DX12_DESCRIPTOR_RANGE> descriptor_ranges(num_srv+num_inline_srv);
     for (UINT i = 0; i < num_srv; ++i) {
         descriptor_ranges[i].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, i);
     }
     // ルートパラメータ
-    std::vector<CD3DX12_ROOT_PARAMETER> root_params(num_cbv + num_srv);
+    std::vector<CD3DX12_ROOT_PARAMETER> root_params(num_cbv + num_srv+ num_inline_srv);
     // ルートパラメータ数
     UINT num_root_params{ 0 };
     // ルートコンスタントバッファビューの設定
@@ -23,6 +23,11 @@ RootSignature::RootSignature(ID3D12Device* device, UINT num_cbv, UINT num_srv, U
     for (UINT i = 0; i < num_srv; ++i) {
         root_params[num_root_params++].InitAsDescriptorTable(1, &descriptor_ranges[i]);
     }
+    //インラインSRVの設定
+    inline_srv_root_index_ = num_root_params;
+    for (UINT i = inline_srv_root_index_; i < num_inline_srv+ inline_srv_root_index_; ++i) {
+        root_params[num_root_params++].InitAsShaderResourceView(i,0);//レジスタ番号、スペース(シェーダーデータの保存空間のようなもの　同じレジスタ番号を使う他データがあったとき、同一空間をつかうとデータが混同してしまうため、ここを別のにする必要がある)、参照元シェーダーのタイプ
+    }
     // ルートシグネチャの作成
     CD3DX12_ROOT_SIGNATURE_DESC desc{
         num_root_params, root_params.data(),
@@ -31,8 +36,16 @@ RootSignature::RootSignature(ID3D12Device* device, UINT num_cbv, UINT num_srv, U
     };
     // ルートシグネチャの作成
     ID3DBlob* blob{};
-    D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1_0, &blob, nullptr);
-    device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&root_signature_));
+    ID3DBlob* errorBlob = nullptr;
+    HRESULT hr = D3D12SerializeRootSignature(&desc, D3D_ROOT_SIGNATURE_VERSION_1_0, &blob, &errorBlob);
+    //ルートシグネチャ作成失敗したら
+    if (FAILED(hr)){
+        if (errorBlob != nullptr){
+            OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+            errorBlob->Release();
+        }
+    }
+    else device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&root_signature_));
     blob->Release();
 }
 // デストラクタ
@@ -47,8 +60,11 @@ ID3D12RootSignature* RootSignature::root_signature() const {
 UINT RootSignature::cbv_root_index() const {
     return cbv_root_index_;
 }
-
 // シェーダーリソースビューの先頭のインデックスを返す
 UINT RootSignature::srv_root_index() const {
     return srv_root_index_;
+}
+// インラインシェーダーリソースビューの先頭のインデックスを返す
+UINT RootSignature::inline_srv_root_index() const {
+    return inline_srv_root_index_;
 }
