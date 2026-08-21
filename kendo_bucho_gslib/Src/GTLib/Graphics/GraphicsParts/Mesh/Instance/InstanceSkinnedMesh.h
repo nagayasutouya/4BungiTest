@@ -34,14 +34,14 @@ public:
     //描画数を変更する
     void set_current_instance_count(UINT current) { current_instance_count_ = current; }
     // スキニング行列をセットする
-    void set_skinned_matrices(const Matrix4x4 skinned[], int instanse_id=0) const;
+    void set_skinned_matrices(const Matrix4x4 skinned[]);
     // 全ボーンデータをセットする
-    void set_all_bone_data(const Matrix4x4 bone[], int bone_count);
+    D3D12_GPU_VIRTUAL_ADDRESS set_all_bone_data(const Matrix4x4 bone[], int bone_count);
     // 全オブジェクトデータをセットする
-    void set_all_object_data(const InstanceObject object[], int object_count);
+    D3D12_GPU_VIRTUAL_ADDRESS set_all_object_data(const InstanceObject object[], int object_count);
     // 描画する
     void draw(unsigned int instance_count) const;
-
+    
     // ボーン数を返す
     std::size_t bone_count(int instance_id) const;
     // 指定アニメーションの終了フレームを返す

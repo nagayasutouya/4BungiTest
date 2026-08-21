@@ -13,6 +13,8 @@ void World::update(float delta_time) {
 	field_->update(delta_time);
 	// アクターの更新
 	actors_.update(delta_time);
+	//敵生成の更新
+	enemy_->update(delta_time);
 	// アクターの衝突
 	actors_.collide();
 	// アクターの遅延更新
@@ -38,6 +40,7 @@ void World::draw() const {
 	field_->draw();
 	// アクターの描画
 	actors_.draw();
+	enemy_->draw();
 	// 半透明アクターの描画
 	actors_.draw_transparent();
 
@@ -62,6 +65,8 @@ void World::clear() {
 	// フィールドを消去
 	delete field_;
 	field_ = nullptr;
+	delete enemy_;
+	enemy_ = nullptr;
 }
 
 // カメラの追加

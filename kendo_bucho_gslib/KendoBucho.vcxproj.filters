@@ -566,6 +566,9 @@
     <ClInclude Include="Src\InstanceTest\InstanceAnimatedMesh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BufferAndPool\ShaderResourceView.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Mesh.hlsl" />

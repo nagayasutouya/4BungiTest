@@ -26,6 +26,8 @@ public:
 	void add_light(Actor* light);
 	// フィールドの追加
 	void add_field(Field* field);
+	//敵生成
+	void add_enemy(Actor* enemy) { delete enemy_; enemy_ = enemy; }
 
 	// アクターを追加
 	virtual void add_actor(Actor* actor) override;
@@ -67,6 +69,8 @@ private:
 	Actor*			light_{ nullptr };
 	// カメラ
 	Actor*			camera_{ nullptr };
+	//敵生成
+	Actor* enemy_{ nullptr };
 	// フィールド
 	Field*			field_{ nullptr };
 	// スコア

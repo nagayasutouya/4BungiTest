@@ -4,6 +4,8 @@
 #include "Actor.h"
 #include "AnimatedMesh.h"
 
+class InstanceAnimatedMesh;
+
 // 敵クラス
 class Enemy : public Actor {
 public:
@@ -16,7 +18,7 @@ public:
         Leave       // 消滅中
     };
     // コンストラクタ
-    Enemy(IWorld* world, const Vector3& position);
+    Enemy(IWorld* world, const Vector3& position,int instance_id, InstanceAnimatedMesh* mesh);
     // 更新
     virtual void update(float delta_time) override;
     //  描画
@@ -44,7 +46,7 @@ private:
 
 private:
     // アニメーション付きメッシュ
-    AnimatedMesh    mesh_;
+    InstanceAnimatedMesh* mesh_{nullptr};
     // モーション番号
     unsigned int          motion_;
     // モーションのループフラグ
@@ -55,6 +57,8 @@ private:
     float           state_timer_{ 0.0f };
     // 点滅タイマ
     float           blink_timer_{ 0.0f };
+    //インスタンス描画用のID
+    int instance_id_{ 0 };
 };
 
 #endif

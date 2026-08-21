@@ -9,13 +9,13 @@ const float InstanceLerpTime{ 10.0f };
 InstanceAnimatedMesh::InstanceAnimatedMesh(unsigned int id, unsigned int instance_count_max, unsigned int motion, bool loop, unsigned int num_bones) :id_{ id },transform_{ instance_count_max},local_bone_data_{ instance_count_max },bone_matrices_{ instance_count_max },skinned_matrices_{ instance_count_max },instance_count_max_{instance_count_max} {
     //データコンテナの作成
     for (int i = 0; i < instance_count_max; i++) {
-        skinned_matrices_[i].skinned = new Matrix4x4[256];
-        bone_matrices_[i].world = new Matrix4x4[256];
-        local_bone_data_[i].local = new Matrix4x4[256];
+        skinned_matrices_[i].skinned = new Matrix4x4[num_bones];
+        bone_matrices_[i].world = new Matrix4x4[num_bones];
+        local_bone_data_[i].local = new Matrix4x4[num_bones];
+        transform_[i].bone_offset_ = num_bones * i;
     }
     instance_count_= instance_count_max_;
 }
-
 // 更新
 void InstanceAnimatedMesh::update(float delta_time) {
     for (int i = 0; i < instance_count_; i++) {
@@ -36,13 +36,11 @@ void InstanceAnimatedMesh::update(float delta_time) {
         local_bone_data_[i].lerp = Mathf::Min(local_bone_data_[i].lerp + delta_time, InstanceLerpTime);
     }
 }
-
 // 描画
 void InstanceAnimatedMesh::draw() const {
-    Graphics::set_instance_skinned_matrices(id_, skinned_matrices_[0].skinned);
+    Graphics::set_instance_skinned_matrices(id_, instance_count_, skinned_matrices_[0].skinned);
     Graphics::draw_instance_skinned_mesh(id_,instance_count_,transform_.data());
 }
-
 // モーションの変更
 void InstanceAnimatedMesh::change_motion(int instance_id,unsigned int motion, bool loop) {
     // 現在と同じモーションの場合は何もしない
@@ -64,7 +62,6 @@ void InstanceAnimatedMesh::change_motion(int instance_id,unsigned int motion, bo
     // モーションループフラグの設定
     local_bone_data_[instance_id].loop = loop;
 }
-
 // 変換行列を設定する
 void InstanceAnimatedMesh::transform(int instance_id, const Matrix4x4& matrix) {
     transform_[instance_id].world_ = matrix;
@@ -74,7 +71,6 @@ void InstanceAnimatedMesh::transform(int instance_id, const Matrix4x4& matrix) {
     Graphics::compute_world_matrices_instance(id_, instance_id,local_bone_data_[instance_id].local, bone_matrices_[instance_id].world, bone_matrices_[instance_id].parent);
     Graphics::compute_skinned_matrices_instance(id_, instance_id, bone_matrices_[instance_id].world, skinned_matrices_[instance_id].skinned);
 }
-
 // モーションが終了しているか？
 bool InstanceAnimatedMesh::is_end_motion(int instance_id) const {
     // ループモーションは終了しない
@@ -82,23 +78,44 @@ bool InstanceAnimatedMesh::is_end_motion(int instance_id) const {
     // 終了しているか？
     return local_bone_data_[instance_id].current_frame >= (motion_end_time(instance_id) - 1.0f);
 }
-
 // 現在のモーションの再生時間を取得
 float InstanceAnimatedMesh::motion_time(int instance_id) const {
     return (local_bone_data_[instance_id].is_empty)?0.0f:local_bone_data_[instance_id].current_frame;
 }
-
 // モーションの再生時間を設定
 void InstanceAnimatedMesh::motion_time(int instance_id, float time) {
     if(!local_bone_data_[instance_id].is_empty)local_bone_data_[instance_id].current_frame = time;
 }
-
 // モーションの終了時間を取得
 float InstanceAnimatedMesh::motion_end_time(int instance_id) const {
     return (local_bone_data_[instance_id].is_empty) ? 0.0f : Graphics::get_skinned_mesh_last_frame(id_, local_bone_data_[instance_id].current_motion);
 }
-
 // ボーンのワールド変換行列を取得　
 Matrix4x4 InstanceAnimatedMesh::bone_matrices(int instance_id,int bone_no) const {
     return (local_bone_data_[instance_id].is_empty) ? Matrix4x4::zero() : bone_matrices_[instance_id].world[bone_no] * transform_[instance_id].world_;
+}
+//現在の描画数を設定
+void InstanceAnimatedMesh::set_instance_count(int count) {
+    instance_count_ = count;
+    instance_count_ = Mathf::CLAMP(instance_count_,0,instance_count_max_);
+}
+//オブジェクトを追加
+int InstanceAnimatedMesh::add_instnace() {
+    int result = -1;
+    for (int i = 0; i < instance_count_max_;i++) {
+        //枠が空いてたらそこに代入
+        if (local_bone_data_[i].is_empty) {
+            result = i;
+            local_bone_data_[i].is_empty = false;
+            break;
+        }
+    }
+    return result;
+}
+//オブジェクトを除外
+void InstanceAnimatedMesh::remove_instance(int id) {
+    //範囲外は無視
+    if (id >= instance_count_max_ || id < 0)return;
+    BlendedMat mat;
+    local_bone_data_[id] = mat;
 }

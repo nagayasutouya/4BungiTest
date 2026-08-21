@@ -2,8 +2,9 @@
 #include "GTLib/Graphics/GraphicsParts/GraphicsDevice.h"
 
 // コンストラクタ
-InstanceSkinnedMesh::InstanceSkinnedMesh(GraphicsDevice* device) :
-    device_{ device }, mesh_{ device }{
+InstanceSkinnedMesh::InstanceSkinnedMesh(GraphicsDevice* device) :device_{ device }, mesh_{ device }{
+    objects_srv_.initialize(device->d3d12_device(), nullptr, 0, 1000);
+    bone_srv_.initialize(device->d3d12_device(), nullptr, 0, 1000);
 }
 // デストラクタ
 InstanceSkinnedMesh::~InstanceSkinnedMesh() {
@@ -37,16 +38,16 @@ void InstanceSkinnedMesh::compute_blended_matrices(int instance_id, int anim_id1
     skeletons_[instance_id].compute_blended_matrices(animation_set_.get(anim_id1), frame1,animation_set_.get(anim_id2), frame2,weight, local);
 }
 // スキニング行列をセットする
-void InstanceSkinnedMesh::set_skinned_matrices(const Matrix4x4 skinned[],int instanse_id) const {
-    device_->set_constant_buffer(4, skinned, sizeof(Matrix4x4) * bone_count(instanse_id));
+void InstanceSkinnedMesh::set_skinned_matrices(const Matrix4x4 skinned[]) {
+    device_->set_shader_resource_view_inline(1,set_all_bone_data(skinned,bone_count(0)*current_instance_count_));
 }
 // 全ボーンデータをセットする
-void InstanceSkinnedMesh::set_all_bone_data(const Matrix4x4 bone[],int bone_count) {
-    bone_srv_.upload(bone ,bone_count ,current_instance_count_);
+D3D12_GPU_VIRTUAL_ADDRESS InstanceSkinnedMesh::set_all_bone_data(const Matrix4x4 bone[],int bone_count) {
+    return bone_srv_.upload(bone ,bone_count ,current_instance_count_);
 }
 // 全オブジェクトデータをセットする
-void InstanceSkinnedMesh::set_all_object_data(const InstanceObject object[],int object_count) {
-    objects_srv_.upload(object,object_count,current_instance_count_);
+D3D12_GPU_VIRTUAL_ADDRESS InstanceSkinnedMesh::set_all_object_data(const InstanceObject object[],int object_count) {
+    return objects_srv_.upload(object,object_count,current_instance_count_);
 }
 // 描画する
 void InstanceSkinnedMesh::draw(unsigned int instance_count) const {
