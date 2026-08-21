@@ -277,6 +277,7 @@
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BufferAndPool\DescriptorPool.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BufferAndPool\FrameBuffer.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BufferAndPool\IndexBuffer.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BufferAndPool\ShaderResourceView.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BufferAndPool\VertexBuffer.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\d3dx12.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\GraphicsCommand.h" />

@@ -28,6 +28,12 @@ public:
     float motion_end_time(int instance_id) const;
     // ボーンのワールド変換行列を取得
     Matrix4x4 bone_matrices(int instance_id, int bone_no) const;
+    //現在の描画数を設定
+    void set_instance_count(int count);
+    //オブジェクトを追加
+    int add_instnace();
+    //オブジェクトを除外
+    void remove_instance(int id);
 private:
     unsigned int id_;// アセットID
     unsigned int instance_count_max_{0};//描画の最大数
