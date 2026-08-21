@@ -5,7 +5,10 @@
 FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT height, DXGI_FORMAT format, ID3D12CommandQueue* command_queue) {
     // スワップチェーンの作成
     IDXGIFactory6* dxgi_factory{};
-    CreateDXGIFactory2(0, IID_PPV_ARGS(&dxgi_factory));
+    HRESULT hr = CreateDXGIFactory2(0, IID_PPV_ARGS(&dxgi_factory));
+    if (FAILED(hr)){
+        OutputDebugStringA("DXGIFactory Creation Failed!\n");
+    }
     desc_.Width = width;
     desc_.Height = height;
     desc_.Format = format;

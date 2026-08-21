@@ -61,6 +61,8 @@ namespace {
     std::unordered_map<std::uint32_t, std::unique_ptr<Mesh>> s_meshes;
     // スキニングメッシュ管理用マップ
     std::unordered_map<std::uint32_t, std::unique_ptr<SkinnedMesh>> s_skinned_meshes;
+    // インスタンスメッシュ管理用マップ
+    std::unordered_map<std::uint32_t, std::unique_ptr<InstanceMesh>> s_instance_meshes;
     // インスタンススキニングメッシュ管理用マップ
     std::unordered_map<std::uint32_t, std::unique_ptr<InstanceSkinnedMesh>>s_instance_skinned_meshes;
     
@@ -72,6 +74,8 @@ namespace {
     std::uint32_t s_mesh_pipeline_state_id{ 0 };
     // スキニングメッシュ用のパイプラインステートID
     std::uint32_t s_skinned_mesh_pipeline_state_id{ 0 };
+    // インスタンスメッシュ用のパイプラインステートID
+    std::uint32_t s_instance_mesh_pipeline_state_id{ 0 };
     // インスタンススキニングメッシュ用のパイプラインステートID
     std::uint32_t s_instance_skinned_mesh_pipeline_state_id{0};
 
@@ -519,6 +523,56 @@ std::size_t Graphics::get_skinned_mesh_bone_count(std::uint32_t skinned_mesh_id)
     return sm->bone_count();
 }
 
+// インスタンスメッシュの読み込み
+InstanceMesh* Graphics::load_instance_mesh(std::uint32_t instance_mesh_id, const std::string& filename) {
+    // インスタンスメッシュの作成
+    InstanceMesh* instance_mesh = new InstanceMesh(s_graphics_device);
+    // インスタンスメッシュの読み込み
+    instance_mesh->load(filename);
+    // インスタンスメッシュの登録
+    s_instance_meshes[instance_mesh_id] = std::unique_ptr<InstanceMesh>(instance_mesh);
+    // インスタンスメッシュを返す
+    return instance_mesh;
+}
+// インスタンスメッシュ削除
+void Graphics::delete_instance_mesh(std::uint32_t instance_mesh_id) {
+    s_instance_meshes.erase(instance_mesh_id);
+}
+// インスタンスメッシュ取得
+InstanceMesh* Graphics::get_instance_mesh(std::uint32_t instance_mesh_id) {
+    // インスタンスメッシュを返す
+    auto it = s_instance_meshes.find(instance_mesh_id);
+    if (it != s_instance_meshes.end()) {
+        return it->second.get();
+    }
+    return nullptr;
+}
+// インスタンスメッシュのパイプラインステート設定
+void Graphics::set_instance_mesh_pipeline_state(std::uint32_t pipeline_state_id) {
+    s_instance_mesh_pipeline_state_id = pipeline_state_id;
+}
+// インスタンスメッシュのパイプラインステート取得
+std::uint32_t Graphics::get_instance_mesh_pipeline_state() {
+    return s_instance_mesh_pipeline_state_id;
+}
+// インスタンスメッシュ描画
+void Graphics::draw_instance_mesh(std::uint32_t instance_mesh_id,unsigned int instance_count) {
+    // インスタンスメッシュを取得
+    InstanceMesh* instance_mesh = get_instance_mesh(instance_mesh_id);
+    if (instance_mesh == nullptr) return;
+
+    // パイプラインステートの設定
+    set_pipeline_state(get_instance_mesh_pipeline_state());
+
+    // 3D行列とライトの設定をGPUへ転送
+    apply_object_params();
+    apply_camera_params();
+    apply_light_params();
+
+    // 描画
+    instance_mesh->draw(instance_count);
+}
+
 // インスタンススキニングメッシュの読み込み
 InstanceSkinnedMesh* Graphics::load_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id,const std::string& mesh_file,const std::string& skeleton_file,const std::string& animation_file,int instance_count) {
     // インスタンススキニングメッシュの作成
@@ -573,19 +627,19 @@ void Graphics::compute_skinned_matrices_instance(std::uint32_t skinned_mesh_id, 
     sm->compute_skinned_matrices(instance_id, world, skinned);
 }
 // インスタンススキニング行列をセットする
-void Graphics::set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id, const Matrix4x4 instance_skinned[]) {
+void Graphics::set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count, const Matrix4x4 instance_skinned[]) {
     InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
     if (sm == nullptr) return;
     sm->set_skinned_matrices(instance_skinned);
 }
-// スキンメッシュを描画する（事前に演算および行列セットが必要）
+// インスタンス スキンメッシュを描画する（事前に演算および行列セットが必要）
 void Graphics::draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count,const InstanceObject* first_obj) {
     InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
     if (sm == nullptr) return;
     // パイプラインステートの設定
     set_pipeline_state(get_instance_skinned_mesh_pipeline_state());
     // 3D行列とライトの設定をGPUへ転送
-    sm->set_all_object_data(first_obj,instance_count);
+    s_graphics_device->set_shader_resource_view_inline(0, sm->set_all_object_data(first_obj, instance_count));
     apply_camera_params();
     apply_light_params();
     // メッシュ描画

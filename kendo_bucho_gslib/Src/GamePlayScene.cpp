@@ -12,7 +12,7 @@ void GamePlayScene::start() {
     // 剣道部長メッシュの読み込み
     Graphics::load_skinned_mesh(Mesh_Player, "Assets/model/Kendo/Kendo_mesh.txt", "Assets/model/Kendo/Kendo_skeleton.txt", "Assets/model/Kendo/Kendo_animations.txt");
     // 剣道部長メッシュの読み込み
-    Graphics::load_skinned_mesh(Mesh_Enemy, "Assets/model/Karate/Karate_mesh.txt", "Assets/model/Karate/Karate_skeleton.txt", "Assets/model/Karate/Karate_animations.txt");
+    Graphics::load_instance_skinned_mesh(Mesh_Enemy, "Assets/model/Karate/Karate_mesh.txt", "Assets/model/Karate/Karate_skeleton.txt", "Assets/model/Karate/Karate_animations.txt");
 
     // スカイボックス用テクスチャの読み込み
     Graphics::load_mesh(Texture_Skybox, "Assets/Skydome/skydome_mesh.txt");
@@ -72,7 +72,7 @@ void GamePlayScene::start() {
     // プレーヤーを追加
     world_.add_actor(new Player{ &world_, Vector3{ 0.0f, 0.0f, 0.0f } });
     // 敵生成の追加
-    world_.add_actor(new EnemyGenerator{ &world_ });
+    world_.add_enemy(new EnemyGenerator{ &world_,Mesh_Enemy,1000,0 });
     // レーダークラスを追加
     world_.add_actor(new Radar{ &world_ });
 
