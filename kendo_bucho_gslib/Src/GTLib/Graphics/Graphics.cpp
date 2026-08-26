@@ -640,7 +640,7 @@ void Graphics::draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id
     set_pipeline_state(get_instance_skinned_mesh_pipeline_state());
     // 3D行列とライトの設定をGPUへ転送
     //s_graphics_device->set_shader_resource_view_inline(0, sm->set_all_object_data(first_obj, instance_count));
-    s_graphics_device->set_instance_structured_buffer(0,first_obj,instance_count);
+    s_graphics_device->set_instance_structured_buffer(0,first_obj,sizeof(InstanceObject)*instance_count);
     apply_camera_params();
     apply_light_params();
     // メッシュ描画

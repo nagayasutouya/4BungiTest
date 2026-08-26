@@ -248,15 +248,15 @@ void GraphicsDevice::set_scissor_rect(float x, float y, float w, float h) {
 }
 
 // ポリゴンの描画（頂点インデックスあり）
-void GraphicsDevice::draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index, UINT start_vertex, UINT instance_count) {
+void GraphicsDevice::draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index, UINT start_vertex, UINT instance_count,UINT instance_id_offset) {
     command_list_->IASetPrimitiveTopology(primitive);
-    command_list_->DrawIndexedInstanced(index_count, instance_count, start_index, start_vertex, 0);
+    command_list_->DrawIndexedInstanced(index_count, instance_count, start_index, start_vertex, instance_id_offset);
 }
 
 // ポリゴンの描画（頂点インデックスなし）
-void GraphicsDevice::draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex, UINT instance_count) {
+void GraphicsDevice::draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex, UINT instance_count, UINT instance_id_offset) {
     command_list_->IASetPrimitiveTopology(primitive);
-    command_list_->DrawInstanced(vertex_count, instance_count, start_vertex, 0);
+    command_list_->DrawInstanced(vertex_count, instance_count, start_vertex, instance_id_offset);
 }
 
 // GPUの実行終了を待つ

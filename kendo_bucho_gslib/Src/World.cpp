@@ -14,7 +14,7 @@ void World::update(float delta_time) {
 	// アクターの更新
 	actors_.update(delta_time);
 	//敵生成の更新
-	enemy_->update(delta_time);
+	if (enemy_ != nullptr)enemy_->update(delta_time);
 	// アクターの衝突
 	actors_.collide();
 	// アクターの遅延更新
@@ -40,7 +40,7 @@ void World::draw() const {
 	field_->draw();
 	// アクターの描画
 	actors_.draw();
-	enemy_->draw();
+	if(enemy_!=nullptr)enemy_->draw();
 	// 半透明アクターの描画
 	actors_.draw_transparent();
 
@@ -54,7 +54,6 @@ void World::draw() const {
 
 // 消去
 void World::clear() {
-	delete enemy_;
 	enemy_ = nullptr;
 	// アクターを消去
 	actors_.clear();
