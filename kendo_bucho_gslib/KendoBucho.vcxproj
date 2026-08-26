@@ -173,6 +173,8 @@
     <ClCompile Include="Src\ActorManager.cpp" />
     <ClCompile Include="Src\AnimatedMesh.cpp" />
     <ClCompile Include="Src\AttackCollider.cpp" />
+    <ClCompile Include="Src\Before\BeforeEnemy.cpp" />
+    <ClCompile Include="Src\Before\BeforeEnemyGenerator.cpp" />
     <ClCompile Include="Src\BoundingSphere.cpp" />
     <ClCompile Include="Src\CameraTPS.cpp" />
     <ClCompile Include="Src\Enemy.cpp" />
@@ -259,6 +261,8 @@
     <ClInclude Include="Src\AnimatedMesh.h" />
     <ClInclude Include="Src\Assets.h" />
     <ClInclude Include="Src\AttackCollider.h" />
+    <ClInclude Include="Src\Before\BeforeEnemy.h" />
+    <ClInclude Include="Src\Before\BeforeEnemyGenerator.h" />
     <ClInclude Include="Src\BoundingSphere.h" />
     <ClInclude Include="Src\CameraTPS.h" />
     <ClInclude Include="Src\Enemy.h" />

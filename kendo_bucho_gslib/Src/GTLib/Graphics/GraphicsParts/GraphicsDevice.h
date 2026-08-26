@@ -75,6 +75,8 @@ public:
     void set_constant_buffer(UINT shader_register, const void* data, UINT size);
     // ストラクテッドバッファの設定
     void set_structured_buffer(UINT shader_register, ConstantBuffer* constant_buffer);
+    // インスタンス描画用ストラクテッドバッファの設定
+    void set_instance_structured_buffer(UINT shader_register,const void* data, UINT size);
     //インラインSRVの設定
     void set_shader_resource_view_inline(UINT shader_register, D3D12_GPU_VIRTUAL_ADDRESS srv_address);
 
@@ -89,9 +91,9 @@ public:
     void set_scissor_rect(float x, float y, float w, float h);
 
     // ポリゴンの描画（頂点インデックスあり）(インスタンス数の設定可能)
-    void draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index = 0, UINT start_vertex = 0, UINT instance_count=1);
+    void draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index = 0, UINT start_vertex = 0, UINT instance_count=1, UINT instance_id_offset=0);
     // ポリゴンの描画（頂点インデックスなし）(インスタンス数の設定可能)
-    void draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex = 0, UINT instance_count=1);
+    void draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex = 0, UINT instance_count=1, UINT instance_id_offset=0);
 
     // GPUの実行終了を待つ
     void wait_for_gpu() const;

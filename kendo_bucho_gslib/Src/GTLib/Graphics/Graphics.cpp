@@ -627,10 +627,10 @@ void Graphics::compute_skinned_matrices_instance(std::uint32_t skinned_mesh_id, 
     sm->compute_skinned_matrices(instance_id, world, skinned);
 }
 // インスタンススキニング行列をセットする
-void Graphics::set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count, const Matrix4x4 instance_skinned[]) {
+void Graphics::set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count, const SkinnedMat instance_skinned[]) {
     InstanceSkinnedMesh* sm = get_instance_skinned_mesh(instance_skinned_mesh_id);
     if (sm == nullptr) return;
-    sm->set_skinned_matrices(instance_skinned);
+    sm->set_skinned_matrices(instance_skinned,instance_count);
 }
 // インスタンス スキンメッシュを描画する（事前に演算および行列セットが必要）
 void Graphics::draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id,unsigned int instance_count,const InstanceObject* first_obj) {
@@ -639,7 +639,8 @@ void Graphics::draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id
     // パイプラインステートの設定
     set_pipeline_state(get_instance_skinned_mesh_pipeline_state());
     // 3D行列とライトの設定をGPUへ転送
-    s_graphics_device->set_shader_resource_view_inline(0, sm->set_all_object_data(first_obj, instance_count));
+    //s_graphics_device->set_shader_resource_view_inline(0, sm->set_all_object_data(first_obj, instance_count));
+    s_graphics_device->set_instance_structured_buffer(0,first_obj,sizeof(InstanceObject)*instance_count);
     apply_camera_params();
     apply_light_params();
     // メッシュ描画
