@@ -33,6 +33,7 @@ struct BlendedMat {
 struct InstanceObject {
     Matrix4x4 world_ = Matrix4x4::identity();
     unsigned int bone_offset_=0;
+    unsigned int padding[3]{};//‚«‚è‚æ‚­‚·‚é‚½‚ß‚ÌŒŠ–„‚ß
 };
 
 #endif

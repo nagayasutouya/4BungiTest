@@ -3,8 +3,8 @@
 
 // コンストラクタ
 InstanceSkinnedMesh::InstanceSkinnedMesh(GraphicsDevice* device) :device_{ device }, mesh_{ device }{
-    objects_srv_.initialize(device->d3d12_device(), nullptr, 0, 1000);
-    bone_srv_.initialize(device->d3d12_device(), nullptr, 0, 1000);
+    //objects_srv_.initialize(device->d3d12_device(), nullptr, 0, 1000);
+    //bone_srv_.initialize(device->d3d12_device(), nullptr, 0, 1000);
 }
 // デストラクタ
 InstanceSkinnedMesh::~InstanceSkinnedMesh() {
@@ -38,17 +38,36 @@ void InstanceSkinnedMesh::compute_blended_matrices(int instance_id, int anim_id1
     skeletons_[instance_id].compute_blended_matrices(animation_set_.get(anim_id1), frame1,animation_set_.get(anim_id2), frame2,weight, local);
 }
 // スキニング行列をセットする
-void InstanceSkinnedMesh::set_skinned_matrices(const Matrix4x4 skinned[]) {
-    device_->set_shader_resource_view_inline(1,set_all_bone_data(skinned,bone_count(0)*current_instance_count_));
+void InstanceSkinnedMesh::set_skinned_matrices(const SkinnedMat skinned[], unsigned int instance_count) {
+    //データの大きさ
+    size_t bone = bone_count(0);
+    unsigned int size = bone * instance_count;
+    //サイズの変更
+    if (instance_count != instnace_skinned_mat_count_) {
+        delete instnace_skinned_mat_;
+        instnace_skinned_mat_ = new Matrix4x4[size];
+        instnace_skinned_mat_count_ = instance_count;
+    }
+    //データの移し替え
+    int current = 0;
+    for (unsigned int i = 0; i < instance_count; i++) {
+        Matrix4x4* first = skinned[i].skinned;
+        for (size_t j = 0; j < bone; j++) {
+            instnace_skinned_mat_[current] = first[j];
+            current++;
+        }
+    }
+    device_->set_instance_structured_buffer(1, skinned, size);
+    //device_->set_shader_resource_view_inline(1,set_all_bone_data(skinned,bone_count(0)*current_instance_count_));
 }
 // 全ボーンデータをセットする
-D3D12_GPU_VIRTUAL_ADDRESS InstanceSkinnedMesh::set_all_bone_data(const Matrix4x4 bone[],int bone_count) {
-    return bone_srv_.upload(bone ,bone_count ,current_instance_count_);
-}
+//D3D12_GPU_VIRTUAL_ADDRESS InstanceSkinnedMesh::set_all_bone_data(const Matrix4x4 bone[],int bone_count) {
+//    return bone_srv_.upload(bone ,bone_count ,current_instance_count_);
+//}
 // 全オブジェクトデータをセットする
-D3D12_GPU_VIRTUAL_ADDRESS InstanceSkinnedMesh::set_all_object_data(const InstanceObject object[],int object_count) {
-    return objects_srv_.upload(object,object_count,current_instance_count_);
-}
+//D3D12_GPU_VIRTUAL_ADDRESS InstanceSkinnedMesh::set_all_object_data(const InstanceObject object[],int object_count) {
+//    return objects_srv_.upload(object,object_count,current_instance_count_);
+//}
 // 描画する
 void InstanceSkinnedMesh::draw(unsigned int instance_count) const {
     // メッシュ描画

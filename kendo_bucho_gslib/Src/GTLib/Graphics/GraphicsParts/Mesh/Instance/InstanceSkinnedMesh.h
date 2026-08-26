@@ -2,6 +2,8 @@
 #define INSTANCE_SKINNED_MESH_H_
 
 #include <string>
+#include "GTLib/Graphics/GraphicsParts/d3dx12.h"
+#include "GTLib/Math/Mathf.h"
 #include "GTLib/Graphics/GraphicsParts/Mesh/Instance/InstanceMesh.h"
 #include "GTLib/Graphics/GraphicsParts/Mesh/Skeleton.h"
 #include "GTLib/Graphics/GraphicsParts/Mesh/AnimationSet.h"
@@ -34,11 +36,11 @@ public:
     //描画数を変更する
     void set_current_instance_count(UINT current) { current_instance_count_ = current; }
     // スキニング行列をセットする
-    void set_skinned_matrices(const Matrix4x4 skinned[]);
+    void set_skinned_matrices(const SkinnedMat skinned[], unsigned int instance_count);
     // 全ボーンデータをセットする
-    D3D12_GPU_VIRTUAL_ADDRESS set_all_bone_data(const Matrix4x4 bone[], int bone_count);
+    //D3D12_GPU_VIRTUAL_ADDRESS set_all_bone_data(const Matrix4x4 bone[], int bone_count);
     // 全オブジェクトデータをセットする
-    D3D12_GPU_VIRTUAL_ADDRESS set_all_object_data(const InstanceObject object[], int object_count);
+    //D3D12_GPU_VIRTUAL_ADDRESS set_all_object_data(const InstanceObject object[], int object_count);
     // 描画する
     void draw(unsigned int instance_count) const;
     
@@ -66,13 +68,18 @@ private:
     // アニメーション
     AnimationSet animation_set_;
     //オブジェクトデータ転送用SRV
-    ShaderResourceView<InstanceObject> objects_srv_;
+    //ShaderResourceView<InstanceObject> objects_srv_;
     //ボーンデータ転送用SRV
-    ShaderResourceView<Matrix4x4> bone_srv_;
+    //ShaderResourceView<Matrix4x4> bone_srv_;
     //描画の最大数
     int instanse_count_{ 0 };
     //今描画する数
     UINT current_instance_count_{ 0 };
+
+    //インスタンス描画用スキニング行列の先頭アドレス
+    Matrix4x4* instnace_skinned_mat_{ nullptr };
+    //インスタンス描画用スキニング行列の先頭アドレス
+    unsigned int instnace_skinned_mat_count_{ 0 };
 };
 
 #endif
