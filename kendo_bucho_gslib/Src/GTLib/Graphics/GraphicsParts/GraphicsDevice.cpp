@@ -202,6 +202,12 @@ void GraphicsDevice::set_structured_buffer(UINT shader_register, ConstantBuffer*
         constant_buffer->constant_buffer_view().BufferLocation);
 }
 
+// インスタンス描画用ストラクテッドバッファの設定
+void GraphicsDevice::set_instance_structured_buffer(UINT shader_register, const void* data,UINT size) {
+    UINT root_index = root_signature_->inline_srv_root_index() + shader_register;
+    command_list_->SetGraphicsRootShaderResourceView(root_index, constant_buffer_pool_[current_back_buffer_]->upload(data,size));
+}
+
 //インラインSRVの設定
 void GraphicsDevice::set_shader_resource_view_inline(UINT shader_register, D3D12_GPU_VIRTUAL_ADDRESS srv_address){
     UINT root_index = root_signature_->inline_srv_root_index() + shader_register;

@@ -38,7 +38,7 @@ void InstanceAnimatedMesh::update(float delta_time) {
 }
 // 描画
 void InstanceAnimatedMesh::draw() const {
-    Graphics::set_instance_skinned_matrices(id_, instance_count_, skinned_matrices_[0].skinned);
+    Graphics::set_instance_skinned_matrices(id_, instance_count_, skinned_matrices_.data());
     Graphics::draw_instance_skinned_mesh(id_,instance_count_,transform_.data());
 }
 // モーションの変更
@@ -92,7 +92,7 @@ float InstanceAnimatedMesh::motion_end_time(int instance_id) const {
 }
 // ボーンのワールド変換行列を取得　
 Matrix4x4 InstanceAnimatedMesh::bone_matrices(int instance_id,int bone_no) const {
-    return (local_bone_data_[instance_id].is_empty) ? Matrix4x4::zero() : bone_matrices_[instance_id].world[bone_no] * transform_[instance_id].world_;
+    return (local_bone_data_[instance_id].is_empty) ? Matrix4x4::identity() : bone_matrices_[instance_id].world[bone_no] * transform_[instance_id].world_;
 }
 //現在の描画数を設定
 void InstanceAnimatedMesh::set_instance_count(int count) {

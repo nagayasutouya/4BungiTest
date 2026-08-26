@@ -72,7 +72,7 @@ void GamePlayScene::start() {
     // プレーヤーを追加
     world_.add_actor(new Player{ &world_, Vector3{ 0.0f, 0.0f, 0.0f } });
     // 敵生成の追加
-    world_.add_enemy(new EnemyGenerator{ &world_,Mesh_Enemy,1000,0 });
+    world_.add_enemy(new EnemyGenerator{ &world_,Mesh_Enemy,1000,0,true,(unsigned int)Graphics::get_instance_skinned_mesh_bone_count(Mesh_Enemy) });
     // レーダークラスを追加
     world_.add_actor(new Radar{ &world_ });
 

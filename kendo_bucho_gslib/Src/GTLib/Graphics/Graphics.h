@@ -187,7 +187,7 @@ namespace Graphics {
     // スキニング行列計算
     void compute_skinned_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 world[], Matrix4x4 skinned[]);
     // スキニング行列を設定する
-    void set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id, unsigned int instance_count, const Matrix4x4 instance_skinned[]);
+    void set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id, unsigned int instance_count, const SkinnedMat instance_skinned[]);
     // スキニングメッシュを描画する (事前にスキニング行列のセットが必要)
     void draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id, unsigned int instance_count,const InstanceObject* first_obj);
     // 指定したスキンメッシュ・アニメーションの終了フレーム（時間）を返す

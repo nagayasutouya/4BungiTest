@@ -54,6 +54,8 @@ void World::draw() const {
 
 // 消去
 void World::clear() {
+	delete enemy_;
+	enemy_ = nullptr;
 	// アクターを消去
 	actors_.clear();
 	// カメラを消去
@@ -65,8 +67,6 @@ void World::clear() {
 	// フィールドを消去
 	delete field_;
 	field_ = nullptr;
-	delete enemy_;
-	enemy_ = nullptr;
 }
 
 // カメラの追加
