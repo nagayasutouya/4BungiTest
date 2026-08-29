@@ -3,7 +3,6 @@
 #include "Field.h"
 #include "Line.h"
 #include "Assets.h"
-#include "InstanceTest/InstanceAnimatedMesh.h"
 
 // 敵のモーションデータ
 enum {
@@ -15,18 +14,17 @@ enum {
 };
 
 // コンストラクタ
-Enemy::Enemy(IWorld* world, const Vector3& position, int instance_id, InstanceAnimatedMesh* mesh) :
-    mesh_{ mesh},
+Enemy::Enemy(IWorld* world, const Vector3& position) :
+    mesh_{Mesh_Enemy,MotionIdle,true},
     motion_{ MotionIdle },
     motion_loop_{ true },
-    state_{ State::Spawn },
-    instance_id_{instance_id} {
+    state_{ State::Spawn }{
     world_ = world;
     name_ = "Enemy";
     tag_ = "EnemyTag";
     collider_ = BoundingSphere{ 0.5f, Vector3{0.0f, 0.8f, 0.0f} };
     transform_.position(position);
-    mesh_->transform(instance_id,transform_.local_to_world_matrix());
+    mesh_.transform(transform_.local_to_world_matrix());
 }
 
 // 更新
@@ -36,13 +34,24 @@ void Enemy::update(float delta_time) {
     // 地面との衝突判定
     collide_field();
     // モーションを変更
-    mesh_->change_motion(instance_id_, motion_, motion_loop_);
+    mesh_.change_motion(motion_, motion_loop_);
+    mesh_.update(delta_time);
     // 行列を設定
-    mesh_->transform(instance_id_,transform_.local_to_world_matrix());
+    mesh_.transform(transform_.local_to_world_matrix());
+    // 点滅処理（2フレームおきに表示）
+    if ((int)blink_timer_ % 4 > 2) {
+        float aa = 0.3f;
+        color_.a = (color_.a <= aa) ? 1.0f :aa;
+    }
+    else {
+        color_.a = 1.0f;
+    }
 }
 
 // 描画
 void Enemy::draw() const {
+    //インスタンスにデータ渡す
+    Graphics::add_instacne_data(Mesh_Enemy,transform_.local_to_world_matrix(),mesh_.skinned_matrix(),color_);
     // 衝突判定の描画
     collider().draw();
 }
@@ -120,7 +129,7 @@ void Enemy::move(float delta_time) {
 // ダメージ中
 void Enemy::damage(float delta_time) {
     // アニメーションの終了待ってダウン中に遷移
-    if (state_timer_ >= mesh_->motion_end_time(instance_id_)) {
+    if (state_timer_ >= mesh_.motion_end_time()) {
         change_state(State::Down, MotionDown, false);
     }
 }

@@ -12,6 +12,9 @@ void Actor::draw() const { }
 // 半透明オブジェクトの描画
 void Actor::draw_transparent() const { }
 
+// インスタンス描画
+void Actor::draw_instance() const{}
+
 // GUIの描画
 void Actor::draw_gui() const { }
 

@@ -40,9 +40,9 @@ void SkinnedMesh::set_skinned_matrices(const Matrix4x4 skinned[]) const {
     device_->set_constant_buffer(4, skinned, sizeof(Matrix4x4) * (UINT)bone_count());
 }
 // •`‰æ‚·‚é
-void SkinnedMesh::draw() const {
+void SkinnedMesh::draw(unsigned int instance_count, unsigned int instance_num_offset, unsigned int start_vartex) const {
     // ƒƒbƒVƒ…•`‰æ
-    mesh_.draw();
+    mesh_.draw(instance_count,instance_num_offset,start_vartex);
 }
 // ƒ{[ƒ“”‚ğ•Ô‚·
 std::size_t SkinnedMesh::bone_count() const {

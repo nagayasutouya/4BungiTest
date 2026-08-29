@@ -22,6 +22,8 @@ public:
     void late_update(float delta_time);
     // アクターの描画
     void draw() const;
+    // インスタンス描画
+    void draw_instance() const;
     // 半透明アクターの描画
     void draw_transparent() const;
     // アクターのGUI描画
