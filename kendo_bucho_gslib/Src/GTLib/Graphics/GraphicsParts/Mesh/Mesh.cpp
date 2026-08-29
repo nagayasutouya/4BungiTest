@@ -112,7 +112,7 @@ void Mesh::load(const std::string& file_name) {
         (UINT)(sizeof(unsigned int) * indices.size()), DXGI_FORMAT_R32_UINT);
 }
 // 描画
-void Mesh::draw() const {
+void Mesh::draw(unsigned int instance_count, unsigned int instance_num_offset,unsigned int start_vartex) const {
     // 頂点バッファとインデックスバッファの設定
     device_->set_vertex_buffer(0, vertices_);
     device_->set_index_buffer(indices_);
@@ -123,7 +123,7 @@ void Mesh::draw() const {
         // マテリアル用テクスチャの設定
         device_->set_texture(0, materials_[subset.material].texture);
         // ポリゴンの描画
-        device_->draw_indexed(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST, subset.count, subset.start);
+        device_->draw_indexed(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST, subset.count, subset.start,start_vartex,instance_count,instance_num_offset);
     }
 }
 // 解放

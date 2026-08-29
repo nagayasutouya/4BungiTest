@@ -47,7 +47,7 @@ public:
     // ƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
     void load(const std::string& file_name);
     // •`‰æ
-    void draw() const;
+    void draw(unsigned int instance_count=1,unsigned int instance_num_offset=0, unsigned int start_vartex=0) const;
     // ‰ğ•ú
     void clear();
 

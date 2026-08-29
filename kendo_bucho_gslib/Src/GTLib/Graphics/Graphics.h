@@ -153,20 +153,6 @@ namespace Graphics {
     // 指定したスキンメッシュのボーン数を返す
     std::size_t get_skinned_mesh_bone_count(std::uint32_t skinned_mesh_id);
 
-    //インスタンスメッシュ
-    // メッシュ読み込み
-    InstanceMesh* load_instance_mesh(std::uint32_t mesh_id, const std::string& filename);
-    // メッシュ削除
-    void delete_instance_mesh(std::uint32_t mesh_id);
-    // メッシュ取得
-    InstanceMesh* get_instance_mesh(std::uint32_t mesh_id);
-    // メッシュのパイプラインステート設定
-    void set_instance_mesh_pipeline_state(std::uint32_t pipeline_state_id);
-    // メッシュのパイプラインステート取得
-    std::uint32_t get_instance_mesh_pipeline_state();
-    // メッシュ描画
-    void draw_instance_mesh(std::uint32_t mesh_id, unsigned int instance_count);
-
     //インスタンススキニングメッシュ
     // インスタンススキニングメッシュ読み込み
     InstanceSkinnedMesh* load_instance_skinned_mesh(std::uint32_t skinned_mesh_id,const std::string& mesh_file,const std::string& skeleton_file,const std::string& animation_file, int instance_count=100);
@@ -183,13 +169,13 @@ namespace Graphics {
     // ブレンドされたローカル行列計算
     void compute_blended_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, BlendedMat& mat, const float lerp_time);
     // ワールド行列計算
-    void compute_world_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent);
+    void compute_world_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 local[], Matrix4x4 world[], const Matrix4x4& parent=Matrix4x4::identity());
     // スキニング行列計算
     void compute_skinned_matrices_instance(std::uint32_t skinned_mesh_id, int instance_id, const Matrix4x4 world[], Matrix4x4 skinned[]);
     // スキニング行列を設定する
     void set_instance_skinned_matrices(std::uint32_t instance_skinned_mesh_id, unsigned int instance_count, const SkinnedMat instance_skinned[]);
     // スキニングメッシュを描画する (事前にスキニング行列のセットが必要)
-    void draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id, unsigned int instance_count,const InstanceObject* first_obj);
+    void draw_instance_skinned_mesh(std::uint32_t instance_skinned_mesh_id, unsigned int instance_count,const InstanceObject* first_obj, unsigned int instance_num_offset=0);
     // 指定したスキンメッシュ・アニメーションの終了フレーム（時間）を返す
     float get_instance_skinned_mesh_last_frame(std::uint32_t instance_skinned_mesh_id, int anim_id);
     // 指定したスキンメッシュのボーン数を返す

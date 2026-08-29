@@ -7,12 +7,13 @@ const float InstanceLerpTime{ 10.0f };
 
 // コンストラクタ
 InstanceAnimatedMesh::InstanceAnimatedMesh(unsigned int id, unsigned int instance_count_max, unsigned int motion, bool loop, unsigned int num_bones) :id_{ id },transform_{ instance_count_max},local_bone_data_{ instance_count_max },bone_matrices_{ instance_count_max },skinned_matrices_{ instance_count_max },instance_count_max_{instance_count_max} {
+    int bone = (int)Graphics::get_instance_skinned_mesh_bone_count(id);
     //データコンテナの作成
     for (int i = 0; i < instance_count_max; i++) {
         skinned_matrices_[i].skinned = new Matrix4x4[num_bones];
         bone_matrices_[i].world = new Matrix4x4[num_bones];
         local_bone_data_[i].local = new Matrix4x4[num_bones];
-        transform_[i].bone_offset_ = num_bones * i;
+        transform_[i].bone_offset_ = bone * i;
     }
     instance_count_= instance_count_max_;
 }
@@ -68,7 +69,7 @@ void InstanceAnimatedMesh::transform(int instance_id, const Matrix4x4& matrix) {
     // ボーンごとのローカル変換行列を計算
     Graphics::compute_blended_matrices_instance(id_,instance_id ,local_bone_data_[instance_id],InstanceLerpTime);
     // ボーンの変換行列を計算
-    Graphics::compute_world_matrices_instance(id_, instance_id,local_bone_data_[instance_id].local, bone_matrices_[instance_id].world, bone_matrices_[instance_id].parent);
+    Graphics::compute_world_matrices_instance(id_, instance_id,local_bone_data_[instance_id].local, bone_matrices_[instance_id].world);
     Graphics::compute_skinned_matrices_instance(id_, instance_id, bone_matrices_[instance_id].world, skinned_matrices_[instance_id].skinned);
 }
 // モーションが終了しているか？
@@ -88,7 +89,7 @@ void InstanceAnimatedMesh::motion_time(int instance_id, float time) {
 }
 // モーションの終了時間を取得
 float InstanceAnimatedMesh::motion_end_time(int instance_id) const {
-    return (local_bone_data_[instance_id].is_empty) ? 0.0f : Graphics::get_skinned_mesh_last_frame(id_, local_bone_data_[instance_id].current_motion);
+    return (local_bone_data_[instance_id].is_empty) ? 0.0f : Graphics::get_instance_skinned_mesh_last_frame(id_, local_bone_data_[instance_id].current_motion);
 }
 // ボーンのワールド変換行列を取得　
 Matrix4x4 InstanceAnimatedMesh::bone_matrices(int instance_id,int bone_no) const {

@@ -41,5 +41,4 @@ namespace Util {
 		return contena.find(data)!=contena.end();
 	}
 };
-
 #endif
