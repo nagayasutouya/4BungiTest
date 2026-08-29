@@ -37,7 +37,7 @@ void SkinnedMesh::compute_blended_matrices(int anim_id1, float frame1, int anim_
 }
 // スキニング行列をセットする
 void SkinnedMesh::set_skinned_matrices(const Matrix4x4 skinned[]) const {
-    device_->set_constant_buffer(4, skinned, sizeof(Matrix4x4) * bone_count());
+    device_->set_constant_buffer(4, skinned, sizeof(Matrix4x4) * (UINT)bone_count());
 }
 // 描画する
 void SkinnedMesh::draw() const {

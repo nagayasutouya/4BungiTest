@@ -19,8 +19,6 @@ namespace PipelineStateID {
     constexpr std::uint32_t Mesh_Opaque = 6;
     // スキニングメッシュ
     constexpr std::uint32_t SkinnedMesh_Opaque = 7;
-    // インスタンス描画メッシュ
-    constexpr std::uint32_t InstanceMesh_Opaque = 9;
     // インスタンス描画スキニングメッシュ
     constexpr std::uint32_t InstanceSkinnedMesh_Opaque = 10;
     // スカイドーム

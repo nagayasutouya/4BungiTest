@@ -25,10 +25,6 @@ namespace PipelineSetup {
     void create_pipeline_skinned_mesh(
         DXGI_FORMAT rtv_format = DXGI_FORMAT_R8G8B8A8_UNORM,
         DXGI_FORMAT dsv_format = DXGI_FORMAT_D32_FLOAT);
-    // インスタンスメッシュ用のパイプラインステート作成
-    void create_pipeline_instance_mesh(
-        DXGI_FORMAT rtv_format = DXGI_FORMAT_R8G8B8A8_UNORM,
-        DXGI_FORMAT dsv_format = DXGI_FORMAT_D32_FLOAT);
     // インスタンス描画スキニングメッシュ用のパイプラインステート作成
     void create_pipeline_instance_skinned_mesh(
         DXGI_FORMAT rtv_format = DXGI_FORMAT_R8G8B8A8_UNORM,

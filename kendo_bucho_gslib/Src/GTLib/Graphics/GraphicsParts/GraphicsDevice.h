@@ -77,8 +77,6 @@ public:
     void set_structured_buffer(UINT shader_register, ConstantBuffer* constant_buffer);
     // インスタンス描画用ストラクテッドバッファの設定
     void set_instance_structured_buffer(UINT shader_register,const void* data, UINT size);
-    //インラインSRVの設定
-    void set_shader_resource_view_inline(UINT shader_register, D3D12_GPU_VIRTUAL_ADDRESS srv_address);
 
     // ディスクリプタヒープの設定
     void set_descriptor_heaps();

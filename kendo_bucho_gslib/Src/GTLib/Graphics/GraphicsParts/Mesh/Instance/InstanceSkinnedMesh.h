@@ -4,10 +4,9 @@
 #include <string>
 #include "GTLib/Graphics/GraphicsParts/d3dx12.h"
 #include "GTLib/Math/Mathf.h"
-#include "GTLib/Graphics/GraphicsParts/Mesh/Instance/InstanceMesh.h"
+#include "GTLib/Graphics/GraphicsParts/Mesh/Mesh.h"
 #include "GTLib/Graphics/GraphicsParts/Mesh/Skeleton.h"
 #include "GTLib/Graphics/GraphicsParts/Mesh/AnimationSet.h"
-#include "GTLib/Graphics/GraphicsParts/BufferAndPool/ShaderResourceView.h"
 #include "GTLib/Data/InstanceComputeMatrix.h"
 #include <vector>
 
@@ -37,12 +36,8 @@ public:
     void set_current_instance_count(UINT current) { current_instance_count_ = current; }
     // スキニング行列をセットする
     void set_skinned_matrices(const SkinnedMat skinned[], unsigned int instance_count);
-    // 全ボーンデータをセットする
-    //D3D12_GPU_VIRTUAL_ADDRESS set_all_bone_data(const Matrix4x4 bone[], int bone_count);
-    // 全オブジェクトデータをセットする
-    //D3D12_GPU_VIRTUAL_ADDRESS set_all_object_data(const InstanceObject object[], int object_count);
     // 描画する
-    void draw(unsigned int instance_count) const;
+    void draw(unsigned int instance_count, unsigned int instance_num_offset=0) const;
     
     // ボーン数を返す
     std::size_t bone_count(int instance_id) const;
@@ -62,15 +57,12 @@ private:
     //コマンドリスト
     ID3D12GraphicsCommandList* command_list_{nullptr};
     // メッシュ
-    InstanceMesh mesh_;
+    Mesh mesh_;
     // スケルトン
-    std::vector<Skeleton> skeletons_;
+    //std::vector<Skeleton> skeletons_;
+    Skeleton skeletons_;
     // アニメーション
     AnimationSet animation_set_;
-    //オブジェクトデータ転送用SRV
-    //ShaderResourceView<InstanceObject> objects_srv_;
-    //ボーンデータ転送用SRV
-    //ShaderResourceView<Matrix4x4> bone_srv_;
     //描画の最大数
     int instanse_count_{ 0 };
     //今描画する数
