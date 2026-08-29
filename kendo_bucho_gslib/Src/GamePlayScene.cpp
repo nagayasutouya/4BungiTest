@@ -74,7 +74,7 @@ void GamePlayScene::start() {
     // プレーヤーを追加
     world_.add_actor(new Player{ &world_, Vector3{ 0.0f, 0.0f, 0.0f } });
     // 敵生成の追加
-    world_.add_enemy(new EnemyGenerator{ &world_,Mesh_Enemy,1 });
+    world_.add_actor(new EnemyGenerator{ &world_});
     //world_.add_actor(new BEnemyGenerator{ &world_});
     // レーダークラスを追加
     world_.add_actor(new Radar{ &world_ });
@@ -140,7 +140,7 @@ void GamePlayScene::end() {
     world_.clear();
     // アセットの削除
     Graphics::delete_skinned_mesh(Mesh_Player);
-    Graphics::delete_skinned_mesh(Mesh_Enemy);
+    Graphics::delete_instance_skinned_mesh(Mesh_Enemy);
     Graphics::delete_mesh(Octree_Koutei);
     Graphics::delete_texture(Texture_Skybox);
     Graphics::delete_texture(Texture_Number);

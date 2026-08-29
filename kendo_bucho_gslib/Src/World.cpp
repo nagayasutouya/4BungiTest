@@ -13,8 +13,6 @@ void World::update(float delta_time) {
 	field_->update(delta_time);
 	// アクターの更新
 	actors_.update(delta_time);
-	//敵生成の更新
-	if (enemy_ != nullptr)enemy_->update(delta_time);
 	// アクターの衝突
 	actors_.collide();
 	// アクターの遅延更新
@@ -35,15 +33,16 @@ void World::draw() const {
 	camera_->draw();
 	// ライトの描画
 	light_->draw();
-
+	//インスタンス描画データの破棄
+	Graphics::reset_instacne_data();
 	// フィールドの描画
 	field_->draw();
 	// アクターの描画
 	actors_.draw();
-	if(enemy_!=nullptr)enemy_->draw();
 	// 半透明アクターの描画
 	actors_.draw_transparent();
-
+	//インスタンス描画
+	actors_.draw_instance();
 	// GUIの描画
 	actors_.draw_gui();
 	// スコアの描画
@@ -54,7 +53,6 @@ void World::draw() const {
 
 // 消去
 void World::clear() {
-	enemy_ = nullptr;
 	// アクターを消去
 	actors_.clear();
 	// カメラを消去

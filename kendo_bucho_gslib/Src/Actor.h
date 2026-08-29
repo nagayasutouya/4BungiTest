@@ -22,6 +22,8 @@ public:
 	virtual void draw() const;
 	// 半透明の描画
 	virtual void draw_transparent() const;
+	// インスタンス描画
+	virtual void draw_instance() const;
 	// GUIの描画
 	virtual void draw_gui() const;
 	// 衝突リアクション

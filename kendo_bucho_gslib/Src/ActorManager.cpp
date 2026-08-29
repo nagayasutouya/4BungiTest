@@ -31,7 +31,12 @@ void ActorManager::draw() const {
         actor->obj()->draw();
     }
 }
-
+// インスタンス描画
+void ActorManager::draw_instance() const {
+    for (auto actor : actors_) {
+        actor->obj()->draw_instance();
+    }
+}
 // 半透明アクターの描画
 void ActorManager::draw_transparent() const {
     for (auto actor : actors_) {

@@ -1,6 +1,7 @@
 #include "EnemyGenerator.h"
 #include "IWorld.h"
 #include "Enemy.h"
+#include "Assets.h"
 
 //最大出現数
 const int EnemyMaxCount{ 1 };
@@ -8,7 +9,7 @@ const int EnemyMaxCount{ 1 };
 const float GenerateInterval{ 5.0f };
 
 // コンストラクタ
-EnemyGenerator::EnemyGenerator(IWorld* world, unsigned int id, unsigned int instance_count_max, unsigned int motion , bool loop , unsigned int num_bones ) :mesh_{ id ,instance_count_max , motion ,loop , num_bones} {
+EnemyGenerator::EnemyGenerator(IWorld* world ) {
     world_ = world;
     tag_   = "EnemyGeneratorTag";
     name_  = "EnemyGenerator";
@@ -28,7 +29,6 @@ void EnemyGenerator::update(float delta_time) {
             timer_ = 0.0f;
         }
     }
-    mesh_.update(delta_time);
 }
 
 // 敵の生成
@@ -53,12 +53,12 @@ void EnemyGenerator::generate() {
         position.z = Random::range(-21.0f, 21.0f);
         break;
     }
-    world_->add_actor(new Enemy(world_, position,mesh_.add_instnace(),&mesh_));
+    world_->add_actor(new Enemy(world_, position));
 }
 
 //一括描画
-void  EnemyGenerator::draw()const {
-    mesh_.draw();
+void  EnemyGenerator::draw_instance()const {
+    Graphics::draw_instance_skinned_mesh(Mesh_Enemy);
 }
 // メッセージ処理
 void  EnemyGenerator::handle_message(const std::string& message, void* param){

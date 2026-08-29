@@ -91,7 +91,7 @@
 //				if (is_ini_ && before_function_id_.at(new_rule_count_) != function_id) {//データが変わっているかを調べ、変わってたらコンテナ作りなおし
 //					origin_data->clear_row(data_count);
 //					Row change_rule = new_rule_.at(rule_id).get_row(function_id, 0);
-//					data_.add_data(data_count, to_string(function_id));
+//					data_.add_instance_data(data_count, to_string(function_id));
 //					add_contents(data_count, 1, change_rule, true);
 //					data_list = origin_data->get_row(data_count);
 //					before_function_id_.at(new_rule_count_) = function_id;
@@ -254,9 +254,9 @@
 //		input_ini_data(row_num, id, "a", is_new_rule);
 //	}
 //	else if (id == MotionLoadID::Vector3) {
-//		if (is_new_rule)data_.add_data(row_num, id);
+//		if (is_new_rule)data_.add_instance_data(row_num, id);
 //		for (int k = 0; k < 3; k++) {
-//			data_.add_data(row_num, "0");
+//			data_.add_instance_data(row_num, "0");
 //		}
 //		j += 2;
 //	}
@@ -266,8 +266,8 @@
 //
 ////指定したデータを保存
 //void Editor::input_ini_data(const int row_num, string id, string data, const bool is_add_id) {
-//	if (is_add_id)data_.add_data(row_num, id);
-//	data_.add_data(row_num, data);
+//	if (is_add_id)data_.add_instance_data(row_num, id);
+//	data_.add_instance_data(row_num, data);
 //}
 ////書き出し用データに変換
 //void Editor::output_result() {
