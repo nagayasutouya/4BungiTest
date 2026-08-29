@@ -39,7 +39,7 @@ public:
     // スキニング行列をセットする
     void set_skinned_matrices(const Matrix4x4 skinned[]) const;
     // 描画する
-    void draw() const;
+    void draw(unsigned int instance_count = 1, unsigned int instance_num_offset = 0, unsigned int start_vartex = 0) const;
 
     // ボーン数を返す
     std::size_t bone_count() const;

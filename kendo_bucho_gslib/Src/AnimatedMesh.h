@@ -27,6 +27,8 @@ public:
     float motion_end_time() const;
     // ボーンのワールド変換行列を取得
     Matrix4x4 bone_matrices(int bone_no) const;
+    //スキニング行列の先頭アドレスを取得
+    const Matrix4x4* skinned_matrix()const;
 private:
     // アセットID
     unsigned int      id_;

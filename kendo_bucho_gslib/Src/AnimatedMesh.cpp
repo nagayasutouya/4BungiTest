@@ -102,3 +102,7 @@ float AnimatedMesh::motion_end_time() const {
 Matrix4x4 AnimatedMesh::bone_matrices(int bone_no) const {
     return bone_matrices_[bone_no] * transform_;
 }
+//スキニング行列の先頭アドレスを取得
+const Matrix4x4* AnimatedMesh::skinned_matrix()const {
+    return skinned_matrices_.data();
+}

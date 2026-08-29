@@ -11,6 +11,8 @@ struct Color {
     float b{ 0.0f };
     // ƒAƒ‹ƒtƒ@¬•ª (0.0f ` 1.0f)
     float a{ 1.0f };
+    //‚Å‚Ó‚§‚ğ•Ô‚·
+    static Color one() { return Color{1.0f,1.0f,1.0f,1.0f}; }
 };
 
 #endif

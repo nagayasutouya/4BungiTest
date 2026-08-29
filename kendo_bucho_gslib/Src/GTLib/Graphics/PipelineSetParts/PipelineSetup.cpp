@@ -284,8 +284,24 @@ void PipelineSetup::create_pipeline_instance_skinned_mesh(DXGI_FORMAT rtv_format
     desc.SampleDesc.Count = 1;
     desc.SampleDesc.Quality = 0;
 
-    // スキニングメッシュ用パイプラインステートの作成 (不透明)
-    desc.BlendState.RenderTarget[0] = BlendState::Opaque;
+    // スキニングメッシュ用パイプラインステートの作成 
+    //BlendStateを半透明にできるように設定
+    D3D12_RENDER_TARGET_BLEND_DESC blendDesc = {};
+    blendDesc.BlendEnable = TRUE;//ブレンディングを有効化
+    blendDesc.LogicOpEnable = FALSE;
+    blendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;//描画する色のアルファ値を使用
+    blendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;//背景色に(1-アルファ値)を乗算
+    blendDesc.BlendOp = D3D12_BLEND_OP_ADD;//加算合成
+    blendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+    blendDesc.DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
+    blendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+    blendDesc.LogicOp = D3D12_LOGIC_OP_NOOP;
+    blendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;//全チャンネル書き込み
+    //BlendState設定を反映
+    desc.BlendState.AlphaToCoverageEnable = FALSE;
+    desc.BlendState.IndependentBlendEnable = FALSE;
+    desc.BlendState.RenderTarget[0] = blendDesc;
+
     PipelineState* pipeline_state =
         Graphics::get_graphics_device()->create_pipeline_state(desc);
     Graphics::add_pipeline_state(PipelineStateID::InstanceSkinnedMesh_Opaque, pipeline_state);
