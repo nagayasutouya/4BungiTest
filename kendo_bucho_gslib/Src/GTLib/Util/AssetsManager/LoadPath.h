@@ -11,12 +11,11 @@ template<typename Type>
 class LoadPath {
 public:
 	LoadPath(){}
-	int load(std::string path, CreatLog& log, CSVReader& csv, const Type target) {
+	int load(std::string path, CSVReader& csv, const Type target) {
 		//IDを元にフォルダの位置を取得
 		csv.load(path);
 		int size = csv.rows();
 		if (size <= 1) {
-			log.creat_log("ID is Nothing");
 			return -1;
 		}
 		int col = csv.columns(0);
@@ -41,13 +40,11 @@ public:
 				if(is_correct(csv, row_num, target))break;
 			}
 			else { 
-				log.creat_log("Get Unknown Type");
 				return -1;
 			}
 			row_num++;
 		}
 		if (row_num >= size) {
-			log.creat_log("Target Path is Nothing");
 			return -1;
 		}
 		return row_num;

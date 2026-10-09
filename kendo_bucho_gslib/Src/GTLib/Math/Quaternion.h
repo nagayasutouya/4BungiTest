@@ -27,11 +27,15 @@ struct Quaternion {
     static Quaternion euler(const Vector3& euler);
     static Quaternion euler(float x, float y, float z);
 
+    // 2つの回転aとb間の角度
+    static float angle(const Quaternion& a, const Quaternion& b);
+
     // 前方ベクトルと上ベクトルからの生成
     static Quaternion look_rotation(const Vector3& forward, const Vector3& up);
     // fromからtoへの回転クォータニオンを生成
     static Quaternion from_to_rotation(const Vector3& from, const Vector3& to);
-
+    // fromからtoへの回転クォータニオンを生成
+    static Quaternion rotate_towards(const Quaternion& from, const Quaternion& to, float max_degrees_delta);
     // 球面線形補間
     static Quaternion slerp(const Quaternion& a, const Quaternion& b, float t);
     

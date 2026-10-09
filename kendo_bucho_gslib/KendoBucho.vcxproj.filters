@@ -264,6 +264,12 @@
     <ClCompile Include="Src\Before\BeforeEnemyGenerator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Sibungi\FPSCheck.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Effect\GTEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Actor.h">
@@ -567,6 +573,366 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Before\BeforeEnemyGenerator.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Sibungi\FPSCheck.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxCompileConfig.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxDataType.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxDataTypeWin.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxFunctionWin.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxLib.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Backend\Effekseer.GraphicsDevice.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Base.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Base.Pre.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Color.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.CoordinateSystem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Curve.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.CurveLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.DefaultFile.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Effect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.EffectLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.ExternalModel.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.File.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Manager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.MaterialLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Math.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Matrix43.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Matrix44.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.RectF.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.RenderingTransform.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.ResourceManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Setting.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.SoundLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.TextureLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Vector2D.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Vector3D.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.WorkerThread.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\IO\Effekseer.EfkEfcFactory.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Model\Effekseer.Model.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Model\Effekseer.ModelLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Network\Effekseer.Client.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Network\Effekseer.Server.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Parameter\Effekseer.Parameters.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.GpuParticles.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.GpuTimer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.ModelRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.RibbonRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.RingRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.SpriteRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.TrackRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Base.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge_Gen.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge_NEON.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge_SSE.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4_Gen.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4_NEON.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4_SSE.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4_Gen.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4_NEON.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4_SSE.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Mat43f.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Mat44f.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Quaternionf.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Utils.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Vec2f.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Vec3f.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Vec4f.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Sound\Effekseer.SoundPlayer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Utils\Effekseer.BinaryReader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Utils\Effekseer.CustomAllocator.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Utils\Effekseer.String.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\VectorField\Effekseer.VectorField.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\VectorField\Effekseer.VectorFieldLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer.Modules.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer.SIMD.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerForDXLib.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.CommonUtils.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.GpuParticles.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.ModelRendererBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.Renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.Renderer_Impl.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.RenderStateBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.RibbonRendererBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.RingRendererBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.ShaderBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.SpriteRendererBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.StandardRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.TrackRendererBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\GraphicsDeviceCPU.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\ModelLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\TextureLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\TrailRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\VertexBuffer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11\EffekseerRendererDX11.Base.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11\EffekseerRendererDX11.Base.Pre.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11\EffekseerRendererDX11.Renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX12\EffekseerRendererDX12.Base.Pre.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX12\EffekseerRendererDX12.Renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX12.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX9\EffekseerRendererDX9.Base.Pre.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX9\EffekseerRendererDX9.Renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX9.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererGL\EffekseerRendererGL.Base.Pre.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererGL\EffekseerRendererGL.Renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererGL.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererLLGI\Common.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerSoundDSound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerSoundXAudio2.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Base.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Buffer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.CommandList.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Compiler.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Graphics.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.PipelineState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Platform.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Query.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Shader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Texture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Effect\GTEffect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

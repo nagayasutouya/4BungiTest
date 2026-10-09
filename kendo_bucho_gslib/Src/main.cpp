@@ -3,6 +3,8 @@
 #include "GamePlayScene.h"
 #include "TitleScene.h"
 
+#include "Sibungi/FPSCheck.h"
+
 class MyGame : public Game {
 public:
     // コンストラクタ
@@ -19,6 +21,7 @@ public:
     }
     //　更新
     void update(float delta_time) override {
+        fps_.Instance()->update();
         if (Input::get_key_down('P'))stop_ = (stop_) ? false : true;
         if (stop_)return;
         // ワールドクラスの更新
@@ -43,6 +46,8 @@ private:
     // シーンマネージャー
     SceneManager scene_manager_;
     bool stop_{false};
+    //FPS
+    FPSCheck fps_;
 };
 
 int main() {

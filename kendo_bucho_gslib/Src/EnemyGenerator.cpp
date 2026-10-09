@@ -4,9 +4,10 @@
 #include "Assets.h"
 
 //最大出現数
-const int EnemyMaxCount{ 1 };
+const int EnemyMaxCount{ 2000 };
 // 出現間隔
-const float GenerateInterval{ 5.0f };
+const float GenerateInterval{ 1.0f };
+const int OneTimeAdd{ 100 };
 
 // コンストラクタ
 EnemyGenerator::EnemyGenerator(IWorld* world ) {
@@ -33,27 +34,29 @@ void EnemyGenerator::update(float delta_time) {
 
 // 敵の生成
 void EnemyGenerator::generate() {
-    // グラウンドの端からランダムに出現
-    Vector3 position{ 0.0f,0.0f,0.0f };
-    switch ((0, 3)) {
-    case 0:
-        position.x = Random::range(-21.0f, 21.0f);
-        position.z = -21.0f;
-        break;
-    case 1:
-        position.x = 21.0f;
-        position.z = Random::range(-21.0f, 21.0f);
-        break;
-    case 2:
-        position.x = Random::range(-21.0f, 21.0f);
-        position.z = 21.0f;
-        break;
-    case 3:
-        position.x = -21.0f;
-        position.z = Random::range(-21.0f, 21.0f);
-        break;
+    for (int i = 0; i < OneTimeAdd; i++) {
+        // グラウンドの端からランダムに出現
+        Vector3 position{ 0.0f,0.0f,0.0f };
+        switch ((0, 3)) {
+        case 0:
+            position.x = Random::range(-21.0f, 21.0f);
+            position.z = -21.0f;
+            break;
+        case 1:
+            position.x = 21.0f;
+            position.z = Random::range(-21.0f, 21.0f);
+            break;
+        case 2:
+            position.x = Random::range(-21.0f, 21.0f);
+            position.z = 21.0f;
+            break;
+        case 3:
+            position.x = -21.0f;
+            position.z = Random::range(-21.0f, 21.0f);
+            break;
+        }
+        world_->add_actor(new Enemy(world_, position));
     }
-    world_->add_actor(new Enemy(world_, position));
 }
 
 //一括描画
