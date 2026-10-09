@@ -83,7 +83,7 @@ namespace Input {
     KeyBoard* get_keyboard();
     // マウスインスタンスの取得
     Mouse* get_mouse();
-    // ゲームパッドインスタンス의取得
+    // ゲームパッドインスタンスを取得
     GamePad* get_gamepad(DWORD player_index = 0);
 
 } // namespace Input

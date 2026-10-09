@@ -3,6 +3,10 @@
 #include "Mathf.h"
 #include <cmath>
 
+//内積誤差補正
+const float kEpsilon{ 1e-05f };
+inline bool is_equal_using_dot(float dot);
+
 // コンストラクタ
 Quaternion::Quaternion(float x, float y, float z, float w)
     : x{ x }, y{ y }, z{ z }, w{ w } {
@@ -33,7 +37,11 @@ Quaternion Quaternion::euler(float x, float y, float z) {
 	float qw = c1 * c2 * c3 + s1 * s2 * s3;
 	return Quaternion{ qx, qy, qz, qw };
 }
-
+// 2つの回転aとb間の角度
+float Quaternion::angle(const Quaternion& a, const Quaternion& b) {
+    float dot = Quaternion::dot(a, b);
+    return is_equal_using_dot(dot) ? 0.0f : Mathf::rad_to_deg(std::acos(Mathf::Min(std::abs(dot), 1.0f)) * 2.0f);
+}
 // 軸と角度からの生成
 Quaternion Quaternion::angle_axis(float angle, const Vector3& axis) {
 	Vector3 n = axis.normalized();
@@ -127,7 +135,12 @@ Quaternion Quaternion::from_to_rotation(const Vector3& from, const Vector3& to) 
     float inv_s = 1.0f / s;
     return Quaternion{ c.x * inv_s, c.y * inv_s, c.z * inv_s, s * 0.5f };
 }
-
+// fromからtoへの回転クォータニオンを生成
+Quaternion Quaternion::rotate_towards(const Quaternion& from, const Quaternion& to, float max_degrees_delta) {
+    float angle = Quaternion::angle(from, to);
+    if (angle == 0.0f) return to;
+    return slerp(from, to, Mathf:: Min(1.0f, max_degrees_delta / angle));
+}
 // 球面線形補間
 Quaternion Quaternion::slerp(const Quaternion& a, const Quaternion& b, float t) {
     float cos_theta = Quaternion::dot(a, b);
@@ -235,4 +248,9 @@ Vector3 Quaternion::euler_angles() const {
 
     return Vector3(
         Mathf::rad_to_deg(euler.x), Mathf::rad_to_deg(euler.y), Mathf::rad_to_deg(euler.z));
+}
+// 内積を比較する際に誤差を考慮
+inline bool is_equal_using_dot(float dot) {
+    // Returns false in the presence of NaN values.
+    return dot > 1.0f - kEpsilon;
 }

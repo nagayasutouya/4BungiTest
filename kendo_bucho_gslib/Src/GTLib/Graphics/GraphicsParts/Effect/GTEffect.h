@@ -1,0 +1,97 @@
+#ifndef GTEFFECT_H_
+#define GTEFFECT_H_
+
+#include <EffekseerRendererDX12.Renderer.h>
+
+#include <XAudio2.h>
+#include <d3d12.h>
+#include <vector>
+#include <wrl/client.h>
+#include "GTLib/GTLibMath.h"
+#include "GTLib/Math/Color.h"
+
+
+//エフェクト管理クラス
+class GTEffect {
+public:
+	//コンストラクタ
+	GTEffect(ID3D12Device* device, ID3D12CommandQueue* queue,int swap_buffer_count, ID3D12Resource* texture_resource);
+	//初期化
+	void initialize(GTUINT effext_load_cout_max = 1024, GTUINT instance_count_max = 2048,DXGI_FORMAT render_format= DXGI_FORMAT_D32_FLOAT,int render_target_count=1, DXGI_FORMAT depth_format= DXGI_FORMAT_D32_FLOAT,bool is_reversed_depth=false,int square_max_count=0);
+	//エフェクトの読み込み
+	bool load_effect(GTUINT effect_id, const char* file_name, float scale=1.0f);
+	//エフェクトの再生(ハンドルが返ってくる)
+	int play_effect(GTUINT effect_id, const Vector3* postion=nullptr);
+	int play_effect_mat(GTUINT effect_id, const Matrix4x4* matrix=nullptr);
+	// エフェクトの更新
+	void update_effect(float frame_time);
+	// エフェクト用のカメラの設定をする
+	void set_effect_camera(Matrix4x4 projection, Matrix4x4 view);
+	// エフェクトの描画開始
+	void begin_rendering_effect();
+	// エフェクトの描画終了
+	void end_rendering_effect();
+	// エフェクトの描画
+	void draw_effect();
+	// エフェクトのハンドル単位の描画
+	void draw_effect(int handle);
+	// エフェクトを停止する
+	void stop_effect(int handle);
+	// 全エフェクトを停止する
+	void stop_all_effects();
+	// エフェクトのルートだけを停止する
+	void stop_root_effect(int handle);
+	//エフェクト全部削除
+	void finish_effect();
+	//指定したエフェクトを破棄
+	void delete_effect(GTUINT effect_id);
+	// エフェクトのインスタンスが存在しているか調べる
+	bool exists_effect(int handle);
+	// エフェクトの色空間をガンマカラー空間にする
+	void set_effect_color_space_type_gamma();
+	// エフェクトの色空間をリニアカラー空間にする
+	void set_effect_color_space_type_linear();
+	// 透視変換行列の設定
+	void set_effect_projection_matrix(const Matrix4x4* matrix);
+	// 視野変換行列の設定
+	void set_effect_view_matrix(const Matrix4x4* matrix);
+	// エフェクトのインスタンスに変換行列を設定
+	void set_effect_matrix(int handle, const Matrix4x4* matrix);
+	// エフェクトのインスタンスに設定されている行列を取得
+	void get_effect_matrix(int handle, Matrix4x4* result);
+	// エフェクトのインスタンスの位置を取得
+	void get_effect_position(int handle, Vector3* position);
+	// エフェクトのインスタンスの位置を指定
+	void set_effect_position(int handle, const Vector3* position);
+	// エフェクトのインスタンスの回転角度を指定
+	void set_effect_rotation_roll_pitch_yaw(int handle, float roll, float pitch, float yaw);
+	// エフェクトのインスタンスの回転角度を指定（任意軸の周り回転）
+	void set_effect_rotation_axis_angle(int handle, const Vector3* axis, float angle);
+	// エフェクトのインスタンスの拡大率を指定
+	void set_effect_scale(int handle, const Vector3* scale);
+	//	エフェクトのインスタンスのターゲット位置を指定
+	void set_effect_target_position(int handle, const Vector3* position);
+	// エフェクトのベース変換行列を取得
+	void get_effect_base_matrix(int handle, Matrix4x4* matrix);
+	// エフェクトのベース変換行列を設定
+	void set_effect_base_matrix(int handle, const Matrix4x4* mat);
+	// エフェクトのインスタンスをDraw時に描画するか設定
+	void set_effect_shown(int handle, bool shown);
+	// エフェクトのインスタンスを一時停止または再開する
+	void set_effect_paused(int handle, bool paused);
+	// エフェクトのインスタンスの再生スピードを設定
+	void set_effect_speed(int handle, float speed);
+	// エフェクトのインスタンスのカラーを設定する
+	void set_effect_color(int handle, const Color* color);
+	// エフェクトがDrawで自動的に描画されるか設定する
+	void set_effect_auto_drawing(int handle, bool autoDraw);
+	// エフェクトのカリングを行う
+	void calc_culling_effect();
+private:
+	ID3D12Device* device_{};// DirectX12デバイス
+	ID3D12CommandQueue* queue_{};//コマンドキュー
+	int swap_buffer_count_{ 0 };//スワップバッファの番号
+	ID3D12Resource* texture_resource_{};//テクスチャのリソース
+};
+
+#endif

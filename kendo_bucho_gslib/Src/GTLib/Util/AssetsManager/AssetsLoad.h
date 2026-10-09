@@ -23,7 +23,7 @@ public:
 		static AssetsLoad al;
 		return &al;
 	}
-	void load(std::string path, CreatLog& log);
+	void load(std::string path);
 	void clear() {
 		load_path_.clear();
 		used_assets_data_.clear();
@@ -177,6 +177,10 @@ private:
 		}
 		else if (genre_id == "BGM") {
 			result.loop_= (stoi(row.at(3))> 0)?true:false;
+		}
+		else if (genre_id == "Mesh") {
+			result.skelton_path_ = row.at(3);
+			result.animation_path_=row.at(4);
 		}
 		return result;
 	}

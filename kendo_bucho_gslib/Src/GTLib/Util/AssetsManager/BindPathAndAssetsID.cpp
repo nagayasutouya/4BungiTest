@@ -5,7 +5,7 @@
 
 void LoadOriginData(std::string path, CreatLog& log) {
 	//アセットデータのパス読み込み
-	AssetsLoad::Instance()->load(path, log);
+	AssetsLoad::Instance()->load(path);
 }
 
 void BindPathAndAssetsID::LoadGenre(std::string genre_name) {

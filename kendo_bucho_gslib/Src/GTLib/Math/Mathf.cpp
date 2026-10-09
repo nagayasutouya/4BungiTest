@@ -37,3 +37,7 @@ float Mathf::nth_power(float target, int n) {
 	for (int i = 1; i < n; i++)result *= target;
 	return result;
 }
+// f ‚Ì•„†
+float Mathf::sign(float f) {
+	return f >= 0.0f ? 1.0f : -1.0f;
+}

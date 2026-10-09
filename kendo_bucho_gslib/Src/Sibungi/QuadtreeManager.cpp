@@ -36,7 +36,7 @@ void QuadTreeManager::one_space_collide(int space_id, QuadTreeObj<Actor>*parent_
 		current_obj = current_space->last_object();
 		//printf("Space:%d Last:%s\n", current_space->space_id(), (current_obj == nullptr) ? "NULL" : current_obj->obj()->name().c_str());
 		//先頭までサーチ
-		while (current_obj != nullptr) {
+		while (current_obj != nullptr&&current_obj!=parent_last_obj) {
 			//一個前とチェック
 			QuadTreeObj<Actor>* check_obj = current_obj->p_obj();
 			//オブジェの本体が存在しているか

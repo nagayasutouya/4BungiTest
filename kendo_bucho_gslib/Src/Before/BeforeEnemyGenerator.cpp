@@ -3,9 +3,9 @@
 #include "BeforeEnemy.h"
 
 //最大出現数
-const int BEnemyMaxCount{ 20 };
+const int BEnemyMaxCount{ 20000 };
 // 出現間隔
-const float GenerateInterval{ 5.0f };
+const float GenerateInterval{ 1.0f };
 
 // コンストラクタ
 BEnemyGenerator::BEnemyGenerator(IWorld* world) {
