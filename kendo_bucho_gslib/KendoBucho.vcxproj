@@ -83,10 +83,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>.\Src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);%(AdditionalLibraryDirectories)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>.\Src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);%(AdditionalLibraryDirectories)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,10 +128,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\GTEffectLib\Effekseer\Include\Effekseer;C:\GTEffectLib\Effekseer\Include\EffekseerRendererCommon;C:\GTEffectLib\Effekseer\Include\EffekseerRendererDX12;C:\GTEffectLib\Effekseer\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\GTEffectLib\Effekseer\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -151,12 +156,15 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\GTEffectLib\Effekseer\Include\Effekseer;C:\GTEffectLib\Effekseer\Include\EffekseerRendererCommon;C:\GTEffectLib\Effekseer\Include\EffekseerRendererDX12;C:\GTEffectLib\Effekseer\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\GTEffectLib\Effekseer\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <EntryPointName>VS</EntryPointName>
@@ -181,6 +189,7 @@
     <ClCompile Include="Src\EnemyGenerator.cpp" />
     <ClCompile Include="Src\Field.cpp" />
     <ClCompile Include="Src\GamePlayScene.cpp" />
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Effect\GTEffect.cpp" />
     <ClCompile Include="Src\GTLib\Data\GenreName.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\Game.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\Graphics.cpp" />
@@ -246,6 +255,7 @@
     <ClCompile Include="Src\Result.cpp" />
     <ClCompile Include="Src\SceneManager.cpp" />
     <ClCompile Include="Src\Score.cpp" />
+    <ClCompile Include="Src\Sibungi\FPSCheck.cpp" />
     <ClCompile Include="Src\Sibungi\MotornOrder.cpp" />
     <ClCompile Include="Src\Sibungi\QuadtreeManager.cpp" />
     <ClCompile Include="Src\Sibungi\QuadTreeSpace.cpp" />
@@ -267,10 +277,129 @@
     <ClInclude Include="Src\EnemyGenerator.h" />
     <ClInclude Include="Src\Field.h" />
     <ClInclude Include="Src\GamePlayScene.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Effect\GTEffect.h" />
     <ClInclude Include="Src\GTLib\Data\AssetsStructs.h" />
     <ClInclude Include="Src\GTLib\Data\DefineVector.h" />
     <ClInclude Include="Src\GTLib\Data\GenreName.h" />
     <ClInclude Include="Src\GTLib\Data\InstanceComputeMatrix.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxCompileConfig.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxDataType.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxDataTypeWin.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxFunctionWin.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\DxLib.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer.Modules.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer.SIMD.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerForDXLib.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.CommonUtils.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.GpuParticles.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.ModelRendererBase.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.Renderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.Renderer_Impl.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.RenderStateBase.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.RibbonRendererBase.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.RingRendererBase.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.ShaderBase.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.SpriteRendererBase.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.StandardRenderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\EffekseerRenderer.TrackRendererBase.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\GraphicsDeviceCPU.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\ModelLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\TextureLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\TrailRenderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererCommon\VertexBuffer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11\EffekseerRendererDX11.Base.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11\EffekseerRendererDX11.Base.Pre.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX11\EffekseerRendererDX11.Renderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX12.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX12\EffekseerRendererDX12.Base.Pre.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX12\EffekseerRendererDX12.Renderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX9.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX9\EffekseerRendererDX9.Base.Pre.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererDX9\EffekseerRendererDX9.Renderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererGL.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererGL\EffekseerRendererGL.Base.Pre.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererGL\EffekseerRendererGL.Renderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerRendererLLGI\Common.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerSoundDSound.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\EffekseerSoundXAudio2.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Backend\Effekseer.GraphicsDevice.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Base.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Base.Pre.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Color.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.CoordinateSystem.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Curve.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.CurveLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.DefaultFile.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Effect.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.EffectLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.ExternalModel.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.File.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Manager.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.MaterialLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Math.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Matrix43.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Matrix44.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.RectF.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.RenderingTransform.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Resource.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.ResourceManager.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Setting.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.SoundLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.TextureLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Vector2D.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.Vector3D.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Effekseer.WorkerThread.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\IO\Effekseer.EfkEfcFactory.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Model\Effekseer.Model.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Model\Effekseer.ModelLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Network\Effekseer.Client.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Network\Effekseer.Server.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Parameter\Effekseer.Parameters.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.GpuParticles.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.GpuTimer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.ModelRenderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.RibbonRenderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.RingRenderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.SpriteRenderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Renderer\Effekseer.TrackRenderer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Base.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge_Gen.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge_NEON.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Bridge_SSE.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4_Gen.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4_NEON.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Float4_SSE.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4_Gen.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4_NEON.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Int4_SSE.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Mat43f.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Mat44f.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Quaternionf.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Utils.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Vec2f.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Vec3f.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\SIMD\Vec4f.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Sound\Effekseer.SoundPlayer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Utils\Effekseer.BinaryReader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Utils\Effekseer.CustomAllocator.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\Utils\Effekseer.String.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\VectorField\Effekseer.VectorField.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\Effekseer\VectorField\Effekseer.VectorFieldLoader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Base.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Buffer.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.CommandList.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Compiler.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Graphics.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.PipelineState.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Platform.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Query.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Shader.h" />
+    <ClInclude Include="Src\GTLib\Effect\EffekseerFiles\LLGI\LLGI.Texture.h" />
     <ClInclude Include="Src\GTLib\Graphics\Game.h" />
     <ClInclude Include="Src\GTLib\Graphics\Graphics.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\BlendState.h" />
@@ -348,6 +477,7 @@
     <ClInclude Include="Src\SceneManager.h" />
     <ClInclude Include="Src\SceneNull.h" />
     <ClInclude Include="Src\Score.h" />
+    <ClInclude Include="Src\Sibungi\FPSCheck.h" />
     <ClInclude Include="Src\Sibungi\MotornOrder.h" />
     <ClInclude Include="Src\Sibungi\QuadtreeManager.h" />
     <ClInclude Include="Src\Sibungi\QuadTreeObj.h" />

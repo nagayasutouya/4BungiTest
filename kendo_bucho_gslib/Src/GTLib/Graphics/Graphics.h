@@ -81,7 +81,11 @@ namespace Graphics {
         const Vector2* center = nullptr,                    // 回転の中心座標
         const Color* color = nullptr,                       // 色
         const Vector2* scale = nullptr,                     // 拡大率
-        float angle = 0.0f                                  // 回転角度
+        float angle = 0.0f,                                  // 回転角度
+        bool is_draw_circle=false,//回転描画するか
+        const Vector2* round_vector = nullptr,//回転方向
+        float rect_angle=1.0f,//回転描画範囲
+        float donut_radius =0.0f//中心に空白作るか
     );
 
     // 3Dスプライトのパイプラインステート設定

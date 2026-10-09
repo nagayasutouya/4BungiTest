@@ -1,6 +1,8 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
+#include "Sibungi/FPSCheck.h"
+
 // 制限時間クラス
 class Timer {
 public:
@@ -18,6 +20,8 @@ public:
 private:
     // タイマ（秒単位）
     float time_{ 0.0f };
+    //FPS
+    FPSCheck fps_;
 };
 
 #endif

@@ -11,7 +11,10 @@ namespace {
         Vector2 position{ 0.0f, 0.0f };		   // スプライトの描画位置
         Vector2 scale{ 1.0f, 1.0f };		   // スプライトの拡大率
         float   angle{ 0.0f };			   // スプライトの回転角度
-        float   padding{};				   // パディング
+        bool is_draw_circle{ false };//円形描画するかどうか
+        float rect_angle{1.0f}; //全体の何％を描画するか(0～1)（円形）
+        Vector2 round_vector{ 1.0f,1.0f };//回転方向
+        float donut_radius{0.0f}; //ドーナツ描画時の空白部分
         Vector2 center{ 0.0f, 0.0f };		   // スプライトの中心
         Vector2 screen{ 0.0f, 0.0f };		   // スクリーンのサイズ
         Color   color{ 1.0f, 1.0f, 1.0f, 1.0f };   // スプライトの色
@@ -262,7 +265,11 @@ void Graphics::draw_sprite2d(
     const Vector2* center,                              // 回転の中心座標
     const Color* color,                                 // 色
     const Vector2* scale,                               // 拡大率
-    float angle                                         // 回転角度
+    float angle,                                         // 回転角度
+    bool is_draw_round,//回転描画するか
+    const Vector2* round_vector,//回転方向
+    float round_angle,//円形描画範囲
+    float donut_radius//中心に空白作るか
 ) {
     // テクスチャ取得
     Texture* texture = get_texture(texture_id);
@@ -294,6 +301,15 @@ void Graphics::draw_sprite2d(
         // テクスチャの切り出しサイズの指定
         params.texture_size = Vector2{ w / texture->width(), h / texture->height() };
     }
+    //回転描画するか
+    params.is_draw_circle = is_draw_round;
+    //回転方向
+    if (round_vector != nullptr)params.round_vector = *round_vector;
+    else params.round_vector = Vector2{ 1.0f,1.0f };
+    //回転描画範囲
+    params.rect_angle = round_angle;
+    //ドーナツ中心の長さ
+    params.donut_radius = donut_radius;
     // 画面サイズの設定
     const D3D12_VIEWPORT& view_port = s_graphics_device->viewport();
     params.screen = Vector2{ view_port.Width, view_port.Height };

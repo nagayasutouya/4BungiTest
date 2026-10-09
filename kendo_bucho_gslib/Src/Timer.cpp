@@ -31,7 +31,12 @@ void Timer::draw() const {
     static const Vector2 jikan_position{ 700.0f, 20.0f };
     static const Rect    jikan_rect{ 0.0f, 0.0f, 128.0f, 64.0f };
     Graphics::draw_sprite2d(Texture_Text, jikan_position, &jikan_rect, NULL, &color, NULL, 0.0f);
-
+    static const NumberTexture fps_texture{ Texture_Number, 32, 64 };
+    // タイマ値の書式指定(右詰め・4文字・ゼロで埋める・小数点以下は1桁まで）
+    std::stringstream fps;
+    fps << std::setw(4) << std::setfill('0') << std::fixed << std::setprecision(1) << fps_.Instance()->fps();
+    // 数値の表示
+    fps_texture.draw(Vector2{ 860.0f, 80.0f }, fps.str(), Color::one());
     if (!is_timeout()) {
         // タイマ値の表示
         static const NumberTexture number_texture{ Texture_Number, 32, 64 };

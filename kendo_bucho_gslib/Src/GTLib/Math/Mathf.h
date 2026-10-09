@@ -23,6 +23,8 @@ namespace Mathf {
     //æ
     int nth_power(int target, int n);
     float nth_power(float target, int n);
+    // f ‚Ì•„†
+    float sign(float f);
 }
 
 #endif
