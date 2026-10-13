@@ -17,11 +17,11 @@ public:
     UINT back_buffer_index() const;
     // バックバッファの取得
     ID3D12Resource* back_buffer() const;
-    // デプス・ステンシルバッファの取得
+    // デプスステンシルバッファの取得
     ID3D12Resource* depth_stencil_buffer() const;
     // バックバッファのビューを取得
     D3D12_CPU_DESCRIPTOR_HANDLE render_target_view() const;
-    // デプス・ステンシルバッファのビューを取得
+    // デプスステンシルバッファのビューを取得
     D3D12_CPU_DESCRIPTOR_HANDLE depth_stencil_view() const;
     // フレームバッファの幅を取得
     UINT width() const;
@@ -49,7 +49,7 @@ private:
     ID3D12Resource* depth_stencil_buffer_{};
     // デプスステンシルバッファ用のディスクプリタヒープ
     ID3D12DescriptorHeap* depth_stencil_heap_{};
-    // デプスステンシルバッファのデプス・ステンシルビュー
+    // デプスステンシルバッファのデプスステンシルビュー
     D3D12_CPU_DESCRIPTOR_HANDLE depth_stencil_view_{};
 };
 

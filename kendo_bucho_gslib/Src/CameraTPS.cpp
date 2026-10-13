@@ -43,6 +43,7 @@ void CameraTPS::update(float delta_time) {
     transform_.position(position);
     // ’Ž‹“_‚ðÝ’è(’Ž‹“_‚Ì•ûŒü‚ÉŒü‚«‚ð•Ï‚¦‚éj
     transform_.look_at(at);
+    Graphics::effect_data()->set_effect_camera(position,at);
 }
 
 // •`‰æ

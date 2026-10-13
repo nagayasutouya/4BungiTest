@@ -128,7 +128,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\GTEffectLib\Effekseer\Include\Effekseer;C:\GTEffectLib\Effekseer\Include\EffekseerRendererCommon;C:\GTEffectLib\Effekseer\Include\EffekseerRendererDX12;C:\GTEffectLib\Effekseer\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -156,7 +156,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\GTEffectLib\Effekseer\Include\Effekseer;C:\GTEffectLib\Effekseer\Include\EffekseerRendererCommon;C:\GTEffectLib\Effekseer\Include\EffekseerRendererDX12;C:\GTEffectLib\Effekseer\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>

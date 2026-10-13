@@ -25,6 +25,7 @@ void World::update(float delta_time) {
 	light_->update(delta_time);
 	// タイマの更新
 	timer_.update(delta_time);
+	Graphics::effect_data()->update_effect(delta_time);
 }
 
 // 描画
@@ -49,6 +50,8 @@ void World::draw() const {
 	score_.draw();
 	// 制限時間の描画
 	timer_.draw();
+	//エフェクトの描画
+	Graphics::effect_data()->draw_effect();
 }
 
 // 消去

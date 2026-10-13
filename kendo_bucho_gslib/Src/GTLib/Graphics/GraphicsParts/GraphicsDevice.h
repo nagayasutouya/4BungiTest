@@ -47,6 +47,8 @@ public:
     ConstantBuffer* create_constant_buffer(const void* data, UINT size);
     // テクスチャの作成
     Texture* create_texture(const std::string& file_name);
+    //デスクデータを返す
+    Desc desc_data()const { return desc_; }
 
     // バックバッファの描画開始
     void begin_render_back_buffer();
@@ -132,9 +134,9 @@ private:
     ID3D12Resource* render_target_resource_{};
     // レンダーターゲットビュー
     D3D12_CPU_DESCRIPTOR_HANDLE render_target_view_{};
-    // デプス・ステンシル用リソース
+    // デプスステンシル用リソース
     ID3D12Resource* depth_stencil_resource_{};
-    // デプス・ステンシルビュー
+    // デプスステンシルビュー
     D3D12_CPU_DESCRIPTOR_HANDLE depth_stencil_view_{};
     // ビューポート
     D3D12_VIEWPORT viewport_{};
@@ -144,6 +146,8 @@ private:
     ConstantBufferPool* constant_buffer_pool_[2]{};
     // 現在設定中のルートシグネチャ
     RootSignature* root_signature_{};
+    //デスクデータ
+    Desc desc_;
 };
 
 #endif
