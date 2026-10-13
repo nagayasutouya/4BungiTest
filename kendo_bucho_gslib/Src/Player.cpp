@@ -110,9 +110,16 @@ void Player::move(float delta_time) {
         speed = 0.1f;
         motion = MotionRun;
     }
+    float y_speed{ 0.0f };
+    if (Input::get_key('Z')) {
+        y_speed = 0.1f;
+    }
+    else if (Input::get_key('X')) {
+        y_speed = -0.1f;
+    }
     change_state(State::Move, motion);
     // 前進する(ローカル座標基準）
-    transform_.translate(0.0f, 0.0f, speed * delta_time);
+    transform_.translate(0.0f, y_speed*delta_time, speed * delta_time);
     // グラウンド内にクランプ
     Vector3 position = transform_.position();
     position.x = Mathf::CLAMP(position.x, -20.0f, 20.0f);

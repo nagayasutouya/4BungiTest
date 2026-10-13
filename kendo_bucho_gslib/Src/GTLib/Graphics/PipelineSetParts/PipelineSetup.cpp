@@ -41,7 +41,10 @@ void PipelineSetup::create_pipeline_sprite2d(DXGI_FORMAT rtv_format, DXGI_FORMAT
     desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;   // カリングなし
     desc.BlendState = CD3DX12_BLEND_DESC(CD3DX12_DEFAULT());
     desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(CD3DX12_DEFAULT());
-    desc.DepthStencilState.DepthEnable = FALSE;             // デプステストなし
+    //desc.DepthStencilState.DepthEnable = FALSE;//深度チェックオフ
+    desc.DepthStencilState.DepthEnable = TRUE;//深度チェックオン
+    desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;//深度書き込みオフ
+    //desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;//手前のものを描画
     desc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
     desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     desc.NumRenderTargets = 1;
@@ -94,7 +97,8 @@ void PipelineSetup::create_pipeline_sprite3d(DXGI_FORMAT rtv_format, DXGI_FORMAT
     desc.BlendState = CD3DX12_BLEND_DESC(CD3DX12_DEFAULT());
     // デプス設定 (デフォルト)
     desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(CD3DX12_DEFAULT());
-
+    desc.DepthStencilState.DepthEnable = TRUE;//深度チェックオン
+    desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;//深度書き込み
 
     desc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
     desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -106,19 +110,19 @@ void PipelineSetup::create_pipeline_sprite3d(DXGI_FORMAT rtv_format, DXGI_FORMAT
 
     PipelineState* pipeline_state{};
 
-    // 1. 不透明 (デプス書き込みあり)
+    //不透明 (デプス書き込みあり)
     desc.BlendState.RenderTarget[0] = BlendState::Opaque;
     desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
     pipeline_state = Graphics::get_graphics_device()->create_pipeline_state(desc);
     Graphics::add_pipeline_state(PipelineStateID::Sprite3D_Opaque, pipeline_state);
 
-    // 2. アルファブレンド (デプス書き込みなし)
+    //アルファブレンド (デプス書き込みなし)
     desc.BlendState.RenderTarget[0] = BlendState::Transparent;
     desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
     pipeline_state = Graphics::get_graphics_device()->create_pipeline_state(desc);
     Graphics::add_pipeline_state(PipelineStateID::Sprite3D_Transparent, pipeline_state);
 
-    // 3. 加算ブレンド (デプス書き込みなし)
+    //加算ブレンド (デプス書き込みなし)
     desc.BlendState.RenderTarget[0] = BlendState::Additive;
     desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
     pipeline_state = Graphics::get_graphics_device()->create_pipeline_state(desc);
@@ -163,6 +167,8 @@ void PipelineSetup::create_pipeline_mesh(DXGI_FORMAT rtv_format, DXGI_FORMAT dsv
     desc.BlendState = CD3DX12_BLEND_DESC(CD3DX12_DEFAULT());
     // デプスステンシル設定（デフォルト）
     desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(CD3DX12_DEFAULT());
+    desc.DepthStencilState.DepthEnable = TRUE;//深度チェックオン
+    desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;//深度書き込みオン
 
     desc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
     desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -219,6 +225,8 @@ void PipelineSetup::create_pipeline_skinned_mesh(DXGI_FORMAT rtv_format, DXGI_FO
     desc.BlendState = CD3DX12_BLEND_DESC(CD3DX12_DEFAULT());
     // デプスステンシル設定（デフォルト）
     desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(CD3DX12_DEFAULT());
+    desc.DepthStencilState.DepthEnable = TRUE;//深度チェックオン
+    desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;//深度書き込み
 
     desc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
     desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -275,6 +283,8 @@ void PipelineSetup::create_pipeline_instance_skinned_mesh(DXGI_FORMAT rtv_format
     desc.BlendState = CD3DX12_BLEND_DESC(CD3DX12_DEFAULT());
     // デプスステンシル設定（デフォルト）
     desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(CD3DX12_DEFAULT());
+    desc.DepthStencilState.DepthEnable = TRUE;//深度チェックオン
+    desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;//深度書き込み
 
     desc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
     desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;

@@ -10,6 +10,7 @@
 #include "GraphicsParts/Mesh/Mesh.h"
 #include "GraphicsParts/Mesh/SkinnedMesh.h"
 #include "GraphicsParts/Mesh/Instance/InstanceSkinnedMesh.h"
+#include "GraphicsParts/Effect/GTEffect.h"
 #include <string>
 #include <cstdint>
 
@@ -173,6 +174,11 @@ namespace Graphics {
     void reset_instacne_data();
     //GPUデータ転送
     void draw_instance_skinned_mesh(unsigned int mesh_id);
+
+    //エフェクト
+    //エフェクトの初期化
+    void initialize_effect(GTUINT effect_load_count_max = 1024, GTUINT instance_count_max = 2048);
+    GTEffect* effect_data();
 
     // GPUの待機
     void wait_for_gpu();

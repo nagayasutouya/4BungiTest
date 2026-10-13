@@ -45,7 +45,7 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
         render_target_views_[i] = handle;
         handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
     }
-    // デプス・ステンシルバッファの作成
+    // デプスステンシルバッファの作成
     CD3DX12_HEAP_PROPERTIES heap_prop{ D3D12_HEAP_TYPE_DEFAULT };
     D3D12_RESOURCE_DESC res_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, width, height, 1, 1);
     res_desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
@@ -58,7 +58,7 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
         &clear_value,
         IID_PPV_ARGS(&depth_stencil_buffer_)
     );
-    // デプス・ステンシルビューの作成
+    // デプスステンシルビューの作成
     D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
     dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
     dsvHeapDesc.NumDescriptors = 1;
@@ -95,7 +95,7 @@ ID3D12Resource* FrameBuffer::back_buffer() const {
     return back_buffer_[back_buffer_index()];
 }
 
-// デプス・ステンシルバッファの取得
+// デプスステンシルバッファの取得
 ID3D12Resource* FrameBuffer::depth_stencil_buffer() const {
     return depth_stencil_buffer_;
 }
