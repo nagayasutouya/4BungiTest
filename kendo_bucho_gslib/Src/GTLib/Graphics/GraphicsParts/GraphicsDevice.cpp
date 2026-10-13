@@ -40,6 +40,8 @@ GraphicsDevice::GraphicsDevice(HWND hwnd, const Desc& desc) {
     // コンスタントバッファプールを作成する
     constant_buffer_pool_[0] = new ConstantBufferPool{ device_, desc.constant_buffer_size };
     constant_buffer_pool_[1] = new ConstantBufferPool{ device_, desc.constant_buffer_size };
+    //デスクデータを保存
+    desc_=desc;
 }
 // デストラクタ
 GraphicsDevice::~GraphicsDevice() {

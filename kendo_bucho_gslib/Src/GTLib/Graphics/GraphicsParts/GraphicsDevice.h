@@ -47,6 +47,8 @@ public:
     ConstantBuffer* create_constant_buffer(const void* data, UINT size);
     // テクスチャの作成
     Texture* create_texture(const std::string& file_name);
+    //デスクデータを返す
+    Desc desc_data()const { return desc_; }
 
     // バックバッファの描画開始
     void begin_render_back_buffer();
@@ -144,6 +146,8 @@ private:
     ConstantBufferPool* constant_buffer_pool_[2]{};
     // 現在設定中のルートシグネチャ
     RootSignature* root_signature_{};
+    //デスクデータ
+    Desc desc_;
 };
 
 #endif

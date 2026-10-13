@@ -4,7 +4,7 @@
 #include "Assets.h"
 
 //Å‘åoŒ»”
-const int EnemyMaxCount{ 2000 };
+const int EnemyMaxCount{ 0 };
 // oŒ»ŠÔŠu
 const float GenerateInterval{ 1.0f };
 const int OneTimeAdd{ 100 };

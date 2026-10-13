@@ -9,6 +9,7 @@ World::~World() {
 
 // 更新
 void World::update(float delta_time) {
+	Graphics::effect_data()->set_effect_camera(Matrix4x4::identity(), Matrix4x4::identity());
 	// フィールドの更新
 	field_->update(delta_time);
 	// アクターの更新
@@ -25,6 +26,7 @@ void World::update(float delta_time) {
 	light_->update(delta_time);
 	// タイマの更新
 	timer_.update(delta_time);
+	Graphics::effect_data()->update_effect(delta_time);
 }
 
 // 描画
@@ -49,6 +51,7 @@ void World::draw() const {
 	score_.draw();
 	// 制限時間の描画
 	timer_.draw();
+	Graphics::effect_data()->draw_effect();
 }
 
 // 消去

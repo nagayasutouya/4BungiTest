@@ -17,6 +17,7 @@
 #endif
 #include <Effekseer.h>
 #include <EffekseerRendererDX12.h>
+#include "GTLib/Graphics/GraphicsParts/GraphicsDevice.h"
 
 
 static void InitEffects(GTUINT effectMaxCount);
@@ -45,13 +46,24 @@ static std::vector<Effekseer::EffectRef>		g_effects;
 // カラースペース
 static Effekseer::ColorSpaceType				g_colorSpace = Effekseer::ColorSpaceType::Gamma;
 
+//コンストラクタ
+GTEffect::GTEffect(GraphicsDevice* device, ID3D12CommandQueue* queue, int swap_buffer_count) {
+	device_ = device;
+	queue_ = queue;
+	swap_buffer_count_ = swap_buffer_count;
+}
+//初期化
 void GTEffect::initialize(GTUINT effect_load_count_max,GTUINT instance_count_max,DXGI_FORMAT render_format,int render_target_count, DXGI_FORMAT depth_format,bool is_reversed_depth,int square_max_count){
 	//エフェクト全部削除
 	finish_effect();
 	// グラフィックデバイスの作成
-	g_graphicsDevice = EffekseerRendererDX12::CreateGraphicsDevice(device_,queue_, swap_buffer_count_);
+	g_graphicsDevice = EffekseerRendererDX12::CreateGraphicsDevice(device_->d3d12_device(), queue_, swap_buffer_count_);
 	// 描画用インスタンスの生成
 	g_renderer = EffekseerRendererDX12::Create(g_graphicsDevice, &render_format, render_target_count, depth_format, is_reversed_depth, square_max_count);
+	//メモリプールの作成
+	memory_pool_ = EffekseerRenderer::CreateSingleFrameMemoryPool(g_renderer->GetGraphicsDevice());
+	//コマンドリストの作成
+	command_list_ = EffekseerRenderer::CreateCommandList(g_renderer->GetGraphicsDevice(), memory_pool_);
 	// エフェクト管理用インスタンスの生成
 	g_manager = Effekseer::Manager::Create(instance_count_max);
 	// 描画用インスタンスから描画機能を設定
@@ -62,7 +74,7 @@ void GTEffect::initialize(GTUINT effect_load_count_max,GTUINT instance_count_max
 	g_manager->SetTrackRenderer(g_renderer->CreateTrackRenderer());
 	// 描画用インスタンスからテクスチャの読込機能を設定
 	// 独自拡張可能、現在はファイルから読み込んでいる。
-	g_manager->SetTextureLoader(EffekseerRendererDX12::CreateTexture(g_graphicsDevice,texture_resource_));
+	g_manager->SetTextureLoader(g_renderer->CreateTextureLoader());
 	g_manager->SetModelLoader(g_renderer->CreateModelLoader());
 	g_manager->SetMaterialLoader(g_renderer->CreateMaterialLoader());
 	g_manager->SetCurveLoader(Effekseer::MakeRefPtr<Effekseer::CurveLoader>());
@@ -111,14 +123,24 @@ int GTEffect::play_effect_mat(GTUINT effect_id, const Matrix4x4* matrix) {
 }
 // エフェクトの更新
 void GTEffect::update_effect(float frame_time) {
+	// レイヤーパラメータの設定
+	Effekseer::Manager::LayerParameter layerParameter;
+	layerParameter.ViewerPosition = viewer_position_;
+	g_manager->SetLayerParameter(0, layerParameter);
 	g_manager->Update(frame_time);
 	float time = g_renderer->GetTime() + frame_time * (1.0f / 60.0f);
 	g_renderer->SetTime(time);
 }
 // エフェクト用のカメラの設定をする
 void GTEffect::set_effect_camera(Matrix4x4 projection, Matrix4x4 view) {
-	set_effect_projection_matrix(&projection);
-	set_effect_view_matrix(&view);
+	// 投影行列を設定
+	::Effekseer::Matrix44 projectionMatrix;
+	projectionMatrix.PerspectiveFovRH(90.0f / 180.0f * 3.14f, (float)device_->desc_data().window_width / (float)device_->desc_data().window_height, 1.0f, 500.0f);
+	// カメラ行列を設定
+	Effekseer::Matrix44 cameraMatrix;
+	cameraMatrix.LookAtRH(viewer_position_, ::Effekseer::Vector3D(0.0f, 0.0f, 0.0f), ::Effekseer::Vector3D(0.0f, 1.0f, 0.0f));
+	//set_effect_projection_matrix(&projection);
+	//set_effect_view_matrix(&view);
 }
 // エフェクトの描画開始
 void GTEffect::begin_rendering_effect() {
@@ -131,7 +153,12 @@ void GTEffect::end_rendering_effect() {
 // エフェクトの描画
 void GTEffect::draw_effect() {
 	begin_rendering_effect();
-	g_manager->Draw();
+	// エフェクト描画
+	Effekseer::Manager::DrawParameter drawParameter;
+	drawParameter.ZNear = 0.0f;
+	drawParameter.ZFar = 1.0f;
+	drawParameter.ViewProjectionMatrix = g_renderer->GetCameraProjectionMatrix();
+	g_manager->Draw(drawParameter);
 	end_rendering_effect();
 }
 // エフェクトのハンドル単位の描画
@@ -155,11 +182,15 @@ void GTEffect::finish_effect(){
 	// エフェクトの消去
 	ClearEffects();
 	// 先にエフェクト管理用インスタンスを破棄
-	g_manager.Reset();
+	if(g_manager!=nullptr)g_manager.Reset();
+	//コマンドリストを破棄
+	if (command_list_ != nullptr)command_list_->Release();
+	//メモリプールを破棄
+	if (memory_pool_ != nullptr)memory_pool_->Release();
 	// 次に描画用インスタンスを破棄
-	g_renderer.Reset();
+	if (g_renderer != nullptr)g_renderer.Reset();
 	// 次にグラフィックデバイスを破棄
-	g_graphicsDevice.Reset();
+	if (g_graphicsDevice != nullptr)g_graphicsDevice.Reset();
 }
 //指定したエフェクトを破棄
 void GTEffect::delete_effect(GTUINT effect_id) {
@@ -266,6 +297,25 @@ void GTEffect::set_effect_auto_drawing(int handle,bool autoDraw) {
 // エフェクトのカリングを行う
 void GTEffect::calc_culling_effect() {
 	//g_manager->CalcCulling(g_renderer->GetCameraProjectionMatrix(), true);
+}
+//エフェクトを動かす
+void GTEffect::move_effect(int handle, Vector3 move) {
+	g_manager->AddLocation(handle, Effekseer::Vector3D(move.x,move.y,move.z));
+}
+//フレームの最初に呼ぶ　エフェクトにフレームの開始を伝える
+void GTEffect::send_new_frame() {
+	memory_pool_->NewFrame();
+	EffekseerRendererDX12::BeginCommandList(command_list_, device_->command_list());
+	g_renderer->SetCommandList(command_list_);
+}
+//フレームの最後に呼ぶ　コマンドリストの終了
+void GTEffect::end_frame() {
+	g_renderer->SetCommandList(nullptr);
+	EffekseerRendererDX12::EndCommandList(command_list_);
+}
+//視点位置
+void GTEffect::set_viewer_position(Vector3 pos) {
+	viewer_position_ = Effekseer::Vector3D{pos.x,pos.y,pos.z};
 }
 
 // SJISをUTF16に変換

@@ -66,7 +66,9 @@ namespace {
     std::unordered_map<std::uint32_t, std::unique_ptr<SkinnedMesh>> s_skinned_meshes;
     // インスタンススキニングメッシュ管理用マップ
     std::unordered_map<std::uint32_t, std::unique_ptr<InstanceSkinnedMesh>>s_instance_skinned_meshes;
-    
+    //エフェクト
+    GTEffect* g_gteffect_{ nullptr };
+
     // スプライト用のパイプラインステートID
     std::uint32_t s_sprite2d_pipeline_state_id{ 0 };
     // 3Dスプライト用のパイプラインステートID
@@ -598,6 +600,21 @@ void Graphics::draw_instance_skinned_mesh(unsigned int mesh_id) {
     apply_light_params();
     // メッシュ描画
     sm->draw(ism->instance_count());
+}
+
+//エフェクト
+//エフェクトの初期化
+void Graphics::initialize_effect(GTUINT effect_load_count_max, GTUINT instance_count_max) {
+    delete g_gteffect_;
+    g_gteffect_ = nullptr;
+    g_gteffect_ = new GTEffect(s_graphics_device, s_graphics_device->command_queue(),2);
+    //作成失敗は無視
+    if (g_gteffect_ == nullptr)return;
+    //初期化
+    g_gteffect_->initialize(effect_load_count_max, instance_count_max);
+}
+GTEffect* Graphics::effect_data() {
+    return g_gteffect_;
 }
 
 // GPUの待機

@@ -15,12 +15,14 @@ public:
         Graphics::initialize(graphics_device_);
         // パイプラインステートの基本設定
         PipelineSetup::setup_defaults();
+        Graphics::initialize_effect();
         scene_manager_.add("TitleScene", new TitleScene());
         scene_manager_.add("GamePlayScene", new GamePlayScene());
         scene_manager_.change("TitleScene");
     }
     //　更新
     void update(float delta_time) override {
+        Graphics::effect_data()->send_new_frame();
         fps_.Instance()->update();
         if (Input::get_key_down('P'))stop_ = (stop_) ? false : true;
         if (stop_)return;
@@ -34,6 +36,7 @@ public:
         // シーン開始
         Graphics::begin_scene(0.5f, 0.5f, 1.0f, 1.0f);
         scene_manager_.draw();
+        Graphics::effect_data()->end_frame();
         // シーン終了
         Graphics::end_scene();
     }
