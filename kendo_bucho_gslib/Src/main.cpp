@@ -36,7 +36,6 @@ public:
         // シーン開始
         Graphics::begin_scene(0.5f, 0.5f, 1.0f, 1.0f);
         scene_manager_.draw();
-        Graphics::effect_data()->end_frame();
         // シーン終了
         Graphics::end_scene();
     }

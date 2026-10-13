@@ -82,6 +82,11 @@ void GTEffect::initialize(GTUINT effect_load_count_max,GTUINT instance_count_max
 	g_manager->SetCoordinateSystem(Effekseer::CoordinateSystem::RH);
 	// エフェクト配列の初期化
 	InitEffects(effect_load_count_max);
+	//カメラパラメータの初期化
+	Matrix4x4 m = Matrix4x4::identity();
+	set_effect_view_matrix(&m);
+	set_effect_projection_matrix(&m);
+	set_effect_draw_zbuffer(0.01f, 10000.0f);
 }
 //エフェクト読み込み
 bool GTEffect::load_effect(GTUINT effect_id, const char* file_name, float scale) {
@@ -124,23 +129,24 @@ int GTEffect::play_effect_mat(GTUINT effect_id, const Matrix4x4* matrix) {
 // エフェクトの更新
 void GTEffect::update_effect(float frame_time) {
 	// レイヤーパラメータの設定
-	Effekseer::Manager::LayerParameter layerParameter;
-	layerParameter.ViewerPosition = viewer_position_;
-	g_manager->SetLayerParameter(0, layerParameter);
+	Effekseer::Manager::LayerParameter layer_parameter;
+	layer_parameter.ViewerPosition = viewer_position_;
+	g_manager->SetLayerParameter(0, layer_parameter);
 	g_manager->Update(frame_time);
 	float time = g_renderer->GetTime() + frame_time * (1.0f / 60.0f);
 	g_renderer->SetTime(time);
 }
 // エフェクト用のカメラの設定をする
-void GTEffect::set_effect_camera(Matrix4x4 projection, Matrix4x4 view) {
+void GTEffect::set_effect_camera(Vector3 eye, Vector3 at,float y_angle,Vector3 up) {
 	// 投影行列を設定
-	::Effekseer::Matrix44 projectionMatrix;
-	projectionMatrix.PerspectiveFovRH(90.0f / 180.0f * 3.14f, (float)device_->desc_data().window_width / (float)device_->desc_data().window_height, 1.0f, 500.0f);
+	::Effekseer::Matrix44 projection_matrix;
+	projection_matrix.PerspectiveFovRH(Mathf::deg_to_rad(y_angle), (float)device_->desc_data().window_width / (float)device_->desc_data().window_height, z_near_, z_far_);//垂直視野角、アスペクト比、描画を始めるカメラから一番近いとこ、描画を終えるカメラから一番遠いとこ
+	g_renderer->SetProjectionMatrix(projection_matrix);
 	// カメラ行列を設定
-	Effekseer::Matrix44 cameraMatrix;
-	cameraMatrix.LookAtRH(viewer_position_, ::Effekseer::Vector3D(0.0f, 0.0f, 0.0f), ::Effekseer::Vector3D(0.0f, 1.0f, 0.0f));
-	//set_effect_projection_matrix(&projection);
-	//set_effect_view_matrix(&view);
+	Effekseer::Matrix44 camera_matrix;
+	set_viewer_position(eye);
+	camera_matrix.LookAtRH(viewer_position_, ::Effekseer::Vector3D(at.x, at.y, at.z), ::Effekseer::Vector3D(up.x, up.y, up.z));
+	g_renderer->SetCameraMatrix(camera_matrix);
 }
 // エフェクトの描画開始
 void GTEffect::begin_rendering_effect() {
@@ -152,14 +158,21 @@ void GTEffect::end_rendering_effect() {
 }
 // エフェクトの描画
 void GTEffect::draw_effect() {
-	begin_rendering_effect();
 	// エフェクト描画
 	Effekseer::Manager::DrawParameter drawParameter;
-	drawParameter.ZNear = 0.0f;
-	drawParameter.ZFar = 1.0f;
+	drawParameter.ZNear = z_near_;
+	drawParameter.ZFar = z_far_;
 	drawParameter.ViewProjectionMatrix = g_renderer->GetCameraProjectionMatrix();
+	//命令部分のオープン
+	set_effect_command_list_param();
+	//描画開始
+	begin_rendering_effect();
+	//描画
 	g_manager->Draw(drawParameter);
+	//描画終了
 	end_rendering_effect();
+	//命令部分のクローズ
+	end_frame();
 }
 // エフェクトのハンドル単位の描画
 void GTEffect::draw_effect(int handle) {
@@ -294,10 +307,6 @@ void GTEffect::set_effect_color(int handle, const Color* color) {
 void GTEffect::set_effect_auto_drawing(int handle,bool autoDraw) {
 	g_manager->SetAutoDrawing(handle, autoDraw == true);
 }
-// エフェクトのカリングを行う
-void GTEffect::calc_culling_effect() {
-	//g_manager->CalcCulling(g_renderer->GetCameraProjectionMatrix(), true);
-}
 //エフェクトを動かす
 void GTEffect::move_effect(int handle, Vector3 move) {
 	g_manager->AddLocation(handle, Effekseer::Vector3D(move.x,move.y,move.z));
@@ -305,6 +314,9 @@ void GTEffect::move_effect(int handle, Vector3 move) {
 //フレームの最初に呼ぶ　エフェクトにフレームの開始を伝える
 void GTEffect::send_new_frame() {
 	memory_pool_->NewFrame();
+}
+//フレーム開始後のコマンドリストの再設定後に、エフェクトコマンドリストに設定を渡す
+void GTEffect::set_effect_command_list_param() {
 	EffekseerRendererDX12::BeginCommandList(command_list_, device_->command_list());
 	g_renderer->SetCommandList(command_list_);
 }
@@ -316,6 +328,11 @@ void GTEffect::end_frame() {
 //視点位置
 void GTEffect::set_viewer_position(Vector3 pos) {
 	viewer_position_ = Effekseer::Vector3D{pos.x,pos.y,pos.z};
+}
+//エフェクトの描画範囲をワールド座標基準に決める
+void GTEffect::set_effect_draw_zbuffer(float z_near, float z_far){
+	z_near_ = z_near;
+	z_far_ = z_far;
 }
 
 // SJISをUTF16に変換

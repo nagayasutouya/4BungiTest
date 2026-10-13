@@ -119,6 +119,9 @@ void Graphics::initialize(GraphicsDevice* device) {
 void Graphics::finalize() {
     // GPUの終了を待つ
     s_graphics_device->wait_for_gpu();
+    //エフェクシアの破棄
+    g_gteffect_->finish_effect();
+    g_gteffect_ = nullptr;
     // パイプラインステートの破棄
     s_pipeline_states.clear();
     // テクスチャの破棄

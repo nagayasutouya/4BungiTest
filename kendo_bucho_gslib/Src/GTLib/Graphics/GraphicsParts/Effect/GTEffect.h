@@ -18,7 +18,7 @@ public:
 	//コンストラクタ
 	GTEffect(GraphicsDevice* device, ID3D12CommandQueue* queue,int swap_buffer_count=1);
 	//初期化
-	void initialize(GTUINT effext_load_cout_max = 1024, GTUINT instance_count_max = 2048,DXGI_FORMAT render_format= DXGI_FORMAT_R8G8B8A8_UNORM,int render_target_count=1, DXGI_FORMAT depth_format= DXGI_FORMAT_UNKNOWN,bool is_reversed_depth=false,int square_max_count=800);
+	void initialize(GTUINT effext_load_cout_max = 1024, GTUINT instance_count_max = 2048,DXGI_FORMAT render_format= DXGI_FORMAT_R8G8B8A8_UNORM,int render_target_count=1, DXGI_FORMAT depth_format= DXGI_FORMAT_D32_FLOAT,bool is_reversed_depth=false,int square_max_count=800);
 	//エフェクトの読み込み
 	bool load_effect(GTUINT effect_id, const char* file_name, float scale=1.0f);
 	//エフェクトの再生(ハンドルが返ってくる)
@@ -27,7 +27,7 @@ public:
 	// エフェクトの更新
 	void update_effect(float frame_time);
 	// エフェクト用のカメラの設定をする
-	void set_effect_camera(Matrix4x4 projection, Matrix4x4 view);
+	void set_effect_camera(Vector3 eye, Vector3 at, float y_angle=90.0f, Vector3 up=Vector3{0.0f,1.0f,0.0f});
 	// エフェクトの描画開始
 	void begin_rendering_effect();
 	// エフェクトの描画終了
@@ -86,16 +86,18 @@ public:
 	void set_effect_color(int handle, const Color* color);
 	// エフェクトがDrawで自動的に描画されるか設定する
 	void set_effect_auto_drawing(int handle, bool autoDraw);
-	// エフェクトのカリングを行う
-	void calc_culling_effect();
 	//エフェクトを動かす
 	void move_effect(int handle, Vector3 move);
 	//フレームの最初に呼ぶ　エフェクトにフレームの開始を伝える
 	void send_new_frame();
+	//フレーム開始後のコマンドリストの再設定後に、エフェクトコマンドリストに設定を渡す
+	void set_effect_command_list_param();
 	//フレームの最後に呼ぶ　コマンドリストの終了
 	void end_frame();
 	//視点位置
 	void set_viewer_position(Vector3 pos);
+	//エフェクトの描画範囲をワールド座標基準に決める
+	void set_effect_draw_zbuffer(float z_near, float z_far);
 private:
 	GraphicsDevice* device_{};// DirectX12デバイス
 	ID3D12CommandQueue* queue_{};//コマンドキュー
@@ -104,6 +106,8 @@ private:
 	Effekseer::RefPtr<EffekseerRenderer::SingleFrameMemoryPool> memory_pool_;// メモリプールの作成
 	Effekseer::RefPtr<EffekseerRenderer::CommandList> command_list_;// コマンドリストの作成
 	Effekseer::Vector3D viewer_position_{0.0f,0.0f,0.0f};// 視点位置
+	float z_near_{ 0.0f };//エフェクトの描画範囲の一番近いとこ
+	float z_far_{ 0.0f };//エフェクトの描画範囲の一番遠いとこ
 };
 
 #endif

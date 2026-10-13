@@ -134,9 +134,9 @@ private:
     ID3D12Resource* render_target_resource_{};
     // レンダーターゲットビュー
     D3D12_CPU_DESCRIPTOR_HANDLE render_target_view_{};
-    // デプス・ステンシル用リソース
+    // デプスステンシル用リソース
     ID3D12Resource* depth_stencil_resource_{};
-    // デプス・ステンシルビュー
+    // デプスステンシルビュー
     D3D12_CPU_DESCRIPTOR_HANDLE depth_stencil_view_{};
     // ビューポート
     D3D12_VIEWPORT viewport_{};

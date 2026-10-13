@@ -127,11 +127,11 @@ void GraphicsDevice::clear_color_buffer(float r, float g, float b, float a) {
     command_list_->ClearRenderTargetView(render_target_view_, clear_color, 0, NULL);
 }
 
-// デプス・ステンシルバッファのクリア
+// デプスステンシルバッファのクリア
 void GraphicsDevice::clear_depth_buffer(float depth, UINT8 stencil) {
-    // デプス・ステンシルビューがなければ何もしない
+    // デプスステンシルビューがなければ何もしない
     if (depth_stencil_resource_ == nullptr) return;
-    // デプス・ステンシルバッファのクリア
+    // デプスステンシルバッファのクリア
     command_list_->ClearDepthStencilView(depth_stencil_view_, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, depth, stencil, 0, NULL);
 }
 // バックバッファのスワップ
