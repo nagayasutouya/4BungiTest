@@ -17,12 +17,13 @@
 #endif
 #include <Effekseer.h>
 #include <EffekseerRendererDX12.h>
+#include "GTLib/Graphics/Graphics.h"
 #include "GTLib/Graphics/GraphicsParts/GraphicsDevice.h"
 
 
 static void InitEffects(GTUINT effectMaxCount);
 static void ClearEffects();
-static void ConvertMatrix4x4ToEffekseerMatrix44(const float* in, Effekseer::Matrix44* out);
+static void ConvertMatrix4x4ToEffekseerMatrix44(Matrix4x4 in, Effekseer::Matrix44* out);
 static void ConvertEffekseerMatrix43ToMatrix4x4(const Effekseer::Matrix43* in, float* out);
 static void ConvertMatrix4x4ToEffekseerMatrix43(const float* in, Effekseer::Matrix43* out);
 static wchar_t* ConvertSjisToUTF16(const char* sjis);
@@ -84,8 +85,8 @@ void GTEffect::initialize(GTUINT effect_load_count_max,GTUINT instance_count_max
 	InitEffects(effect_load_count_max);
 	//カメラパラメータの初期化
 	Matrix4x4 m = Matrix4x4::identity();
-	set_effect_view_matrix(&m);
-	set_effect_projection_matrix(&m);
+	set_effect_view_matrix(m);
+	set_effect_projection_matrix(m);
 	set_effect_draw_zbuffer(0.01f, 10000.0f);
 }
 //エフェクト読み込み
@@ -137,16 +138,12 @@ void GTEffect::update_effect(float frame_time) {
 	g_renderer->SetTime(time);
 }
 // エフェクト用のカメラの設定をする
-void GTEffect::set_effect_camera(Vector3 eye, Vector3 at,float y_angle,Vector3 up) {
+void GTEffect::set_effect_camera() {
 	// 投影行列を設定
-	::Effekseer::Matrix44 projection_matrix;
-	projection_matrix.PerspectiveFovRH(Mathf::deg_to_rad(y_angle), (float)device_->desc_data().window_width / (float)device_->desc_data().window_height, z_near_, z_far_);//垂直視野角、アスペクト比、描画を始めるカメラから一番近いとこ、描画を終えるカメラから一番遠いとこ
-	g_renderer->SetProjectionMatrix(projection_matrix);
+	set_effect_view_matrix(Graphics::get_view_matrix());
 	// カメラ行列を設定
-	Effekseer::Matrix44 camera_matrix;
-	set_viewer_position(eye);
-	camera_matrix.LookAtRH(viewer_position_, ::Effekseer::Vector3D(at.x, at.y, at.z), ::Effekseer::Vector3D(up.x, up.y, up.z));
-	g_renderer->SetCameraMatrix(camera_matrix);
+	set_viewer_position(Graphics::get_view_position());
+	set_effect_projection_matrix(Graphics::get_projection_matrix());
 }
 // エフェクトの描画開始
 void GTEffect::begin_rendering_effect() {
@@ -222,15 +219,15 @@ void GTEffect::set_effect_color_space_type_linear() {
 	g_colorSpace = Effekseer::ColorSpaceType::Linear;
 }
 // 透視変換行列の設定
-void GTEffect::set_effect_projection_matrix(const Matrix4x4* matrix) {
+void GTEffect::set_effect_projection_matrix(const Matrix4x4 matrix) {
 	Effekseer::Matrix44 projction;
-	ConvertMatrix4x4ToEffekseerMatrix44(&matrix->m[0][0], &projction);
+	ConvertMatrix4x4ToEffekseerMatrix44(matrix, &projction);
 	g_renderer->SetProjectionMatrix(projction);
 }
 // 視野変換行列の設定
-void GTEffect::set_effect_view_matrix(const Matrix4x4* matrix) {
+void GTEffect::set_effect_view_matrix(const Matrix4x4 matrix) {
 	Effekseer::Matrix44 view;
-	ConvertMatrix4x4ToEffekseerMatrix44(&matrix->m[0][0], &view);
+	ConvertMatrix4x4ToEffekseerMatrix44(matrix, &view);
 	g_renderer->SetCameraMatrix(view);
 }
 // エフェクトのインスタンスに設定されている行列を取得
@@ -364,8 +361,14 @@ static void ClearEffects() {
 	g_effects.clear();
 }
 // maitix4x4をEffekseerMatrix44に変換
-static void ConvertMatrix4x4ToEffekseerMatrix44(const float* in, Effekseer::Matrix44* out) {
-	memcpy(&out->Values[0][0], in, sizeof(out->Values));
+static void ConvertMatrix4x4ToEffekseerMatrix44(Matrix4x4 in, Effekseer::Matrix44* out) {
+	Effekseer::Matrix44 input;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			input.Values[i][j]=in.m[i][j];
+		}
+	}
+	memcpy(&out->Values[0][0],&input.Values[0][0], sizeof(out->Values));
 }
 // EffekseerMatrix43をmaitix4x4に変換
 static void ConvertEffekseerMatrix43ToMatrix4x4(const Effekseer::Matrix43* in, float* out) {
