@@ -82,7 +82,7 @@ void GamePlayScene::start() {
     // スコアの初期化
     world_.score().initialize(0);
     // タイマの初期化
-    world_.timer().initialize(60.0f);
+    world_.timer().initialize(600.0f);
 
     // リザルトの初期化
     result_.initialize();
@@ -94,7 +94,7 @@ void GamePlayScene::start() {
     is_end_ = false;
     //エフェクトテスト
     Graphics::effect_data()->load_effect(0, "Assets/FireBall/FireBall_Purple.efkefc");
-    Vector3 effect_pos{ 0.0f,3.0f,0.0f };
+    Vector3 effect_pos{ 0.0f,0.5f,0.0f };
     int id=Graphics::effect_data()->play_effect(0,&effect_pos);
     //Graphics::effect_data()->move_effect(id,Vector3{0.0f,1.0f,0.0f});
 }
@@ -141,6 +141,7 @@ void GamePlayScene::end() {
     Graphics::wait_for_gpu();
     // ランキングファイルの保存
     result_.save("Assets/ranking.txt");
+    //Graphics::effect_data()->finish_effect();
     // ワールドを消去
     world_.clear();
     // アセットの削除
@@ -190,6 +191,7 @@ void GamePlayScene::update_playing(float delta_time) {
 
 // リザルト中の更新
 void GamePlayScene::update_result(float delta_time) {
+    world_.update(delta_time);
     // リザルトの更新
     result_.update(delta_time);
     // リザルト中タイマの更新

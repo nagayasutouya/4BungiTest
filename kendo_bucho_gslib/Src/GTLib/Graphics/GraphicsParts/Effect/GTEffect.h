@@ -27,7 +27,7 @@ public:
 	// エフェクトの更新
 	void update_effect(float frame_time);
 	// エフェクト用のカメラの設定をする
-	void set_effect_camera(Vector3 eye, Vector3 at, float y_angle=90.0f, Vector3 up=Vector3{0.0f,1.0f,0.0f});
+	void set_effect_camera();
 	// エフェクトの描画開始
 	void begin_rendering_effect();
 	// エフェクトの描画終了
@@ -53,9 +53,9 @@ public:
 	// エフェクトの色空間をリニアカラー空間にする
 	void set_effect_color_space_type_linear();
 	// 透視変換行列の設定
-	void set_effect_projection_matrix(const Matrix4x4* matrix);
+	void set_effect_projection_matrix(const Matrix4x4 matrix);
 	// 視野変換行列の設定
-	void set_effect_view_matrix(const Matrix4x4* matrix);
+	void set_effect_view_matrix(const Matrix4x4 matrix);
 	// エフェクトのインスタンスに変換行列を設定
 	void set_effect_matrix(int handle, const Matrix4x4* matrix);
 	// エフェクトのインスタンスに設定されている行列を取得

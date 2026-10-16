@@ -67,6 +67,27 @@ namespace Util {
 		float result = ab_length * ab_length + ac_length * ac_length - 2 * ab_length * ac_length * cos(a_angle);
 		return std::sqrt(result);
 	}
+	//原点とベクトルから、任意の角度の同じ大きさのベクトルを出す
+	Vector2 AngleToVector(Vector2 o, Vector2 a, float angle) {
+		//原点からの相対距離を出す
+		Vector2 a_dash = a - o;
+		Vector2 b_dash{ 0.0f,0.0f };
+		//角度をラジアン＆絶対値に
+		float rad = Mathf::ABS( Mathf::deg_to_rad(angle));
+		//反時計回り
+		if (angle < 0) {
+			b_dash.x = a_dash.x * cos(rad) - a_dash.y * sin(rad);
+			b_dash.y = a_dash.x * sin(rad) + a_dash.y * cos(rad);
+		}
+		//時計回り
+		else if (angle > 0) {
+			b_dash.x = a_dash.x * cos(rad) + a_dash.y * sin(rad);
+			b_dash.y = -(a_dash.x * sin(rad)) + a_dash.y * cos(rad);
+		}
+		else b_dash = a_dash;
+		//絶対座標に戻す
+		return b_dash + o;
+	}
 	bool IsOverLine(float target, float line, float add) {
 		if ((add < 0.0f && target <= line) || (add > 0.0f && target >= line)) {
 			return true;

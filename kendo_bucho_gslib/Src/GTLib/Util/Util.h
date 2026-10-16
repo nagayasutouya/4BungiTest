@@ -11,7 +11,7 @@ class Actor;
 namespace Util {
 	//二つのベクター３をかけ合わせて各要素を足してfloatにする
 	extern inline float Vector3ToFloat(const Vector3& add1, const Vector3& add2);
-	extern inline Vector3 Cross(Vector3 add1, Vector3 add2);//
+	extern inline Vector3 Cross(Vector3 add1, Vector3 add2);
 	//指定した範囲のなかからランダムな数字を返してくれる
 	extern inline int RandomRange(int min, int max);	
 	extern inline float RandomRange(float min, float max);
@@ -32,6 +32,8 @@ namespace Util {
 	extern inline Vector2 ToTarget(const Vector2& target_position, const Vector2& from_position);
 	//余弦定理
 	extern inline float CosineTheorem(float ab_length,float ac_length,float a_angle);
+	//原点とベクトルから、任意の角度の同じ大きさのベクトルを出す
+	extern inline Vector2 AngleToVector(Vector2 o,Vector2 a,float angle);
 	//足し引きに関わらず一定のラインを超えたらTrue返す
 	extern inline bool IsOverLine(float target,float line,float add);
 	extern inline bool IsOverLine(int target,int line,int add);
