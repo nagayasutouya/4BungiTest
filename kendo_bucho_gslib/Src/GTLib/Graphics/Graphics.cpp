@@ -9,15 +9,23 @@ namespace {
     struct Sprite2DParams {
         Vector2 size{ 0.0f, 0.0f };		   // スプライトのサイズ
         Vector2 position{ 0.0f, 0.0f };		   // スプライトの描画位置
+        
         Vector2 scale{ 1.0f, 1.0f };		   // スプライトの拡大率
         float   angle{ 0.0f };			   // スプライトの回転角度
         bool is_draw_circle{ false };//円形描画するかどうか
+        char padding1{ 0 };
+        char padding2{ 0 };
+        char padding3{ 0 };
+
         float rect_angle{1.0f}; //全体の何％を描画するか(0～1)（円形）
         Vector2 round_vector{ 1.0f,1.0f };//回転方向
         float donut_radius{0.0f}; //ドーナツ描画時の空白部分
+        
         Vector2 center{ 0.0f, 0.0f };		   // スプライトの中心
         Vector2 screen{ 0.0f, 0.0f };		   // スクリーンのサイズ
+        
         Color   color{ 1.0f, 1.0f, 1.0f, 1.0f };   // スプライトの色
+        
         Vector2 texture_position{ 0.0f, 0.0f };	   // テクスチャの切り出し開始位置
         Vector2 texture_size{ 1.0f, 1.0f };	   // テクスチャの切り出しサイズ
     };
@@ -161,7 +169,18 @@ void Graphics::clear_depth_buffer() {
 void Graphics::set_viewport(float x, float y, float w, float h) {
     s_graphics_device->set_viewport(x, y, w, h);
 }
-
+// カメラパラメータのビュー行列を返す
+Matrix4x4 Graphics::get_view_matrix() {
+    return s_camera_params.view_matrix;
+}
+// カメラパラメータのプロジェクションを返す
+Matrix4x4 Graphics::get_projection_matrix() {
+    return s_camera_params.projection_matrix;
+}
+// カメラパラメータの座標を返す
+Vector3 Graphics::get_view_position() {
+    return s_camera_params.view_position;
+}
 // ルートシグネチャを設定
 void Graphics::set_root_signature() {
     s_graphics_device->set_root_signature(s_root_signature.get());
@@ -593,6 +612,8 @@ void Graphics::draw_instance_skinned_mesh(unsigned int mesh_id) {
     SkinnedMesh* sm = get_skinned_mesh(mesh_id);
     InstanceSkinnedMesh* ism = get_instance_skinned_mesh(mesh_id);
     if (sm == nullptr||ism == nullptr) return;
+    //インスタンス数が０なら無視
+    if (ism->instance_count() <= 0)return;
     // パイプラインステートの設定
     set_pipeline_state(get_instance_skinned_mesh_pipeline_state());
 

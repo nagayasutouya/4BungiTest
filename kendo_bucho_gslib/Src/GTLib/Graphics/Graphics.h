@@ -40,6 +40,13 @@ namespace Graphics {
     // ビューポート設定
     void set_viewport(float x, float y, float w, float h);
 
+    // カメラパラメータのビュー行列を返す
+    Matrix4x4 get_view_matrix();
+    // カメラパラメータのプロジェクションを返す
+    Matrix4x4 get_projection_matrix();
+    // カメラパラメータの座標を返す
+    Vector3 get_view_position();
+
     // ルートシグネチャ設定
     void set_root_signature();
     // ルートシグニチャ取得
