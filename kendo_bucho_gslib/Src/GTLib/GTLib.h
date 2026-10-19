@@ -1,6 +1,8 @@
 #ifndef GTLIB_H_
 #define GTLIB_H_
 
+//Šî‘bˆêŠ‡ƒ[ƒh
+
 #include "Graphics/Game.h"
 #include "Graphics/Graphics.h"
 #include "Graphics/PipelineSetParts/PipelineSetup.h"

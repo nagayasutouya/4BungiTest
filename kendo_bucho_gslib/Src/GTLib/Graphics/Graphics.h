@@ -187,6 +187,34 @@ namespace Graphics {
     void initialize_effect(GTUINT effect_load_count_max = 1024, GTUINT instance_count_max = 2048);
     GTEffect* effect_data();
 
+    // レンダーテクスチャの作成
+    RenderTexture* create_render_texture(std::uint32_t texture_id,
+        UINT width, UINT height, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
+        const Color* clear_color = nullptr);
+    // デプステクスチャの作成
+    DepthTexture* create_depth_texture(std::uint32_t texture_id,
+        UINT width, UINT height, DXGI_FORMAT format = DXGI_FORMAT_D32_FLOAT);
+
+    // レンダーターゲットの描画開始（デプスバッファなし）
+    void begin_render_target(std::uint32_t texture_id);
+    // レンダーターゲットの描画開始（デプスバッファあり）
+    void begin_render_target(std::uint32_t texture_id, std::uint32_t depth_texture_id);
+    // デプスバッファのみをレンダーターゲットに設定して描画開始
+    void begin_depth_target(std::uint32_t depth_texture_id);
+    // レンダーターゲットの描画終了
+    void end_render_target();
+
+    // バックバッファにテクスチャをコピー
+    void blit_to_back_buffer(std::uint32_t texture_id, std::uint32_t pipeline_state_id);
+    // レンダーターゲットにテクスチャをコピー
+    void blit_to_render_target(std::uint32_t texture_id, std::uint32_t pipeline_state_id);
+
+    // テクスチャのバインド
+    void bind_texture(std::uint32_t shader_register, std::uint32_t texture_id);
+    // コンスタントバッファにデータを設定
+    void set_constant_buffer(std::uint32_t shader_register, const void* data, size_t size);
+
+
     // GPUの待機
     void wait_for_gpu();
 
