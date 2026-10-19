@@ -2,6 +2,7 @@
 #define GRAPHICS_DEVICE_H_
 
 #include <d3d12.h>
+#include <vector>
 
 #include "GTLib/Graphics/GraphicsParts/BufferAndPool/FrameBuffer.h"
 #include "GraphicsCommand.h"
@@ -13,6 +14,7 @@
 #include "GTLib/Graphics/GraphicsParts/BufferAndPool/ConstantBuffer.h"
 #include "GTLib/Graphics/GraphicsParts/BufferAndPool/ConstantBufferPool.h"
 #include "GTLib/Graphics/GraphicsParts/Texture/Texture.h"
+#include "RenderTarget.h"
 
 // グラフィックスデバイスクラス
 class GraphicsDevice {
@@ -49,11 +51,27 @@ public:
     Texture* create_texture(const std::string& file_name);
     //デスクデータを返す
     Desc desc_data()const { return desc_; }
+    // レンダーテクスチャの作成
+    RenderTexture* create_render_texture(
+        UINT width, UINT height, DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM,
+        const float* clear_color = nullptr);
+    // 深度テクスチャの作成
+    DepthTexture* create_depth_texture(
+        UINT width, UINT height, DXGI_FORMAT format = DXGI_FORMAT_D32_FLOAT);
+
+    // レンダーターゲットの描画開始
+    void begin_render_target(
+        Texture* render_textures[], UINT num_render_texture,
+        Texture* depth_texture = nullptr);
+    // レンダーターゲットの描画終了
+    void end_render_target();
 
     // バックバッファの描画開始
     void begin_render_back_buffer();
     // バックバッファの描画終了
     void end_render_back_buffer();
+    // バックバッファの復元
+    void reset_to_back_buffer();
     // カラーバッファのクリア
     void clear_color_buffer(float r = 0.0f, float g = 0.0f, float b = 0.0f, float a = 1.0f);
     // デプスバッファのクリア
@@ -148,6 +166,8 @@ private:
     RootSignature* root_signature_{};
     //デスクデータ
     Desc desc_;
+    // レンダーターゲットスタック
+    std::vector<RenderTarget> render_targets_{};
 };
 
 #endif

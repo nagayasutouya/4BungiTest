@@ -1,5 +1,5 @@
 #include "BoundingSphere.h"
-#include "GTLib/Physics/Collision.h"
+#include "GTLib/Physics/Collision/Collision.h"
 
 // コンストラクタ
 BoundingSphere::BoundingSphere(float radius, const Vector3& center) :

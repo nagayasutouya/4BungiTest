@@ -19,6 +19,8 @@ void PipelineSetup::setup_defaults(DXGI_FORMAT rtv_format, DXGI_FORMAT dsv_forma
     create_pipeline_instance_skinned_mesh(rtv_format, dsv_format);
     // スカイドーム用のパイプラインステート作成
     create_pipeline_skydome(rtv_format, dsv_format);
+    // 画像転送用のパイプラインステート作成
+    create_pipeline_blit(rtv_format, dsv_format);
 }
 // スプライト用のパイプラインステートを作成
 void PipelineSetup::create_pipeline_sprite2d(DXGI_FORMAT rtv_format, DXGI_FORMAT dsv_format) {
@@ -371,6 +373,47 @@ void PipelineSetup::create_pipeline_skydome(DXGI_FORMAT rtv_format, DXGI_FORMAT 
     PipelineState* pipeline_state =
         Graphics::get_graphics_device()->create_pipeline_state(desc);
     Graphics::add_pipeline_state(PipelineStateID::Mesh_Skydome, pipeline_state);
+
+    pCompileVS->Release();
+    pCompilePS->Release();
+}
+// 画像転送用のパイプラインステート作成
+void PipelineSetup::create_pipeline_blit(DXGI_FORMAT rtv_format, DXGI_FORMAT dsv_format) {
+#ifdef _DEBUG
+    DWORD compile_flag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#else
+    DWORD compile_flag = 0;
+#endif
+    // テクスチャ転送用のシェーダー
+    ID3D10Blob* pCompileVS{};
+    D3DCompileFromFile(L"Assets/Shader/Basic/blit_shader.hlsl", NULL, NULL, "VS", "vs_5_0", compile_flag, 0, &pCompileVS, NULL);
+    ID3D10Blob* pCompilePS{};
+    D3DCompileFromFile(L"Assets/Shader/Basic/blit_shader.hlsl", NULL, NULL, "PS", "ps_5_0", compile_flag, 0, &pCompilePS, NULL);
+
+    D3D12_GRAPHICS_PIPELINE_STATE_DESC desc{};
+    desc.InputLayout = { nullptr, 0 };
+    desc.pRootSignature = Graphics::get_root_signature()->root_signature();
+    desc.VS = CD3DX12_SHADER_BYTECODE{ pCompileVS };
+    desc.PS = CD3DX12_SHADER_BYTECODE{ pCompilePS };
+    desc.RasterizerState = CD3DX12_RASTERIZER_DESC(CD3DX12_DEFAULT());
+    desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;   // カリングしない
+    desc.BlendState = CD3DX12_BLEND_DESC(CD3DX12_DEFAULT());
+    desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(CD3DX12_DEFAULT());
+    desc.DepthStencilState.DepthEnable = FALSE;    // デプスバッファに書き込まない
+    desc.DepthStencilState.StencilEnable = FALSE;  // ステンシルバッファに書き込まない
+    desc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+    desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    desc.NumRenderTargets = 1;
+    desc.RTVFormats[0] = rtv_format;
+    desc.DSVFormat = dsv_format;
+    desc.SampleDesc.Count = 1;
+    desc.SampleDesc.Quality = 0;
+
+
+    // パイプラインステートの作成
+    PipelineState* pipeline_state =
+        Graphics::get_graphics_device()->create_pipeline_state(desc);
+    Graphics::add_pipeline_state(PipelineStateID::Blit, pipeline_state);
 
     pCompileVS->Release();
     pCompilePS->Release();

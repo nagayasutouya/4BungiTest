@@ -1,6 +1,8 @@
 #ifndef GTLIB_MATH_H_
 #define GTLIB_MATH_H_
 
+//”ŠwŒnˆêŠ‡ƒ[ƒh
+
 #include "Math/Matrix4x4.h"
 #include "Math/Mathf.h"
 #include "Math/Transform.h"

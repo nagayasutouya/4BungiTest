@@ -23,7 +23,7 @@ Vector3 Vector3::normalized() const {
     return Vector3{ x / mag, y / mag, z / mag };
 }
 // ベクトルの2乗の長さ
-float Vector3::sqrm_agnitude() const {
+float Vector3::sqr_dot_magnitude() const {
     return dot(*this, *this);
 }
 // 内積
@@ -37,6 +37,14 @@ Vector3 Vector3::cross(const Vector3& lhs, const Vector3& rhs) {
         lhs.z * rhs.x - lhs.x * rhs.z,
         lhs.x * rhs.y - lhs.y * rhs.x
     };
+}
+// 2点間の距離の2乗
+float Vector3::sqr_distance(const Vector3& a, const Vector3& b) {
+    return (b - a).sqr_magnitude();
+}
+// 2点間の距離
+float Vector3::distance(const Vector3& a, const Vector3& b) {
+    return std::sqrt(sqr_distance(a, b));
 }
 // ピッチとヨーからベクトル生成
 Vector3 Vector3::create_from_pitch_yaw(float pitch, float yaw) {
@@ -61,10 +69,6 @@ float Vector3::signed_angle(const Vector3& from, const Vector3& to, const Vector
     float unsigned_angle = angle(from, to);
     float sign = Mathf::sign(dot(axis, cross(from, to)));
     return unsigned_angle * sign;
-}
-//aとbの間の距離
-float Vector3::distance(const Vector3& a, const Vector3& b) {
-    return (a - b).magnitude();
 }
 // Vector3(0, 0, 0) と同じ意味
 Vector3 Vector3::zero() {

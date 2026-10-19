@@ -16,12 +16,14 @@ Texture::Texture(ID3D12Device* device, ID3D12CommandQueue* queue, DescriptorPool
     CD3DX12_HEAP_PROPERTIES heap_prop{ D3D12_HEAP_TYPE_DEFAULT };
     // リソースの設定
     resource_desc_ = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R8G8B8A8_UNORM, width, height, 1, 1);
+    // 現在のテクスチャリソースの状態をコピーデスティネーションに設定
+    current_state_ = D3D12_RESOURCE_STATE_COPY_DEST;
     // テクスチャ用のリソースを作成
     device->CreateCommittedResource(
         &heap_prop,
         D3D12_HEAP_FLAG_NONE,
         &resource_desc_,
-        D3D12_RESOURCE_STATE_COPY_DEST,
+        current_state_,
         nullptr,
         IID_PPV_ARGS(&resource_)
     );
@@ -70,10 +72,7 @@ void Texture::update_subresources(ID3D12Device* device, ID3D12CommandQueue* queu
         subresource_data.data()
     );
     // リソースバリアの設定
-    CD3DX12_RESOURCE_BARRIER resource_barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-        resource_, D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
-    );
-    command_list->ResourceBarrier(1, &resource_barrier);
+    barrier(command_list, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
     // コマンドリストの実行を待つ
     command.execute().wait();
     // アップロード用のリソースを削除
@@ -101,4 +100,26 @@ ID3D12Resource* Texture::resource() const {
 // シェーダーリソースビューの取得	
 D3D12_GPU_DESCRIPTOR_HANDLE Texture::shader_resource_view() const {
     return shader_resource_view_->gpu_handle();
+}
+// レンダーターゲットビューの取得
+D3D12_CPU_DESCRIPTOR_HANDLE Texture::render_target_view() const {
+    return render_target_view_;
+}
+// デプスステンシルビューの取得
+D3D12_CPU_DESCRIPTOR_HANDLE Texture::depth_stencil_view() const {
+    return depth_stencil_view_;
+}
+
+// リソースバリア設定（現在の状態から更新）
+void Texture::barrier(ID3D12GraphicsCommandList* command_list,
+    D3D12_RESOURCE_STATES after_state) {
+    // 状態が同じ場合は何もしない
+    if (current_state_ == after_state) return;
+    // リソースバリアの作成
+    CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+        resource_, current_state_, after_state);
+    // コマンドリストにリソースバリアを設定
+    command_list->ResourceBarrier(1, &barrier);
+    // 現在の状態を更新
+    current_state_ = after_state;
 }

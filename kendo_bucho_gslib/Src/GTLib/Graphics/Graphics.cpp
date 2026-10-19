@@ -1,6 +1,7 @@
 #include "Graphics.h"
 #include "GTLib/Math/Mathf.h"
 #include "GraphicsParts/d3dx12.h"
+#include "GraphicsParts/StaticSampler.h"
 #include <unordered_map>
 #include <memory>
 
@@ -106,8 +107,7 @@ void Graphics::initialize(GraphicsDevice* device) {
     // グラフィックスデバイスの保持
     s_graphics_device = device;
     // ルートシグネチャの作成
-    CD3DX12_STATIC_SAMPLER_DESC sampler{ 0, D3D12_FILTER_MIN_MAG_MIP_LINEAR };
-    s_root_signature = std::unique_ptr<RootSignature>(s_graphics_device->create_root_signature(8, 8, 2 ,1 ,&sampler));
+    s_root_signature = std::unique_ptr<RootSignature>(s_graphics_device->create_root_signature(8, 8,2,(UINT)default_static_samplers.size(), default_static_samplers.data()));
 
     // オブジェクトパラメータの初期化
     s_object_params.world_matrix = Matrix4x4::identity();
@@ -639,6 +639,131 @@ void Graphics::initialize_effect(GTUINT effect_load_count_max, GTUINT instance_c
 }
 GTEffect* Graphics::effect_data() {
     return g_gteffect_;
+}
+
+// レンダーターゲットの作成
+RenderTexture* Graphics::create_render_texture(std::uint32_t texture_id,
+    UINT width, UINT height, DXGI_FORMAT format, const Color* clear_color) {
+    // 消去カラーの設定
+    float color[4]{ 0.0f, 0.0f, 0.0f, 1.0f }; // デフォルトカラー（黒）
+    if (clear_color) {
+        color[0] = clear_color->r;
+        color[1] = clear_color->g;
+        color[2] = clear_color->b;
+        color[3] = clear_color->a;
+    }
+    // RenderTextureの作成
+    RenderTexture* texture = s_graphics_device->create_render_texture(
+        width, height, format, color);
+    // テクスチャの登録
+    s_textures[texture_id] = std::unique_ptr<Texture>(texture);
+    // テクスチャを返す
+    return texture;
+}
+// デプステクスチャの作成
+DepthTexture* Graphics::create_depth_texture(std::uint32_t texture_id,
+    UINT width, UINT height, DXGI_FORMAT format) {
+    // デプステクスチャの作成
+    DepthTexture* texture = s_graphics_device->create_depth_texture(width, height, format);
+    // テクスチャの登録
+    s_textures[texture_id] = std::unique_ptr<Texture>(texture);
+    // テクスチャを返す
+    return texture;
+}
+// レンダーターゲットの描画開始（デプスバッファなし）
+void Graphics::begin_render_target(std::uint32_t texture_id) {
+    // 描画対象となるテクスチャを取得
+    Texture* render_texture = get_texture(texture_id);
+    if (render_texture == nullptr) return;
+
+    Texture* render_textures[]{ render_texture };
+    s_graphics_device->begin_render_target(render_textures, 1, nullptr);
+}
+// レンダーターゲットの描画開始（デプスバッファあり）
+void Graphics::begin_render_target(std::uint32_t texture_id, std::uint32_t depth_texture_id) {
+    // 描画対象となるテクスチャを取得
+    Texture* render_texture = get_texture(texture_id);
+    if (render_texture == nullptr) return;
+
+    // デプスバッファを取得
+    Texture* depth_texture = get_texture(depth_texture_id);
+    if (depth_texture == nullptr) return;
+
+    Texture* render_textures[]{ render_texture };
+    s_graphics_device->begin_render_target(render_textures, 1, depth_texture);
+}
+// デプスバッファのみをレンダーターゲットに設定して描画開始
+void Graphics::begin_depth_target(std::uint32_t depth_texture_id) {
+    // デプスバッファを取得
+    Texture* depth_texture = get_texture(depth_texture_id);
+    if (depth_texture == nullptr) return;
+
+    s_graphics_device->begin_render_target(nullptr, 0, depth_texture);
+}
+// レンダーターゲットの描画終了
+void Graphics::end_render_target() {
+    s_graphics_device->end_render_target();
+}
+// バックバッファにテクスチャをコピー
+void Graphics::blit_to_back_buffer(std::uint32_t texture_id, std::uint32_t pipeline_state_id) {
+    // テクスチャ取得
+    Texture* texture = get_texture(texture_id);
+    if (texture == nullptr) return;
+
+    // 現在のビューポートのサイズ取得
+    const D3D12_VIEWPORT& view_port = s_graphics_device->viewport();
+    float view_width = view_port.Width;
+    float view_height = view_port.Height;
+    // ビューポートの位置
+    float view_x = 0.0f;
+    float view_y = 0.0f;
+
+    // アスペクト比の計算
+    float src_aspect = (float)texture->width() / (float)texture->height();
+    float dst_aspect = view_width / view_height;
+    // アスペクト比の比較
+    if (src_aspect > dst_aspect) {
+        // 元画像の方が横長 → 上下に黒帯を入れる（レターボックス）
+        view_height = view_port.Width / src_aspect;
+        view_y = (view_port.Height - view_height) * 0.5f; // 上下の真ん中に配置
+    }
+    else if (src_aspect < dst_aspect) {
+        // 元画像の方が縦長 → 左右に黒帯を入れる（ピラーボックス）
+        view_width = view_port.Height * src_aspect;
+        view_x = (view_port.Width - view_width) * 0.5f; // 左右の真ん中に配置
+    }
+    // ビューポートの設定
+    s_graphics_device->set_viewport(view_x, view_y, view_width, view_height);
+
+    // パイプラインステートの設定
+    set_pipeline_state(pipeline_state_id);
+    // テクスチャの設定
+    s_graphics_device->set_texture(0, texture);
+    // 3頂点で描画
+    s_graphics_device->draw(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 3);
+}
+// レンダーターゲットにテクスチャをコピー
+void Graphics::blit_to_render_target(std::uint32_t texture_id, std::uint32_t pipeline_state_id) {
+    // テクスチャ取得
+    Texture* texture = get_texture(texture_id);
+    if (texture == nullptr) return;
+
+    // パイプラインステートの設定
+    set_pipeline_state(pipeline_state_id);
+    // テクスチャの設定
+    s_graphics_device->set_texture(0, texture);
+    // 3頂点で描画
+    s_graphics_device->draw(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 3);
+}
+// テクスチャのバインド
+void Graphics::bind_texture(std::uint32_t shader_register, std::uint32_t texture_id) {
+    Texture* texture = get_texture(texture_id);
+    if (texture == nullptr) return;
+    s_graphics_device->set_texture(shader_register, texture);
+}
+// コンスタントバッファにデータを設定
+void Graphics::set_constant_buffer(std::uint32_t shader_register, const void* data, size_t size) {
+    s_graphics_device->set_constant_buffer(shader_register, data, size);
 }
 
 // GPUの待機

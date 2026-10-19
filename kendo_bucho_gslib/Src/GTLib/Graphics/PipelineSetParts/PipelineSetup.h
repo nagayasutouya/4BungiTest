@@ -33,6 +33,10 @@ namespace PipelineSetup {
     void create_pipeline_skydome(
         DXGI_FORMAT rtv_format = DXGI_FORMAT_R8G8B8A8_UNORM,
         DXGI_FORMAT dsv_format = DXGI_FORMAT_D32_FLOAT);
+    // 画像転送用のパイプラインステート作成
+    void create_pipeline_blit(
+        DXGI_FORMAT rtv_format = DXGI_FORMAT_R8G8B8A8_UNORM,
+        DXGI_FORMAT dsv_format = DXGI_FORMAT_D32_FLOAT);
 }
 
 #endif

@@ -20,7 +20,7 @@ struct Vector3 {
     // 正規化されたベクトルを返す
     Vector3 normalized() const;
     // ベクトルの2乗の長さ
-    float sqrm_agnitude() const;
+    float sqr_dot_magnitude() const;
 
     // 内積
     static float dot(const Vector3& lhs, const Vector3& rhs);
@@ -30,6 +30,8 @@ struct Vector3 {
     static Vector3 create_from_pitch_yaw(float pitch, float yaw);
     // 線形補間
     static Vector3 lerp(const Vector3& a, const Vector3& b, float t);
+    // 2点間の距離の2乗
+    static float sqr_distance(const Vector3& a, const Vector3& b);
     //from to間の角度
     static float angle(const Vector3& from, const Vector3& to);
     //from to間の符号付き角度

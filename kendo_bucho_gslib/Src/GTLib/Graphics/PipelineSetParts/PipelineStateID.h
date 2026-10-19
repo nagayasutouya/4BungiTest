@@ -23,6 +23,8 @@ namespace PipelineStateID {
     constexpr std::uint32_t InstanceSkinnedMesh_Opaque = 10;
     // スカイドーム
     constexpr std::uint32_t Mesh_Skydome = 8;
+    // 画像転送用
+    constexpr std::uint32_t Blit = 9;
 }
 
 #endif
