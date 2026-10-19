@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "IWorld.h"
 #include "Field.h"
-#include "Line.h"
+#include "GTLib/Math/Line.h"
 #include "Assets.h"
 
 // 敵のモーションデータ

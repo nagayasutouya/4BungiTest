@@ -180,7 +180,7 @@
     <ClCompile Include="Src\GTLib\Sound\SoundEffect.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GTLib\Physics\Collision.cpp">
+    <ClCompile Include="Src\GTLib\Physics\Collision\Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\Sibungi\MotornOrder.cpp">
@@ -268,6 +268,36 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Effect\GTEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceMesh.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Math\Sphere.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Math\Line.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Math\AABB.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\RenderTexture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\DepthTexture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\RenderTarget.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Physics\Collision\MeshCollider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Math\Triangle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Math\Plane.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -470,7 +500,7 @@
     <ClInclude Include="Src\GTLib\Sound\SoundEffect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GTLib\Physics\Collision.h">
+    <ClInclude Include="Src\GTLib\Physics\Collision\Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Sibungi\MotornOrder.h">
@@ -933,6 +963,48 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Effect\GTEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\GTLibMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Math\Line.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Mesh\Instance\InstanceMesh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Math\Ray.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Math\Sphere.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Math\AABB.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\StaticSampler.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\RenderTexture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\DepthTexture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\RenderTarget.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Physics\Collision\MeshCollider.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Math\Triangle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Math\Plane.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\GTLibCollision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

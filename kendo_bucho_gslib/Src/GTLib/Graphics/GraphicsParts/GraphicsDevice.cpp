@@ -93,47 +93,123 @@ Texture* GraphicsDevice::create_texture(const std::string& file_name) {
     return new Texture(device_, command_queue_, descriptor_pool_, file_name);
 }
 
+// レンダーテクスチャの作成
+RenderTexture* GraphicsDevice::create_render_texture(
+    UINT width, UINT height, DXGI_FORMAT format, const float* clear_color) {
+    return new RenderTexture(device_, descriptor_pool_, width, height, format, clear_color);
+}
+// デプステクスチャの作成
+DepthTexture* GraphicsDevice::create_depth_texture(
+    UINT width, UINT height, DXGI_FORMAT format) {
+    return new DepthTexture(device_, descriptor_pool_, width, height, format);
+}
+
+// レンダーターゲットへの描画開始
+void GraphicsDevice::begin_render_target(
+    Texture* render_textures[], UINT num_render_texture, Texture* depth_texture) {
+    // レンダーターゲットをスタックにプッシュ
+    render_targets_.emplace_back(render_textures, num_render_texture, depth_texture);
+    // バリアを設定: 現在の状態 -> RENDER_TARGET / DEPTH_WRITE
+    render_targets_.back().barrier_begin(command_list_);
+    // レンダーターゲットを適用
+    render_targets_.back().apply(command_list_);
+    // ビューポートを設定
+    set_viewport(0.0f, 0.0f,
+        (float)render_targets_.back().width(),
+        (float)render_targets_.back().height());
+}
+// レンダーターゲットへの描画終了
+void GraphicsDevice::end_render_target() {
+    // スタックが空なら何もしない
+    if (render_targets_.empty()) return;
+    // バリアを設定: RENDER_TARGET / DEPTH_WRITE -> PIXEL_SHADER_RESOURCE
+    render_targets_.back().barrier_end(command_list_);
+    render_targets_.pop_back();
+    // 前回のレンダーターゲットに復帰
+    if (!render_targets_.empty()) {
+        render_targets_.back().apply(command_list_);
+        set_viewport(0.0f, 0.0f,
+            (float)render_targets_.back().width(),
+            (float)render_targets_.back().height());
+    }
+    else {
+        // バックバッファが設定されていない場合は何もしない
+        if (!render_target_resource_) return;
+        // バックバッファを復元
+        reset_to_back_buffer();
+    }
+}
+
 // バックバッファの描画開始
 void GraphicsDevice::begin_render_back_buffer() {
-    // バックバッファのレンダーターゲットの取得
+    // バックバッファをリセット
+    reset_to_back_buffer();
+    // リソースバリアの設定 PRESENT -> RENDER_TARGET
+    const D3D12_RESOURCE_BARRIER& barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+        render_target_resource_,
+        D3D12_RESOURCE_STATE_PRESENT,
+        D3D12_RESOURCE_STATE_RENDER_TARGET
+    );
+    command_list_->ResourceBarrier(1, &barrier);
+}
+// バックバッファの描画終了
+void GraphicsDevice::end_render_back_buffer() {
+    // バックバッファ用のRenderTargetが設定されていなければ何もしない
+    if (render_target_resource_ == nullptr) return;
+    // リソースバリアの設定 RENDER_TARGET -> PRESENT
+    const D3D12_RESOURCE_BARRIER& barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+        render_target_resource_,
+        D3D12_RESOURCE_STATE_RENDER_TARGET,
+        D3D12_RESOURCE_STATE_PRESENT
+    );
+    command_list_->ResourceBarrier(1, &barrier);
+    // バックバッファを未設定の状態にする
+    render_target_resource_ = nullptr;
+    depth_stencil_resource_ = nullptr;
+}
+// バックバッファのリセット
+void GraphicsDevice::reset_to_back_buffer() {
+    // バックバッファの情報を最新の状態に更新して復元
     render_target_resource_ = frame_buffer_->back_buffer();
     render_target_view_ = frame_buffer_->render_target_view();
-    // デプスステンシルバッファの取得
     depth_stencil_resource_ = frame_buffer_->depth_stencil_buffer();
     depth_stencil_view_ = frame_buffer_->depth_stencil_view();
-    // リソースバリアーの設定
-    const D3D12_RESOURCE_BARRIER& barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-        render_target_resource_, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    command_list_->ResourceBarrier(1, &barrier);
-    // レンダーターゲットの設定
-    command_list_->OMSetRenderTargets(1, &render_target_view_, false, &depth_stencil_view_);
-    // ビューポートの設定（現在のレンダーターゲットのサイズにする）
+    command_list_->OMSetRenderTargets(1, &render_target_view_, FALSE, &depth_stencil_view_);
+    // ビューポートの設定（バックバッファのサイズにする）
     set_viewport();
 }
 
-// バックバッファの描画終了
-void GraphicsDevice::end_render_back_buffer() {
-    // リソースバリアーの設定
-    const D3D12_RESOURCE_BARRIER& barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-        render_target_resource_, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-    command_list_->ResourceBarrier(1, &barrier);
-}
-
-// カラーバッファのクリア
+// カラーバッファのクリア（レンダーターゲットスタックに応じて切替）
 void GraphicsDevice::clear_color_buffer(float r, float g, float b, float a) {
-    // レンダーターゲットがなければ何もしない
-    if (render_target_resource_ == nullptr) return;
-    float clear_color[]{ r, g, b, a };
-    command_list_->ClearRenderTargetView(render_target_view_, clear_color, 0, NULL);
+    if (!render_targets_.empty()) {
+        // カレントのレンダーターゲットをクリア
+        render_targets_.back().clear_color(command_list_, r, g, b, a);
+    }
+    else {
+        // バックバッファが設定されていない場合は何もしない
+        if (!render_target_resource_) return;
+        // バックバッファをクリア
+        float clear_color[]{ r, g, b, a };
+        command_list_->ClearRenderTargetView(render_target_view_,
+            clear_color, 0, NULL);
+    }
 }
 
-// デプスステンシルバッファのクリア
+// デプスバッファのクリア（レンダーターゲットスタックに応じて切替）
 void GraphicsDevice::clear_depth_buffer(float depth, UINT8 stencil) {
-    // デプスステンシルビューがなければ何もしない
-    if (depth_stencil_resource_ == nullptr) return;
-    // デプスステンシルバッファのクリア
-    command_list_->ClearDepthStencilView(depth_stencil_view_, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, depth, stencil, 0, NULL);
+    if (!render_targets_.empty()) {
+        // カレントのレンダーターゲットのデプスバッファをクリア
+        render_targets_.back().clear_depth(command_list_, depth, stencil);
+    }
+    else {
+        // バックバッファが設定されていない場合は何もしない
+        if (!depth_stencil_resource_) return;
+        // バックバッファ用のデプスバッファをクリア
+        command_list_->ClearDepthStencilView(depth_stencil_view_,
+            D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, depth, stencil, 0, NULL);
+    }
 }
+
 // バックバッファのスワップ
 void GraphicsDevice::swap_buffers(UINT sync_interval, UINT flags) {
     // 現在のフレームのコマンドバッファを実行する

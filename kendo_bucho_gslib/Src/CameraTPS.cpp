@@ -1,7 +1,7 @@
 #include "CameraTPS.h"
 #include "IWorld.h"
 #include "Field.h"
-#include "Line.h"
+#include "GTLib/Math/Line.h"
 
 // プレーヤーからの相対座標
 const Vector3 PlayerOffset{ 0.0f, 2.0f, -4.0f };
