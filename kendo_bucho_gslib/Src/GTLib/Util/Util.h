@@ -57,7 +57,7 @@ namespace Util {
 		return contena.end()!=std::find(contena.begin(), contena.end(), data);
 	}	
 	template<typename CheckDataKey, typename CheckDataUM>
-	extern inline bool FindTargetKeyInUnorderedMap(std::unordered_map<CheckDataKey,CheckDataUM>contena, CheckDataKey data) {
+	extern inline bool FindTargetDataInUnorderedMap(std::unordered_map<CheckDataKey,CheckDataUM>contena, CheckDataKey data) {
 		return contena.find(data)!=contena.end();
 	}
 };
