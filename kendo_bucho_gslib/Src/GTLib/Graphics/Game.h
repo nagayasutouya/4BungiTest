@@ -11,12 +11,13 @@
 class Game {
 public:
     // コンストラクタ
-    Game(int window_width = 640, int window_height = 480, bool fullscreen = false);
+    Game(int window_width = 640, int window_height = 480, const LPCSTR window_name="GameWindow", bool fullscreen = false);
     // デストラクタ
     virtual ~Game();
     // 実行
     int run();
-
+    // ウィンドウサイズ変更時の処理
+    void resize(int width, int height);
 protected:
     // 開始
     virtual void start() {}

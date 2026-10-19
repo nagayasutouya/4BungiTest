@@ -2,6 +2,7 @@
 #include "GTLib/Graphics/Graphics.h"
 #include "GTLib/Input/Input.h"
 #include "GTLib/Sound/Sound.h"
+#include "GTLib/GTLibTextrueID.h"
 
 // DirectXに関係するライブラリの指定
 #pragma comment(lib, "d3d12.lib")
@@ -11,7 +12,19 @@
 
 // ウィンドウプロシージャ(ウインドウに対するイベント処理に対応する関数）
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    // ゲームクラスのインスタンスを取得する
+    Game* game = reinterpret_cast<Game*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
     switch (uMsg) {
+    case WM_SIZE:
+        if (game) {
+            UINT width = LOWORD(lParam);
+            UINT height = HIWORD(lParam);
+            // 最小化された時は width/height が 0 になるため除外
+            if (width > 0 && height > 0) {
+                game->resize(static_cast<int>(width), static_cast<int>(height));
+            }
+        }
+        return 0;
     case WM_DESTROY:         // ウィンドウが破壊された
         PostQuitMessage(0);  // 終了メッセージ(WM_QUIT)を送る
         return 0;
@@ -19,12 +32,10 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // その他メッセージに対するデフォルト処理を行う
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
-
 // コンストラクタ
-Game::Game(int window_width, int window_height, bool fullscreen) :
+Game::Game(int window_width, int window_height, const LPCSTR window_name, bool fullscreen) :
     window_width_{ window_width }, window_height_{ window_height } {
     // ウィンドウを作成する
-    const LPCSTR window_name{ "GameWindow" };     // Windowの名前
     // ウィンドウクラスを登録する
     wnd_class_.lpfnWndProc = WndProc;
     wnd_class_.hInstance = GetModuleHandle(0);
@@ -39,17 +50,26 @@ Game::Game(int window_width, int window_height, bool fullscreen) :
     hwnd_ = CreateWindow(window_name, window_name,
         WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
         rect.right - rect.left, rect.bottom - rect.top, NULL, NULL, wnd_class_.hInstance, NULL);
-    // ウィンドウを開く
-    ShowWindow(hwnd_, SW_SHOWDEFAULT);
-    UpdateWindow(hwnd_);
+    // Gameインスタンスのポインタをウィンドウに関連付ける
+    SetWindowLongPtr(hwnd_, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
     // グラフィックスデバイスの作成
     GraphicsDevice::Desc desc{};
     desc.window_width = window_width;
     desc.window_height = window_height;
     graphics_device_ = new GraphicsDevice{ hwnd_, desc };
+    // フルスクリーンの設定 (非表示の状態でボーダレスフルスクリーン化を行います)
+    graphics_device_->set_borderless_fullscreen(fullscreen);
+    // 設定完了後にウィンドウを表示する
+    if (fullscreen) {
+        ShowWindow(hwnd_, SW_SHOWNORMAL);// フルスクリーンモード
+    }
+    else {
+        ShowWindow(hwnd_, SW_SHOWDEFAULT);// ウィンドウモード
+    }
+    UpdateWindow(hwnd_);
+    //テクスチャIDを初期化
+    GTLibTextureID::Instance()->initialize();
 }
-
-
 
 // デストラクタ
 Game::~Game() {
@@ -109,4 +129,12 @@ int Game::run() {
 bool Game::is_running() const {
     // エスケープキーが押されていない？（押されたら終了）
     return GetAsyncKeyState(VK_ESCAPE) == 0;
+}
+// ウィンドウサイズ変更時の処理
+void Game::resize(int width, int height) {
+    window_width_ = width;
+    window_height_ = height;
+    if (graphics_device_) {
+        graphics_device_->resize_back_buffer((UINT)width, (UINT)height);
+    }
 }

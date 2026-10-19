@@ -216,6 +216,7 @@
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\Texture.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\PipelineSetParts\PipelineSetup.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\PipelineSetParts\PipelineState.cpp" />
+    <ClCompile Include="Src\GTLib\GTLibTextrueID.cpp" />
     <ClCompile Include="Src\GTLib\Input\GamePad.cpp" />
     <ClCompile Include="Src\GTLib\Input\Input.cpp" />
     <ClCompile Include="Src\GTLib\Input\KeyBoard.cpp" />
@@ -443,6 +444,7 @@
     <ClInclude Include="Src\GTLib\GTLib.h" />
     <ClInclude Include="Src\GTLib\GTLibCollision.h" />
     <ClInclude Include="Src\GTLib\GTLibMath.h" />
+    <ClInclude Include="Src\GTLib\GTLibTextrueID.h" />
     <ClInclude Include="Src\GTLib\Input\GamePad.h" />
     <ClInclude Include="Src\GTLib\Input\Input.h" />
     <ClInclude Include="Src\GTLib\Input\KeyBoard.h" />
