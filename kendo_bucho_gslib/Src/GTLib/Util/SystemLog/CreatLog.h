@@ -11,7 +11,7 @@ class CreatLog {
 public:
 	CreatLog(){}
 	~CreatLog();
-	static CreatLog* instance() {
+	static CreatLog* Instance() {
 		static CreatLog* cl = new CreatLog{};
 		return cl;
 	}
