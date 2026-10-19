@@ -161,6 +161,7 @@
 //};
 
 #include "GTLib/GTLib.h"
+#include "GTLib/GTLibTextrueID.h"
 #include "GTLib/GTLibCollision.h"
 
 //// メイン関数
@@ -168,6 +169,7 @@
 //    return MyGame().run();
 //}
 
+static const Vector2 screen_size_{ 640.0f,480.0f };
 // メッシュ衝突判定テスト
 class MyGame : public Game {
 private:
@@ -175,6 +177,9 @@ private:
     Vector3 sphere_pos_{ 0.0f, 1.0f, 0.0f };
     // 球体の半径
     float sphere_radius_{ 0.5f };
+public:
+
+    MyGame():Game{(int)screen_size_.x,(int)screen_size_.y,"TestQuadTree",true} {}
 
     // 開始
     void start() override {
@@ -183,6 +188,10 @@ private:
 
         // パイプライン状態の基本設定
         PipelineSetup::setup_defaults();
+
+        // レンダーターゲットの作成(ゲーム側で想定する解像度に設定する）
+        Graphics::create_render_texture(GTLibTextureID::Instance()->render_target_id_min(), (UINT)screen_size_.x, (UINT)screen_size_.y);
+        Graphics::create_depth_texture(GTLibTextureID::Instance()->depth_id_min(), (UINT)screen_size_.x, (UINT)screen_size_.y);
 
         // メッシュコライダーファイルの読み込み
         CollisionPhysics::load_mesh_collider(0, "Assets/test/Terrain.col");
@@ -236,9 +245,14 @@ private:
     void draw() override {
         // 描画開始
         Graphics::begin_scene();
-
+        // レンダーターゲットに描画開始
+        Graphics::begin_render_target(GTLibTextureID::Instance()->render_target_id_min(), GTLibTextureID::Instance()->depth_id_min());
+        //レンダーターゲットをクリア
+        Graphics::clear_color_buffer(0.0f,0.0f,0.0f,1.0f);
+        //デプスバッファをクリア
+        Graphics::clear_depth_buffer();
         // 射影行列の設定
-        Matrix4x4 proj = Matrix4x4::perspective(45.0f, 640.0f / 480.0f, 0.1f, 1000.0f);
+        Matrix4x4 proj = Matrix4x4::perspective(45.0f, screen_size_.x / screen_size_.y, 0.1f, 1000.0f);
         Graphics::set_projection_matrix(proj);
 
         // ビュー行列の設定 (球体を斜め上から追従)
@@ -258,6 +272,11 @@ private:
         Matrix4x4 sphere_world = Matrix4x4::translate(sphere_pos_);
         Graphics::set_world_matrix(sphere_world);
         Graphics::draw_mesh(1);
+        // レンダーターゲットの描画終了
+        Graphics::end_render_target();
+
+        // レンダーターゲットをバックバッファに転送
+        Graphics::blit_to_back_buffer(0, PipelineStateID::Blit);
 
         // 描画終了
         Graphics::end_scene();
