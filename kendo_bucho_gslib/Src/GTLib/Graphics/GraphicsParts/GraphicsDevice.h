@@ -129,6 +129,11 @@ public:
     // 現在のバックバッファのインデックスを取得
     UINT current_back_buffer() const;
 
+    // バックバッファのリサイズ
+    void resize_back_buffer(UINT width, UINT height);
+    // ボーダレスウィンドウフルスクリーン切替
+    void set_borderless_fullscreen(bool fullscreen);
+
     // コピー禁止
     GraphicsDevice(const GraphicsDevice&) = delete;
     GraphicsDevice& operator = (const GraphicsDevice&) = delete;

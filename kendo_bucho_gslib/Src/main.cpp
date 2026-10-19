@@ -176,6 +176,10 @@ private:
     // 球体の半径
     float sphere_radius_{ 0.5f };
 
+public:
+
+    MyGame():Game{1920,1080,"TestQuadTree",true} {}
+
     // 開始
     void start() override {
         // 衝突判定システムの初期化
@@ -183,6 +187,9 @@ private:
 
         // パイプライン状態の基本設定
         PipelineSetup::setup_defaults();
+
+        // レンダーターゲットの作成(ゲーム側で想定する解像度に設定する）
+        Graphics::create_render_texture(0, 1920, 1080);
 
         // メッシュコライダーファイルの読み込み
         CollisionPhysics::load_mesh_collider(0, "Assets/test/Terrain.col");
@@ -236,9 +243,10 @@ private:
     void draw() override {
         // 描画開始
         Graphics::begin_scene();
-
+        // レンダーターゲットに描画開始
+        Graphics::begin_render_target(0);
         // 射影行列の設定
-        Matrix4x4 proj = Matrix4x4::perspective(45.0f, 640.0f / 480.0f, 0.1f, 1000.0f);
+        Matrix4x4 proj = Matrix4x4::perspective(45.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
         Graphics::set_projection_matrix(proj);
 
         // ビュー行列の設定 (球体を斜め上から追従)
@@ -258,6 +266,11 @@ private:
         Matrix4x4 sphere_world = Matrix4x4::translate(sphere_pos_);
         Graphics::set_world_matrix(sphere_world);
         Graphics::draw_mesh(1);
+        // レンダーターゲットの描画終了
+        Graphics::end_render_target();
+
+        // レンダーターゲットをバックバッファに転送
+        Graphics::blit_to_back_buffer(0, PipelineStateID::Blit);
 
         // 描画終了
         Graphics::end_scene();

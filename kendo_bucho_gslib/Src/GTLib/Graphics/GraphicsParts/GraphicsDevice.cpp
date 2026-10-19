@@ -62,37 +62,30 @@ GraphicsDevice::~GraphicsDevice() {
     // DirectX12デバイスの削除
     device_->Release();
 }
-
 // ルートシグネチャの作成
 RootSignature* GraphicsDevice::create_root_signature(UINT num_cbv, UINT num_srv,UINT num_inline_srv,UINT num_sampler, const D3D12_STATIC_SAMPLER_DESC sampler[]) {
     return new RootSignature(device_, num_cbv, num_srv,num_inline_srv ,num_sampler, sampler);
 }
-
 // パイプラインステートの作成
 PipelineState* GraphicsDevice::create_pipeline_state(const D3D12_GRAPHICS_PIPELINE_STATE_DESC& desc) {
     return new PipelineState(device_, desc);
 }
-
 // 頂点バッファの作成
 VertexBuffer* GraphicsDevice::create_vertex_buffer(const void* data, UINT size, UINT stride) {
     return new VertexBuffer(device_, data, size, stride);
 }
-
 // インデックスバッファの作成
 IndexBuffer* GraphicsDevice::create_index_buffer(const void* data, UINT size, DXGI_FORMAT format) {
     return new IndexBuffer(device_, data, size, format);
 }
-
 // コンスタントバッファの作成
 ConstantBuffer* GraphicsDevice::create_constant_buffer(const void* data, UINT size) {
     return new ConstantBuffer(device_, data, size);
 }
-
 // テクスチャの作成
 Texture* GraphicsDevice::create_texture(const std::string& file_name) {
     return new Texture(device_, command_queue_, descriptor_pool_, file_name);
 }
-
 // レンダーテクスチャの作成
 RenderTexture* GraphicsDevice::create_render_texture(
     UINT width, UINT height, DXGI_FORMAT format, const float* clear_color) {
@@ -103,7 +96,6 @@ DepthTexture* GraphicsDevice::create_depth_texture(
     UINT width, UINT height, DXGI_FORMAT format) {
     return new DepthTexture(device_, descriptor_pool_, width, height, format);
 }
-
 // レンダーターゲットへの描画開始
 void GraphicsDevice::begin_render_target(
     Texture* render_textures[], UINT num_render_texture, Texture* depth_texture) {
@@ -178,7 +170,6 @@ void GraphicsDevice::reset_to_back_buffer() {
     // ビューポートの設定（バックバッファのサイズにする）
     set_viewport();
 }
-
 // カラーバッファのクリア（レンダーターゲットスタックに応じて切替）
 void GraphicsDevice::clear_color_buffer(float r, float g, float b, float a) {
     if (!render_targets_.empty()) {
@@ -194,7 +185,6 @@ void GraphicsDevice::clear_color_buffer(float r, float g, float b, float a) {
             clear_color, 0, NULL);
     }
 }
-
 // デプスバッファのクリア（レンダーターゲットスタックに応じて切替）
 void GraphicsDevice::clear_depth_buffer(float depth, UINT8 stencil) {
     if (!render_targets_.empty()) {
@@ -209,7 +199,6 @@ void GraphicsDevice::clear_depth_buffer(float depth, UINT8 stencil) {
             D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, depth, stencil, 0, NULL);
     }
 }
-
 // バックバッファのスワップ
 void GraphicsDevice::swap_buffers(UINT sync_interval, UINT flags) {
     // 現在のフレームのコマンドバッファを実行する
@@ -225,14 +214,12 @@ void GraphicsDevice::swap_buffers(UINT sync_interval, UINT flags) {
     // 次のフレームのコンスタントバッファプールをリセットする
     constant_buffer_pool_[current_back_buffer_]->reset();
 }
-
 // ルートシグネチャの設定
 void GraphicsDevice::set_root_signature(RootSignature* root_signature) {
     command_list_->SetGraphicsRootSignature(root_signature->root_signature());
     // ルートシグネチャを保存しておく
     root_signature_ = root_signature;
 }
-
 // パイプラインステートの設定
 void GraphicsDevice::set_pipeline_state(PipelineState* pipeline_state, RootSignature* root_signature) {
     // パイプラインステートの設定
@@ -242,56 +229,47 @@ void GraphicsDevice::set_pipeline_state(PipelineState* pipeline_state, RootSigna
         set_root_signature(root_signature);
     }
 }
-
 // 頂点バッファの設定
 void GraphicsDevice::set_vertex_buffer(UINT slot, VertexBuffer* vertex_buffer) {
     command_list_->IASetVertexBuffers(slot, 1, &vertex_buffer->vertex_buffer_view());
 }
-
 // インデックスバッファの設定
 void GraphicsDevice::set_index_buffer(IndexBuffer* index_buffer) {
     command_list_->IASetIndexBuffer(&index_buffer->index_buffer_view());
 }
-
 // テクスチャの設定
 void GraphicsDevice::set_texture(UINT shader_register, Texture* texture) {
     UINT root_index = root_signature_->srv_root_index() + shader_register;
     command_list_->SetGraphicsRootDescriptorTable(root_index, texture->shader_resource_view());
 }
-
 // コンスタントバッファの設定
 void GraphicsDevice::set_constant_buffer(UINT shader_register, ConstantBuffer* constant_buffer) {
     UINT root_index = root_signature_->cbv_root_index() + shader_register;
     command_list_->SetGraphicsRootConstantBufferView(root_index,
         constant_buffer->constant_buffer_view().BufferLocation);
 }
-
 // コンスタントバッファの設定(コンスタントバッファプールを使用）
 void GraphicsDevice::set_constant_buffer(UINT shader_register, const void* data, UINT size) {
     UINT root_index = root_signature_->cbv_root_index() + shader_register;
     command_list_->SetGraphicsRootConstantBufferView(root_index,
         constant_buffer_pool_[current_back_buffer_]->upload(data, size));
 }
-
 // ストラクテッドバッファの設定
 void GraphicsDevice::set_structured_buffer(UINT shader_register, ConstantBuffer* constant_buffer) {
     UINT root_index = root_signature_->cbv_root_index() + shader_register;
     command_list_->SetGraphicsRootConstantBufferView(root_index,
         constant_buffer->constant_buffer_view().BufferLocation);
 }
-
 // インスタンス描画用ストラクテッドバッファの設定
 void GraphicsDevice::set_instance_structured_buffer(UINT shader_register, const void* data,UINT size) {
     UINT root_index = root_signature_->inline_srv_root_index() + shader_register;
     command_list_->SetGraphicsRootShaderResourceView(root_index, constant_buffer_pool_[current_back_buffer_]->upload(data,size));
 }
-
 // ディスクリプタヒープの設定
 void GraphicsDevice::set_descriptor_heaps() {
     ID3D12DescriptorHeap* heaps[]{ descriptor_pool_->heap() };
     command_list_->SetDescriptorHeaps(1, heaps);
 }
-
 // ビューポートの設定
 void GraphicsDevice::set_viewport(float x, float y, float w, float h) {
     // ビューポートの設定
@@ -300,7 +278,6 @@ void GraphicsDevice::set_viewport(float x, float y, float w, float h) {
     // シザー矩形の設定
     set_scissor_rect(viewport_.TopLeftX, viewport_.TopLeftY, viewport_.Width, viewport_.Height);
 }
-
 // ビューポートの設定(現在のレンダーターゲットのサイズに合わせる）
 void GraphicsDevice::set_viewport() {
     // ビューポートの設定
@@ -309,7 +286,6 @@ void GraphicsDevice::set_viewport() {
     // シザー矩形の設定
     set_scissor_rect(viewport_.TopLeftX, viewport_.TopLeftY, viewport_.Width, viewport_.Height);
 }
-
 // シザー矩形の設定
 void GraphicsDevice::set_scissor_rect(float x, float y, float w, float h) {
     scissor_rect_.left = (LONG)x;
@@ -318,19 +294,16 @@ void GraphicsDevice::set_scissor_rect(float x, float y, float w, float h) {
     scissor_rect_.bottom = scissor_rect_.top + (LONG)h;
     command_list_->RSSetScissorRects(1, &scissor_rect_);
 }
-
 // ポリゴンの描画（頂点インデックスあり）
 void GraphicsDevice::draw_indexed(D3D_PRIMITIVE_TOPOLOGY primitive, UINT index_count, UINT start_index, UINT start_vertex, UINT instance_count,UINT instance_id_offset) {
     command_list_->IASetPrimitiveTopology(primitive);
     command_list_->DrawIndexedInstanced(index_count, instance_count, start_index, start_vertex, instance_id_offset);
 }
-
 // ポリゴンの描画（頂点インデックスなし）
 void GraphicsDevice::draw(D3D_PRIMITIVE_TOPOLOGY primitive, UINT vertex_count, UINT start_vertex, UINT instance_count, UINT instance_id_offset) {
     command_list_->IASetPrimitiveTopology(primitive);
     command_list_->DrawInstanced(vertex_count, instance_count, start_vertex, instance_id_offset);
 }
-
 // GPUの実行終了を待つ
 void GraphicsDevice::wait_for_gpu() const {
     commands_[0]->wait_idle();
@@ -340,28 +313,37 @@ void GraphicsDevice::wait_for_gpu() const {
 ID3D12Device* GraphicsDevice::d3d12_device() const {
     return device_;
 }
-
 // コマンドキューを取得
 ID3D12CommandQueue* GraphicsDevice::command_queue() const {
     return command_queue_;
 }
-
 // コマンドリストを取得
 ID3D12GraphicsCommandList* GraphicsDevice::command_list() const {
     return command_list_;
 }
-
 // ビューポートを取得
 const D3D12_VIEWPORT& GraphicsDevice::viewport() const {
     return viewport_;
 }
-
 // シザー矩形を取得
 const D3D12_RECT& GraphicsDevice::scissor_rect() const {
     return scissor_rect_;
 }
-
 // 現在のバックバッファのインデックスを取得
 UINT GraphicsDevice::current_back_buffer() const {
     return current_back_buffer_;
+}
+// バックバッファのリサイズ
+void GraphicsDevice::resize_back_buffer(UINT width, UINT height) {
+    // GPUの処理完了を待機
+    wait_for_gpu();
+    // バックバッファと深度バッファのリサイズ
+    frame_buffer_->resize(width, height);
+}
+// ボーダレスウィンドウフルスクリーン切替
+void GraphicsDevice::set_borderless_fullscreen(bool fullscreen) {
+    // GPUの終了を待つ
+    wait_for_gpu();
+    // フルスクリーン状態を切り替える
+    frame_buffer_->set_borderless_fullscreen(fullscreen);
 }
