@@ -44,27 +44,6 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
     device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&render_target_heaps_));
     // バックバッファのレンダーターゲットビューを作成
     create_render_target_views();
-    // バックバッファ用のレンダーターゲットビューの作成
-    D3D12_CPU_DESCRIPTOR_HANDLE handle{ render_target_heaps_->GetCPUDescriptorHandleForHeapStart() };
-    for (UINT i = 0; i < FrameBufferCount; ++i) {
-        swap_chain_->GetBuffer(i, IID_PPV_ARGS(&back_buffer_[i]));
-        device->CreateRenderTargetView(back_buffer_[i], nullptr, handle);
-        render_target_views_[i] = handle;
-        handle.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-    }
-    // デプスステンシルバッファの作成
-    CD3DX12_HEAP_PROPERTIES heap_prop{ D3D12_HEAP_TYPE_DEFAULT };
-    D3D12_RESOURCE_DESC res_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, width, height, 1, 1);
-    res_desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-    CD3DX12_CLEAR_VALUE clear_value{ res_desc.Format, 1.0f, 0 };
-    device->CreateCommittedResource(
-        &heap_prop,
-        D3D12_HEAP_FLAG_NONE,
-        &res_desc,
-        D3D12_RESOURCE_STATE_DEPTH_WRITE,
-        &clear_value,
-        IID_PPV_ARGS(&depth_stencil_buffer_)
-    );
     // デプスステンシルビューの作成
     D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
     dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -72,8 +51,6 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
     dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     dsvHeapDesc.NodeMask = 0;
     device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&depth_stencil_heap_));
-    depth_stencil_view_ = depth_stencil_heap_->GetCPUDescriptorHandleForHeapStart();
-    device->CreateDepthStencilView(depth_stencil_buffer_, nullptr, depth_stencil_view_);
     // デプス・ステンシルバッファの作成
     create_depth_stencil_buffer();
 }

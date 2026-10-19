@@ -2,6 +2,7 @@
 #include "GTLib/Graphics/Graphics.h"
 #include "GTLib/Input/Input.h"
 #include "GTLib/Sound/Sound.h"
+#include "GTLib/GTLibTextrueID.h"
 
 // DirectXに関係するライブラリの指定
 #pragma comment(lib, "d3d12.lib")
@@ -66,6 +67,8 @@ Game::Game(int window_width, int window_height, const LPCSTR window_name, bool f
         ShowWindow(hwnd_, SW_SHOWDEFAULT);// ウィンドウモード
     }
     UpdateWindow(hwnd_);
+    //テクスチャIDを初期化
+    GTLibTextureID::Instance()->initialize();
 }
 
 // デストラクタ
