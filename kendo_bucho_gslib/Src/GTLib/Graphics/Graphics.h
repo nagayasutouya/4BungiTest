@@ -186,6 +186,12 @@ namespace Graphics {
     //エフェクトの初期化
     void initialize_effect(GTUINT effect_load_count_max = 1024, GTUINT instance_count_max = 2048);
     GTEffect* effect_data();
+    //エフェクトカメラのセット
+    void set_effect_camera();
+    //エフェクトの更新
+    void update_effect(float delta_time);
+    //エフェクトの描画
+    void draw_effect();
 
     // レンダーテクスチャの作成
     RenderTexture* create_render_texture(std::uint32_t texture_id,

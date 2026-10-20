@@ -48,7 +48,7 @@ void CameraTPS::update(float delta_time) {
 
 // •`‰æ
 void CameraTPS::draw() const {
-    Matrix4x4 proj = Matrix4x4::perspective(45.0f, 1024.0f / 768.0f, 0.1f, 1000.0f);
+    Matrix4x4 proj = Matrix4x4::perspective(45.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
     Graphics::set_projection_matrix(proj);
     // Ž‹“_‚ÌˆÊ’u
     Vector3 eye = transform_.position();
