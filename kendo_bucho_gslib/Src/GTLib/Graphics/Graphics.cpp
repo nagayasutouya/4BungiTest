@@ -640,6 +640,21 @@ void Graphics::initialize_effect(GTUINT effect_load_count_max, GTUINT instance_c
 GTEffect* Graphics::effect_data() {
     return g_gteffect_;
 }
+//エフェクトカメラのセット
+void Graphics::set_effect_camera(){
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->set_effect_camera();
+}
+//エフェクトの更新
+void Graphics::update_effect(float delta_time){
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->update_effect(delta_time);
+}
+//エフェクトの描画
+void Graphics::draw_effect(){
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->draw_effect();
+}
 
 // レンダーターゲットの作成
 RenderTexture* Graphics::create_render_texture(std::uint32_t texture_id,
