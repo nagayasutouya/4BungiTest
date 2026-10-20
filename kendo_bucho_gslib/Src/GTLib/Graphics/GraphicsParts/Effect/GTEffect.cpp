@@ -199,8 +199,6 @@ void GTEffect::finish_effect(){
 	if (memory_pool_ != nullptr)memory_pool_->Release();
 	// 次に描画用インスタンスを破棄
 	if (g_renderer != nullptr)g_renderer.Reset();
-	// 次にグラフィックデバイスを破棄
-	if (g_graphicsDevice != nullptr)g_graphicsDevice.Reset();
 }
 //指定したエフェクトを破棄
 void GTEffect::delete_effect(GTUINT effect_id) {

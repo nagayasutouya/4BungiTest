@@ -189,6 +189,9 @@ public:
         // パイプライン状態の基本設定
         PipelineSetup::setup_defaults();
 
+        //エフェクシアの初期化
+        Graphics::initialize_effect();
+
         // レンダーターゲットの作成(ゲーム側で想定する解像度に設定する）
         Graphics::create_render_texture(GTLibTextureID::Instance()->render_target_id_min(), (UINT)screen_size_.x, (UINT)screen_size_.y);
         Graphics::create_depth_texture(GTLibTextureID::Instance()->depth_id_min(), (UINT)screen_size_.x, (UINT)screen_size_.y);
