@@ -8,7 +8,7 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
     // スワップチェーンの作成
     IDXGIFactory6* dxgi_factory{};
     HRESULT hr = CreateDXGIFactory2(0, IID_PPV_ARGS(&dxgi_factory));
-    if (FAILED(hr)){
+    if (FAILED(hr)) {
         OutputDebugStringA("DXGIFactory Creation Failed!\n");
     }
     desc_.Width = width;
@@ -30,7 +30,6 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
         nullptr,
         nullptr,
         (IDXGISwapChain1**)&swap_chain_);
-    dxgi_factory->Release();
     // Alt+Enter 処理を無視させる
     dxgi_factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
     dxgi_factory->Release();
@@ -42,8 +41,6 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
     heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     heapDesc.NodeMask = 0;
     device->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&render_target_heaps_));
-    // バックバッファのレンダーターゲットビューを作成
-    create_render_target_views();
     // デプスステンシルビューの作成
     D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
     dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -51,6 +48,8 @@ FrameBuffer::FrameBuffer(ID3D12Device* device, HWND hwnd, UINT width, UINT heigh
     dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
     dsvHeapDesc.NodeMask = 0;
     device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&depth_stencil_heap_));
+    // バックバッファのレンダーターゲットビューを作成
+    create_render_target_views();
     // デプス・ステンシルバッファの作成
     create_depth_stencil_buffer();
 }
@@ -142,7 +141,7 @@ void FrameBuffer::set_borderless_fullscreen(bool fullscreen) {
             SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 
         // バックバッファをモニター解像度に合わせてリサイズ
-        resize((UINT)(mr.right - mr.left), (UINT)(mr.bottom - mr.top));
+        resize(static_cast<UINT>(mr.right - mr.left), static_cast<UINT>(mr.bottom - mr.top));
     }
     else {
         // ウィンドウスタイルと位置を復元
@@ -157,8 +156,8 @@ void FrameBuffer::set_borderless_fullscreen(bool fullscreen) {
         RECT client_rect;
         GetClientRect(hwnd_, &client_rect);
         // バックバッファをクライアント領域のサイズに合わせてリサイズ
-        resize((UINT)(client_rect.right - client_rect.left),
-            (UINT)(client_rect.bottom - client_rect.top));
+        resize(static_cast<UINT>(client_rect.right - client_rect.left),
+            static_cast<UINT>(client_rect.bottom - client_rect.top));
     }
     is_fullscreen_ = fullscreen;
 }

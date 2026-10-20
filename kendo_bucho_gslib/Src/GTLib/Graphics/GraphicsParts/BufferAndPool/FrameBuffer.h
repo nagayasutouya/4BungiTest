@@ -45,7 +45,7 @@ private:
     static const UINT FrameBufferCount{ 2 };
 
     // DirectX12デバイス
-    ID3D12Device* device_{nullptr};
+    ID3D12Device* device_{ nullptr };
     // ウィンドウハンドル
     HWND hwnd_{};
     // スワップチェーンディスクリプタ
@@ -75,4 +75,3 @@ private:
 };
 
 #endif
-
