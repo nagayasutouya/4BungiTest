@@ -303,6 +303,12 @@
     <ClCompile Include="Src\GTLib\GTLibTextrueID.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\stb_image.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\DDSTextureLoader12.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Actor.h">
@@ -1011,6 +1017,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\GTLib\GTLibTextrueID.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\stb_image.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\DDSTextureLoader12.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

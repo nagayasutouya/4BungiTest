@@ -210,9 +210,11 @@
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Mesh\SkinnedMesh.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\RenderTarget.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\RootSignature.cpp" />
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\DDSTextureLoader12.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\DepthTexture.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\lodepng.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\RenderTexture.cpp" />
+    <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\stb_image.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Texture\Texture.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\PipelineSetParts\PipelineSetup.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\PipelineSetParts\PipelineState.cpp" />
@@ -434,9 +436,11 @@
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\RenderTarget.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\RootSignature.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\StaticSampler.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\DDSTextureLoader12.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\DepthTexture.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\lodepng.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\RenderTexture.h" />
+    <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\stb_image.h" />
     <ClInclude Include="Src\GTLib\Graphics\GraphicsParts\Texture\Texture.h" />
     <ClInclude Include="Src\GTLib\Graphics\PipelineSetParts\PipelineSetup.h" />
     <ClInclude Include="Src\GTLib\Graphics\PipelineSetParts\PipelineState.h" />
