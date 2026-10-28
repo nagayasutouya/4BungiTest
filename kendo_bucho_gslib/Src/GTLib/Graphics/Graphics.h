@@ -192,6 +192,17 @@ namespace Graphics {
     void update_effect(float delta_time);
     //エフェクトの描画
     void draw_effect();
+    //エフェクトの読み込み
+    void load_effect(int effect_id, std::string path, float scale = 1.0f);
+    //指定したエフェクトを削除
+    void delete_effect(int effect_id);
+    //指定したエフェクトを再生
+    int play_effect(int effect_id, Vector3 position);
+    int play_effect(int effect_id, Matrix4x4 position);
+    //指定したエフェクトを停止
+    void stop_effect(int handle);
+    //全てのエフェクトを停止
+    void stop_all_effect();
 
     // レンダーテクスチャの作成
     RenderTexture* create_render_texture(std::uint32_t texture_id,

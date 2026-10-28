@@ -655,6 +655,35 @@ void Graphics::draw_effect(){
     if (g_gteffect_ == nullptr)return;
     g_gteffect_->draw_effect();
 }
+//エフェクトの読み込み
+void Graphics::load_effect(int effect_id, std::string path, float scale) {
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->load_effect((GTUINT)effect_id, path.c_str(), scale);
+}
+//指定したエフェクトを削除
+void Graphics::delete_effect(int effect_id) {
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->delete_effect(effect_id);
+}
+//指定したエフェクトを再生
+int Graphics::play_effect(int effect_id, Vector3 position) {
+    if (g_gteffect_ == nullptr)return -1;
+    return g_gteffect_->play_effect((GTUINT)effect_id, &position);
+}
+int Graphics::play_effect(int effect_id, Matrix4x4 position) {
+    if (g_gteffect_ == nullptr)return -1;
+    return g_gteffect_->play_effect_mat((GTUINT)effect_id, &position);
+}
+//指定したエフェクトを停止
+void Graphics::stop_effect(int handle) {
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->stop_effect(handle);
+}
+//全てのエフェクトを停止
+void Graphics::stop_all_effect() {
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->stop_all_effects();
+}
 
 // レンダーターゲットの作成
 RenderTexture* Graphics::create_render_texture(std::uint32_t texture_id,

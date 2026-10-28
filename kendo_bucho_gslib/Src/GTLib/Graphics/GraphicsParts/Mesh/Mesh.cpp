@@ -23,105 +23,92 @@ Mesh::~Mesh() {
 // ファイルの読み込み
 void Mesh::load(const std::string& file_name) {
     // メッシュファイルの読み込み
-    std::ifstream file(file_name);
+    std::ifstream file{ file_name, std::ios::binary };
     // ファイルのオープンに成功？
     if (!file) {
-        throw std::runtime_error("can not open " + file_name);
+        // 失敗したときは例外を投げる
+        throw std::runtime_error("Cannot Open File : " + file_name);
     }
-    // 解放
+    // 初期化
     clear();
 
-    // メッシュファイルのフォルダ取得
+    // メッシュファイルのパス
     std::filesystem::path mesh_path{ file_name };
-    // テクスチャファイルのフォルダ
-    std::string texture_path;
-    // メッシュファイルにフォルダの指定があるか？
-    if (mesh_path.has_parent_path()) {
-        // メッシュファイルのフォルダをテクスチャファイルのフォルダとする
-        texture_path = mesh_path.parent_path().string() + "/";
-    }
+    // メッシュファイルのフォルダをテクスチャファイルの基準フォルダとする
+    std::filesystem::path texture_path = mesh_path.parent_path();
 
     // マテリアル配列の読み込み
-    int num_material = 0;
-    file >> num_material;
-    for (int i = 0; i < num_material; ++i) {
-        MaterialParams cb;
+    unsigned int num_material = 0;
+    file.read(reinterpret_cast<char*>(&num_material), sizeof(num_material));
+    for (unsigned int i = 0; i < num_material; ++i) {
+        MaterialParams cb{};
         // マテリアルの読み込み
-        file >> cb.ambient.r >> cb.ambient.g >> cb.ambient.b >> cb.ambient.a;
-        file >> cb.diffuse.r >> cb.diffuse.g >> cb.diffuse.b >> cb.diffuse.a;
-        file >> cb.specular.r >> cb.specular.g >> cb.specular.b >> cb.specular.a;
-        file >> cb.emission.r >> cb.emission.g >> cb.emission.b >> cb.emission.a;
-        file >> cb.shininess;
-        // テクスチャファイルの読み込み
-        std::string texture_file_name;
-        file >> texture_file_name;
+        file.read(reinterpret_cast<char*>(&cb.ambient), sizeof(Color));
+        file.read(reinterpret_cast<char*>(&cb.diffuse), sizeof(Color));
+        file.read(reinterpret_cast<char*>(&cb.specular), sizeof(Color));
+        file.read(reinterpret_cast<char*>(&cb.emission), sizeof(Color));
+        file.read(reinterpret_cast<char*>(&cb.shininess), sizeof(float));
+
+        // テクスチャファイル名の読み込み（128バイト固定バッファ）
+        char texture_file_name[128]{};
+        file.read(texture_file_name, sizeof(texture_file_name));
 
         Material mat;
         // マテリアル定数バッファの作成
-        mat.constant_buffer = device_->create_constant_buffer(&cb, sizeof(MaterialParams));
+        mat.constant_buffer.reset(device_->create_constant_buffer(&cb, sizeof(MaterialParams)));
         // テクスチャの作成
-        mat.texture = device_->create_texture(texture_path + texture_file_name);
+        if (texture_file_name[0] != '\0') {
+            mat.texture.reset(device_->create_texture((texture_path / texture_file_name).string()));
+        }
         // マテリアルの追加
-        materials_.push_back(mat);
+        materials_.push_back(std::move(mat));
+
     }
 
     // サブセットの読み込み
-    int num_subset = 0;
-    file >> num_subset;
-    for (int i = 0; i < num_subset; ++i) {
-        Subset subset;
-        file >> subset.material >> subset.start >> subset.count;
-        subsets_.push_back(subset);
-    }
+    unsigned int num_subset = 0;
+    file.read(reinterpret_cast<char*>(&num_subset), sizeof(num_subset));
+    subsets_.resize(num_subset);
+    file.read(reinterpret_cast<char*>(subsets_.data()), sizeof(Subset) * num_subset);
 
     // インデックスバッファの読み込み
-    std::vector<unsigned int> indices;
-    UINT num_index;
-    file >> num_index;
-    for (UINT i = 0; i < num_index; ++i) {
-        unsigned int index;
-        file >> index;
-        indices.push_back(index);
-    }
+    // インデックスデータのストライドの読み込み
+    unsigned int index_stride = 0;
+    file.read(reinterpret_cast<char*>(&index_stride), sizeof(index_stride));
+    unsigned int index_buffer_size = 0;
+    // インデックスデータのバイトサイズを読み込み
+    file.read(reinterpret_cast<char*>(&index_buffer_size), sizeof(index_buffer_size));
+    // インデックスデータの読み込み
+    std::vector<char> indices(index_buffer_size);
+    file.read(indices.data(), index_buffer_size);
 
     // 頂点データの読み込み
-    std::vector<Vertex> vertices;
-    int num_vertex;
-    file >> num_vertex;
-    for (int i = 0; i < num_vertex; ++i) {
-        Vertex vertex;
-        file >> vertex.position.x >> vertex.position.y >> vertex.position.z;
-        file >> vertex.normal.x >> vertex.normal.y >> vertex.normal.z;
-        file >> vertex.texcoord.x >> vertex.texcoord.y;
-        for (int j = 0; j < 4; ++j) {
-            unsigned int bone_index;
-            file >> bone_index;
-            vertex.bone_indices[j] = (unsigned char)bone_index;
-        }
-        for (int j = 0; j < 4; ++j) {
-            file >> vertex.bone_weights[j];
-        }
-        vertices.push_back(vertex);
-    }
-
+    // 頂点データのストライドの読み込み
+    unsigned int vertex_stride = 0;
+    file.read(reinterpret_cast<char*>(&vertex_stride), sizeof(vertex_stride));
+    // 頂点データのバイトサイズを読み込み
+    unsigned int vertex_buffer_size = 0;
+    file.read(reinterpret_cast<char*>(&vertex_buffer_size), sizeof(vertex_buffer_size));
+    // 頂点データの読み込み
+    std::vector<char> vertices(vertex_buffer_size);
+    file.read(vertices.data(), vertex_buffer_size);
     // 頂点バッファの作成
-    vertices_ = device_->create_vertex_buffer(vertices.data(),
-        (UINT)(sizeof(Vertex) * vertices.size()), (UINT)sizeof(Vertex));
+    vertices_.reset(device_->create_vertex_buffer(vertices.data(), vertex_buffer_size, vertex_stride));
     // インデックスバッファの作成
-    indices_ = device_->create_index_buffer(indices.data(),
-        (UINT)(sizeof(unsigned int) * indices.size()), DXGI_FORMAT_R32_UINT);
+    DXGI_FORMAT index_format = (index_stride == 2) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+    indices_.reset(device_->create_index_buffer(indices.data(), index_buffer_size, index_format));
 }
 // 描画
 void Mesh::draw(unsigned int instance_count, unsigned int instance_num_offset,unsigned int start_vartex) const {
     // 頂点バッファとインデックスバッファの設定
-    device_->set_vertex_buffer(0, vertices_);
-    device_->set_index_buffer(indices_);
+    device_->set_vertex_buffer(0, vertices_.get());
+    device_->set_index_buffer(indices_.get());
     // サブセットごとに描画
     for (const auto& subset : subsets_) {
         // マテリアル用コンスタントバッファの設定
-        device_->set_constant_buffer(3, materials_[subset.material].constant_buffer);
+        device_->set_constant_buffer(3, materials_[subset.material].constant_buffer.get());
         // マテリアル用テクスチャの設定
-        device_->set_texture(0, materials_[subset.material].texture);
+        device_->set_texture(0, materials_[subset.material].texture.get());
         // ポリゴンの描画
         device_->draw_indexed(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST, subset.count, subset.start,start_vartex,instance_count,instance_num_offset);
     }
@@ -129,16 +116,10 @@ void Mesh::draw(unsigned int instance_count, unsigned int instance_num_offset,un
 // 解放
 void Mesh::clear() {
     // マテリアルの削除
-    for (const auto& mat : materials_) {
-        delete mat.constant_buffer;
-        delete mat.texture;
-    }
     materials_.clear();
     // サブセットの消去
     subsets_.clear();
     // バッファの削除
-    delete vertices_;
-    vertices_ = nullptr;
-    delete indices_;
-    indices_ = nullptr;
+    vertices_.reset();
+    indices_.reset();
 }

@@ -475,6 +475,7 @@
     <ClInclude Include="Src\GTLib\Sound\SoundEffect.h" />
     <ClInclude Include="Src\GTLib\Util\AssetsManager\AssetsLoad.h" />
     <ClInclude Include="Src\GTLib\Util\AssetsManager\BindPathAndAssetsID.h" />
+    <ClInclude Include="Src\GTLib\Util\AssetsManager\LoadDevide.h" />
     <ClInclude Include="Src\GTLib\Util\AssetsManager\LoadPath.h" />
     <ClInclude Include="Src\GTLib\Util\ControllerXInput.h" />
     <ClInclude Include="Src\GTLib\Util\CSVReader.h" />

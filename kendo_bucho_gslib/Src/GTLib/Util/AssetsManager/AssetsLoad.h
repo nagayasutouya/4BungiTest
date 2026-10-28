@@ -182,6 +182,9 @@ private:
 			result.skelton_path_ = row.at(3);
 			result.animation_path_=row.at(4);
 		}
+		else if (genre_id == "Effect") {
+			result.scale_ = stoi(row.at(3));
+		}
 		return result;
 	}
 };

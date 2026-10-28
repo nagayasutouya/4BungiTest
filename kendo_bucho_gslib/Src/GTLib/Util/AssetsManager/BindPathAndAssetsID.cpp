@@ -41,7 +41,7 @@ void BindPathAndAssetsID::Load(std::string genre, Row genre_list, AssetsData dat
 	//ロード部分対応分増やす　あとAssetsDataの構造体にBGM SEに対応できるようにする
 	if (genre == genre_list.at(0))Graphics::load_skinned_mesh(data.id_, data.path_.c_str(),data.skelton_path_,data.animation_path_);
 	//else if (genre == genre_list.at(1))gsLoadOctree(data.id_, data.path_.c_str());
-	//else if (genre == genre_list.at(2))gsLoadEffect(data.id_, data.path_.c_str());
+	else if (genre == genre_list.at(2))Graphics::load_effect(data.id_, data.path_.c_str(), data.scale_);
 	else if (genre == genre_list.at(3))Sound::load_bgm(data.id_, data.path_.c_str(), data.loop_);
 	else if (genre == genre_list.at(4))Sound::load_se(data.id_, data.path_.c_str(), data.play_count_, data.volume_);
 	else if (genre == genre_list.at(5))Graphics::load_texture (data.id_, data.path_.c_str());
@@ -102,7 +102,7 @@ void BindPathAndAssetsID::Delete(std::string genre, Row genre_list, AssetsData d
 	//ロード部分対応分増やす　あとAssetsDataの構造体にBGM SEに対応できるようにする
 	if (genre == genre_list.at(0))Graphics::delete_skinned_mesh(data.id_);
 	//else if (genre == genre_list.at(1))gsDeleteOctree(data.id_);
-	//else if (genre == genre_list.at(2))gsDeleteEffect(data.id_);
+	else if (genre == genre_list.at(2))Graphics::delete_effect(data.id_);
 	else if (genre == genre_list.at(3)|| genre == genre_list.at(4))Sound::delete_sound_effect(data.id_);
 	else if (genre == genre_list.at(5))Graphics::delete_texture(data.id_);
 	//else if (genre == genre_list.at(6))gsDeleteShader(data.id_);

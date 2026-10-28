@@ -2,20 +2,30 @@
 #include "SceneManager.h"
 #include "GamePlayScene.h"
 #include "TitleScene.h"
+#include "GTLib/GTLibTextrueID.h"
+#include "GTLib/GTLibCollision.h"
+static const Vector2 FirstScreenSize{ 1920.0f,1080.0f };//スクリーンサイズの初期値
+
 
 #include "Sibungi/FPSCheck.h"
 
 class MyGame : public Game {
 public:
     // コンストラクタ
-    MyGame() : Game{ 1920, 1080 } {}
+    MyGame() : Game{ 1920, 1080,"GGG",true} {}
     // 開始
     void start() override {
-        // グラフィックスシステムの初期化
-        Graphics::initialize(graphics_device_);
         // パイプラインステートの基本設定
         PipelineSetup::setup_defaults();
         Graphics::initialize_effect();
+        //当たり判定システムの初期化
+        CollisionPhysics::initialize();
+        // レンダーターゲットの作成(ゲーム側で想定する解像度に設定する）
+        back_buffer_id_ = GTLibTextureID::Instance()->render_target_id_min();
+        Graphics::create_render_texture(back_buffer_id_, (UINT)FirstScreenSize.x, (UINT)FirstScreenSize.y);
+        back_buffer_depth_id_ = GTLibTextureID::Instance()->depth_id_min();
+        Graphics::create_depth_texture(back_buffer_depth_id_, (UINT)FirstScreenSize.x, (UINT)FirstScreenSize.y);
+
         scene_manager_.add("TitleScene", new TitleScene());
         scene_manager_.add("GamePlayScene", new GamePlayScene());
         scene_manager_.change("TitleScene");
@@ -35,7 +45,18 @@ public:
         if (stop_)return;
         // シーン開始
         Graphics::begin_scene(0.5f, 0.5f, 1.0f, 1.0f);
+        // レンダーターゲットに描画開始
+        Graphics::begin_render_target(back_buffer_id_, back_buffer_depth_id_);
+        //レンダーターゲットをクリア
+        Graphics::clear_color_buffer(0.0f, 0.0f, 0.0f, 1.0f);
+        //デプスバッファをクリア
+        Graphics::clear_depth_buffer();
+        //シーン描画
         scene_manager_.draw();
+        // レンダーターゲットの描画終了
+        Graphics::end_render_target();
+        // レンダーターゲットをバックバッファに転送
+        Graphics::blit_to_back_buffer(0, PipelineStateID::Blit);
         // シーン終了
         Graphics::end_scene();
     }
@@ -50,11 +71,76 @@ private:
     bool stop_{false};
     //FPS
     FPSCheck fps_;
+    GTUINT back_buffer_id_{ 0 };//バックバッファ用テクスチャID
+    GTUINT back_buffer_depth_id_{ 0 };//バックバッファ用深度テクスチャID
 };
-
 int main() {
     return MyGame().run();
 }
+
+// メッシュ描画テスト
+//class MyGame : public Game {
+//    // 回転角度
+//    float angle_{ 0.0f };
+//
+//    // 開始
+//    void start() override {
+//        // パイプラインステートの基本設定
+//        PipelineSetup::setup_defaults();
+//
+//        // メッシュの読み込み（バイナリファイルを指定する）
+//        Graphics::load_mesh(0, "Assets/Binaly/koutei.mesh");
+//
+//        // ライトの設定
+//        Graphics::Light light;
+//        light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
+//        light.diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+//        light.specular = { 1.0f, 1.0f, 1.0f, 1.0f };
+//        light.position = { 100.0f, 100.0f, 100.0f };
+//        Graphics::set_light(light);
+//    }
+//    // 更新
+//    void update(float delta_time) override {
+//        // 回転角更新
+//        angle_ += 60.0f * delta_time;
+//    }
+//    // 描画
+//    void draw() override {
+//        // シーン開始
+//        Graphics::begin_scene(0.5f, 0.5f, 1.0f, 1.0f);
+//
+//        // 透視射影行列の設定
+//        Matrix4x4 proj = Matrix4x4::perspective(45.0f, 640.0f / 480.0f, 0.1f, 1000.0f);
+//        Graphics::set_projection_matrix(proj);
+//        // 視野変換行列の設定
+//        Matrix4x4 view = Matrix4x4::look_at(
+//            Vector3{ 0.0f, 10.0f, 20.0f },
+//            Vector3{ 0.0f, 0.0f,  0.0f },
+//            Vector3{ 0.0f, 1.0f,  0.0f });
+//        Graphics::set_view_matrix(view);
+//
+//
+//        // ワールド変換行列の設定
+//        Matrix4x4 world = Matrix4x4::rotate_y(angle_);
+//        Graphics::set_world_matrix(world);
+//
+//        // メッシュ描画
+//        Graphics::draw_mesh(0);
+//
+//        // シーン終了
+//        Graphics::end_scene();
+//    }
+//
+//    // 終了
+//    void end() override {
+//        // メッシュの削除
+//        Graphics::delete_mesh(0);
+//    }
+//};
+//
+//int main() {
+//    return MyGame().run();
+//}
 
 
 
@@ -163,12 +249,12 @@ int main() {
 //#include "GTLib/GTLib.h"
 //#include "GTLib/GTLibTextrueID.h"
 //#include "GTLib/GTLibCollision.h"
-
-//// メイン関数
-//int main() {
-//    return MyGame().run();
-//}
-
+//
+////// メイン関数
+////int main() {
+////    return MyGame().run();
+////}
+//
 //static const Vector2 screen_size_{ 640.0f,480.0f };
 //// メッシュ衝突判定テスト
 //class MyGame : public Game {
@@ -197,12 +283,12 @@ int main() {
 //        Graphics::create_depth_texture(GTLibTextureID::Instance()->depth_id_min(), (UINT)screen_size_.x, (UINT)screen_size_.y);
 //
 //        // メッシュコライダーファイルの読み込み
-//        CollisionPhysics::load_mesh_collider(0, "Assets/test/Terrain.col");
+//        //CollisionPhysics::load_mesh_collider(0, "Assets/test/Terrain.col");
 //
 //        // ステージのメッシュの読み込み
-//        Graphics::load_mesh(0, "Assets/test/Terrain.mesh");
+//        //Graphics::load_mesh(0, "Assets/test/Terrain.mesh");
 //        // 球体メッシュの読み込み
-//        Graphics::load_mesh(1, "Assets/test/Sphere.mesh");
+//        //Graphics::load_mesh(1, "Assets/test/Sphere.mesh");
 //
 //        // ライトの設定
 //        Graphics::Light light;
@@ -297,8 +383,8 @@ int main() {
 //        CollisionPhysics::finalize();
 //    }
 //};
-
-// メイン関数
+//
+////メイン関数
 //int main() {
 //    return MyGame().run();
 //}

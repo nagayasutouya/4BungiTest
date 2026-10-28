@@ -28,19 +28,17 @@ const struct AssetsData {
 	int id_ = -1;
 	std::string path_ = "";
 	std::string genre_id = "";
-
 	//スキニングメッシュ用
 	std::string skelton_path_ = "";
 	std::string animation_path_ = "";
-
 	//シェーダー用
 	std::string fragment_shader_name_ = "";
-
 	//BGM
 	bool loop_ = false;
-
 	//SE
 	int play_count_ = 0;
 	int volume_ = 0;
+	//エフェクト
+	float scale_ = 1.0f;
 };
 #endif
