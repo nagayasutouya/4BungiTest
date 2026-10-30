@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "GTLib/Math/Vector2.h"
 #include "GTLib/Math/Vector3.h"
 #include "GTLib/Math/Color.h"
@@ -19,24 +20,16 @@ class Mesh {
 public:
     // マテリアル構造体
     struct Material {
-        // コンスタントバッファ
-        ConstantBuffer* constant_buffer{ nullptr };
+        // 定数バッファ
+        std::unique_ptr<ConstantBuffer> constant_buffer;
         // テクスチャ
-        Texture* texture{ nullptr };
+        std::unique_ptr<Texture>        texture;
     };
     // サブセット構造体
     struct Subset {
         int             material;           // マテリアル番号
         int             start;              // インデックスの開始位置
         int             count;              // インデックス数
-    };
-    // 頂点データ構造体
-    struct Vertex {
-        Vector3         position;           // 座標
-        Vector3         normal;             // 法線ベクトル
-        Vector2         texcoord;           // テクスチャ座標
-        unsigned char   bone_indices[4];    // ボーンインデックス
-        float           bone_weights[4];    // ボーンウェイト
     };
 
 public:
@@ -63,9 +56,9 @@ private:
     // サブセット配列
     std::vector<Subset>     subsets_;
     // インデックスバッファ
-    IndexBuffer* indices_{ nullptr };
+    std::unique_ptr<IndexBuffer> indices_;
     // 頂点バッファ
-    VertexBuffer* vertices_{ nullptr };
+    std::unique_ptr<VertexBuffer> vertices_;
 };
 
 #endif
