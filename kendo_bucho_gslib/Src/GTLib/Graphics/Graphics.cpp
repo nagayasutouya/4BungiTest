@@ -147,11 +147,15 @@ void Graphics::finalize() {
 void Graphics::begin_scene(float r, float g, float b, float a) {
     s_cb_camera_dirty = true;
     s_cb_light_dirty = true;
-    set_root_signature();
-    set_descriptor_heaps();
+    set_graphics_param();
     s_graphics_device->begin_render_back_buffer();
     clear_color_buffer(r, g, b, a);
     clear_depth_buffer();
+}
+//パイプラインステートとデプスバッファの設定をする
+void Graphics::set_graphics_param() {
+    set_root_signature();
+    set_descriptor_heaps();
 }
 // 描画の終了
 void Graphics::end_scene() {
@@ -683,6 +687,21 @@ void Graphics::stop_effect(int handle) {
 void Graphics::stop_all_effect() {
     if (g_gteffect_ == nullptr)return;
     g_gteffect_->stop_all_effects();
+}
+//エフェクトの色を変更する
+void Graphics::change_effect_color(int handle, Color color) {
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->set_effect_color(handle, &color);
+}
+//エフェクトの座標を変更する
+void Graphics::set_effect_position(int handle, Vector3 position) {
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->set_effect_position(handle, &position);
+}
+//エフェクトを回転させる
+void Graphics::set_effect_rotation(int handle, Vector3 rotate_vector, float angle) {
+    if (g_gteffect_ == nullptr)return;
+    g_gteffect_->set_effect_rotation_axis_angle(handle, &rotate_vector, angle);
 }
 
 // レンダーターゲットの作成

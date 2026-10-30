@@ -168,22 +168,22 @@ private:
 		result.path_ = row.at(2);
 		result.genre_id = genre_id;
 		//‰ü‘Pƒ|ƒCƒ“ƒg
-		if (genre_id == "Shader") {
+		if (genre_id == AssetsLoadGenreName::Shader) {
 			result.fragment_shader_name_ = row.at(3);
 		}
-		else if (genre_id == "SE") {
-			result.play_count_= stoi(row.at(3));
-			result.volume_=stoi(row.at(4));
+		else if (genre_id == AssetsLoadGenreName::SE) {
+			result.play_count_ = stoi(row.at(3));
+			result.volume_ = stoi(row.at(4));
 		}
-		else if (genre_id == "BGM") {
-			result.loop_= (stoi(row.at(3))> 0)?true:false;
+		else if (genre_id == AssetsLoadGenreName::BGM) {
+			result.loop_ = (stoi(row.at(3)) > 0) ? true : false;
 		}
-		else if (genre_id == "Mesh") {
+		else if (genre_id == AssetsLoadGenreName::SkinnedMesh) {
 			result.skelton_path_ = row.at(3);
-			result.animation_path_=row.at(4);
+			result.animation_path_ = row.at(4);
 		}
-		else if (genre_id == "Effect") {
-			result.scale_ = stoi(row.at(3));
+		else if (genre_id == AssetsLoadGenreName::Effect) {
+			result.scale_ = stof(row.at(3));
 		}
 		return result;
 	}

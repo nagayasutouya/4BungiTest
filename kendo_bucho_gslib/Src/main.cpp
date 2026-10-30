@@ -12,7 +12,7 @@ static const Vector2 FirstScreenSize{ 1920.0f,1080.0f };//スクリーンサイズの初期
 class MyGame : public Game {
 public:
     // コンストラクタ
-    MyGame() : Game{ 1920, 1080,"GGG",true} {}
+    MyGame() : Game{ (int)FirstScreenSize.x, (int)FirstScreenSize.y ,"DMFD",true } {}
     // 開始
     void start() override {
         // パイプラインステートの基本設定
@@ -55,8 +55,10 @@ public:
         scene_manager_.draw();
         // レンダーターゲットの描画終了
         Graphics::end_render_target();
+        //設定をGTLibに戻す
+        Graphics::set_graphics_param();
         // レンダーターゲットをバックバッファに転送
-        Graphics::blit_to_back_buffer(0, PipelineStateID::Blit);
+        Graphics::blit_to_back_buffer(back_buffer_id_, PipelineStateID::Blit);
         // シーン終了
         Graphics::end_scene();
     }

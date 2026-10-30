@@ -189,6 +189,7 @@
     <ClCompile Include="Src\EnemyGenerator.cpp" />
     <ClCompile Include="Src\Field.cpp" />
     <ClCompile Include="Src\GamePlayScene.cpp" />
+    <ClCompile Include="Src\GTLib\Data\AssetsStructs.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\GraphicsParts\Effect\GTEffect.cpp" />
     <ClCompile Include="Src\GTLib\Data\GenreName.cpp" />
     <ClCompile Include="Src\GTLib\Graphics\Game.cpp" />
@@ -259,6 +260,11 @@
     <ClCompile Include="Src\GTLib\Util\SystemLog\CreatLog.cpp" />
     <ClCompile Include="Src\GTLib\Util\SystemLog\PacketDebugWindow.cpp" />
     <ClCompile Include="Src\GTLib\Util\SystemLog\UtilLogFolder.cpp" />
+    <ClCompile Include="Src\GTLib\Util\Tween\Tween.cpp" />
+    <ClCompile Include="Src\GTLib\Util\Tween\TweenUnit.cpp" />
+    <ClCompile Include="Src\GTLib\Util\Tween\ValueUnit.cpp" />
+    <ClCompile Include="Src\GTLib\Util\Tween\Vector2Unit.cpp" />
+    <ClCompile Include="Src\GTLib\Util\Tween\Vector3Unit.cpp" />
     <ClCompile Include="Src\GTLib\Util\Util.cpp" />
     <ClCompile Include="Src\Light.cpp" />
     <ClCompile Include="Src\main.cpp" />
@@ -495,6 +501,12 @@
     <ClInclude Include="Src\GTLib\Util\SystemLog\CreatLog.h" />
     <ClInclude Include="Src\GTLib\Util\SystemLog\PacketDebugWindow.h" />
     <ClInclude Include="Src\GTLib\Util\SystemLog\UtilLogFolder.h" />
+    <ClInclude Include="Src\GTLib\Util\Tween\Easing.h" />
+    <ClInclude Include="Src\GTLib\Util\Tween\Tween.h" />
+    <ClInclude Include="Src\GTLib\Util\Tween\TweenUnit.h" />
+    <ClInclude Include="Src\GTLib\Util\Tween\ValueUnit.h" />
+    <ClInclude Include="Src\GTLib\Util\Tween\Vector2Unit.h" />
+    <ClInclude Include="Src\GTLib\Util\Tween\Vector3Unit.h" />
     <ClInclude Include="Src\GTLib\Util\Util.h" />
     <ClInclude Include="Src\IScene.h" />
     <ClInclude Include="Src\IWorld.h" />

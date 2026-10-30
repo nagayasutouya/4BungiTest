@@ -30,6 +30,8 @@ namespace Graphics {
 
     // 描画の開始
     void begin_scene(float r = 0.0f, float g = 0.0f, float b = 0.0f, float a = 1.0f);
+    //パイプラインステートとデプスバッファの設定をする
+    void set_graphics_param();
     // 描画の終了
     void end_scene();
 
@@ -203,6 +205,12 @@ namespace Graphics {
     void stop_effect(int handle);
     //全てのエフェクトを停止
     void stop_all_effect();
+    //エフェクトの色を変更する
+    void change_effect_color(int handle, Color color);
+    //エフェクトの座標を変更する
+    void set_effect_position(int handle, Vector3 position);
+    //エフェクトを回転させる
+    void set_effect_rotation(int handle, Vector3 rotate_vector, float angle);
 
     // レンダーテクスチャの作成
     RenderTexture* create_render_texture(std::uint32_t texture_id,
