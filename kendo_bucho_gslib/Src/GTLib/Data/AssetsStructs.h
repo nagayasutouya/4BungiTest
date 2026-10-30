@@ -28,19 +28,29 @@ const struct AssetsData {
 	int id_ = -1;
 	std::string path_ = "";
 	std::string genre_id = "";
-
 	//スキニングメッシュ用
 	std::string skelton_path_ = "";
 	std::string animation_path_ = "";
-
 	//シェーダー用
 	std::string fragment_shader_name_ = "";
-
 	//BGM
 	bool loop_ = false;
-
 	//SE
 	int play_count_ = 0;
 	int volume_ = 0;
+	//エフェクト
+	float scale_ = 1.0f;
 };
+namespace AssetsLoadGenreName {
+	extern const std::string Mesh;
+	extern const std::string SkinnedMesh;
+	extern const std::string Octree;
+	extern const std::string Effect;
+	extern const std::string BGM;
+	extern const std::string SE;
+	extern const std::string Texture;
+	extern const std::string Shader;
+	extern const std::string ReflectionProbe;
+	extern const std::string Lightmap;
+}
 #endif

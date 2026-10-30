@@ -30,6 +30,8 @@ namespace Graphics {
 
     // 描画の開始
     void begin_scene(float r = 0.0f, float g = 0.0f, float b = 0.0f, float a = 1.0f);
+    //パイプラインステートとデプスバッファの設定をする
+    void set_graphics_param();
     // 描画の終了
     void end_scene();
 
@@ -192,6 +194,23 @@ namespace Graphics {
     void update_effect(float delta_time);
     //エフェクトの描画
     void draw_effect();
+    //エフェクトの読み込み
+    void load_effect(int effect_id, std::string path, float scale = 1.0f);
+    //指定したエフェクトを削除
+    void delete_effect(int effect_id);
+    //指定したエフェクトを再生
+    int play_effect(int effect_id, Vector3 position);
+    int play_effect(int effect_id, Matrix4x4 position);
+    //指定したエフェクトを停止
+    void stop_effect(int handle);
+    //全てのエフェクトを停止
+    void stop_all_effect();
+    //エフェクトの色を変更する
+    void change_effect_color(int handle, Color color);
+    //エフェクトの座標を変更する
+    void set_effect_position(int handle, Vector3 position);
+    //エフェクトを回転させる
+    void set_effect_rotation(int handle, Vector3 rotate_vector, float angle);
 
     // レンダーテクスチャの作成
     RenderTexture* create_render_texture(std::uint32_t texture_id,
