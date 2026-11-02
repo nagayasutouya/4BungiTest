@@ -18,7 +18,7 @@ void Skeleton::load(const std::string& file_name) {
         // É{Å[ÉìÇÃì«Ç›çûÇ›
         Bone bone{};
         char bone_name[128]{};
-        file.read(/*reinterpret_cast<char*>(&*/bone_name/*)*/ , sizeof(bone_name));
+        file.read(bone_name , sizeof(bone_name));
         bone.name = bone_name;
         file.read(reinterpret_cast<char*>(&bone.id), sizeof(int));
         file.read(reinterpret_cast<char*>(&bone.parent_id), sizeof(int));

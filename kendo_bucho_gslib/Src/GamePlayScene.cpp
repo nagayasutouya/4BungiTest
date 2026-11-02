@@ -7,13 +7,14 @@
 #include "CameraTPS.h"
 #include "Radar.h"
 #include "Assets.h"
+#include "GTLib/GTLibCollision.h"
 
 // 開始
 void GamePlayScene::start() {
     // 剣道部長メッシュの読み込み
     Graphics::load_skinned_mesh(Mesh_Player, "Assets/Binary/kendo.mesh", "Assets/Binary/kendo.skel", "Assets/Binary/kendo.anim");
     // 剣道部長メッシュの読み込み
-    //Graphics::load_instance_skinned_mesh(Mesh_Enemy, "Assets/model/Karate/Karate_mesh.txt", "Assets/model/Karate/Karate_skeleton.txt", "Assets/model/Karate/Karate_animations.txt");
+    Graphics::load_instance_skinned_mesh(Mesh_Enemy, "Assets/Binary/karate.mesh", "Assets/Binary/karate.skel", "Assets/Binary/karate.anim");
     //Graphics::load_skinned_mesh(Mesh_Enemy, "Assets/model/Karate/Karate_mesh.txt", "Assets/model/Karate/Karate_skeleton.txt", "Assets/model/Karate/Karate_animations.txt");
 
     // スカイボックス用テクスチャの読み込み
@@ -22,6 +23,8 @@ void GamePlayScene::start() {
     Graphics::load_mesh(Octree_Koutei, "Assets/Binary/koutei.mesh");
     // 校庭衝突判定用オクトリーの読み込み
     //Graphics::load_mesh(Octree_KouteiCollider, "Assets/model/Koutei/koutei_collider.oct");
+    CollisionPhysics::initialize();
+    CollisionPhysics::load_mesh_collider(0, "Assets/Binary/koutei.col");
 
     // 数値用テクスチャの読み込み
     Graphics::load_texture(Texture_Number, "Assets/texture/num.png");
@@ -75,7 +78,7 @@ void GamePlayScene::start() {
     world_.add_actor(new Player{ &world_, Vector3{ 0.0f, 0.0f, 0.0f } });
     // 敵生成の追加
     //world_.add_actor(new EnemyGenerator{ &world_});
-    //world_.add_actor(new BEnemyGenerator{ &world_});
+    world_.add_actor(new BEnemyGenerator{ &world_});
     // レーダークラスを追加
     world_.add_actor(new Radar{ &world_ });
 
@@ -93,9 +96,9 @@ void GamePlayScene::start() {
     //　シーン終了フラグの初期化
     is_end_ = false;
     //エフェクトテスト
-    Graphics::effect_data()->load_effect(0, "Assets/FireBall/FireBall_Purple.efkefc");
+    //Graphics::effect_data()->load_effect(0, "Assets/FireBall/FireBall_Purple.efkefc");
     Vector3 effect_pos{ 0.0f,0.5f,0.0f };
-    int id=Graphics::effect_data()->play_effect(0,&effect_pos);
+    //int id=Graphics::effect_data()->play_effect(0,&effect_pos);
     //Graphics::effect_data()->move_effect(id,Vector3{0.0f,1.0f,0.0f});
 }
 

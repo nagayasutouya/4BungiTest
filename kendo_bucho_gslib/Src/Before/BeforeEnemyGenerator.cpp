@@ -3,7 +3,7 @@
 #include "BeforeEnemy.h"
 
 //Å‘åoŒ»”
-const int BEnemyMaxCount{ 20000 };
+const int BEnemyMaxCount{ 2000 };
 // oŒ»ŠÔŠu
 const float GenerateInterval{ 1.0f };
 

@@ -8,7 +8,7 @@ void Animation::load(std::istream& file) {
     clear();
     //アニメーション名取得
     char anim_name[128]{};
-    file.read(/*reinterpret_cast<char*>(&*/anim_name/*)*/, sizeof(anim_name));
+    file.read(anim_name, sizeof(anim_name));
     name_=anim_name;
     // ボーン数の読み込み
     int num_bone=0;
@@ -16,7 +16,7 @@ void Animation::load(std::istream& file) {
     for (int i = 0; i < num_bone; ++i) {
         // ボーン名の読み込み
         char bone_name[128]{};
-        file.read(/*reinterpret_cast<char*>(&*/bone_name/*)*/, sizeof(bone_name));
+        file.read(bone_name, sizeof(bone_name));
         std::string bone = bone_name;
         // キーフレーム数の読み込み
         int num_key_frame=0;

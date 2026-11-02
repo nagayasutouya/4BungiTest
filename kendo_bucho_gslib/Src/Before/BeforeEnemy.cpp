@@ -30,7 +30,7 @@ BEnemy::BEnemy(IWorld* world, const Vector3& position) :
 // 更新
 void BEnemy::update(float delta_time) {
     // 状態の更新
-    update_state(delta_time);
+    //update_state(delta_time);
     // 地面との衝突判定
     collide_field();
     // モーションを変更
