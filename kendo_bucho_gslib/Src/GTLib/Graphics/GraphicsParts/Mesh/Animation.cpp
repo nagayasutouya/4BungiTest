@@ -7,32 +7,25 @@ void Animation::load(std::istream& file) {
     // 消去
     clear();
     //アニメーション名取得
-    file >> name_;
+    char anim_name[128]{};
+    file.read(/*reinterpret_cast<char*>(&*/anim_name/*)*/, sizeof(anim_name));
+    name_=anim_name;
     // ボーン数の読み込み
-    int num_bone;
-    file >> num_bone;
+    int num_bone=0;
+    file.read(reinterpret_cast<char*>(&num_bone),sizeof(num_bone));
     for (int i = 0; i < num_bone; ++i) {
         // ボーン名の読み込み
-        std::string bone_name;
-        file >> bone_name;
+        char bone_name[128]{};
+        file.read(/*reinterpret_cast<char*>(&*/bone_name/*)*/, sizeof(bone_name));
+        std::string bone = bone_name;
         // キーフレーム数の読み込み
-        int num_key_frame;
-        file >> num_key_frame;
+        int num_key_frame=0;
+        file.read(reinterpret_cast<char*>(&num_key_frame),sizeof(num_key_frame));
         for (int j = 0; j < num_key_frame; ++j) {
             // キーフレームの読み込み
-            KeyFrame key_frame;
-            file >> key_frame.frame_no;
-            file >> key_frame.scale.x
-                >> key_frame.scale.y
-                >> key_frame.scale.z;
-            file >> key_frame.rotation.x
-                >> key_frame.rotation.y
-                >> key_frame.rotation.z
-                >> key_frame.rotation.w;
-            file >> key_frame.position.x
-                >> key_frame.position.y
-                >> key_frame.position.z;
-            bone_key_frames_[bone_name].push_back(key_frame);
+            KeyFrame key_frame{};
+            file.read(reinterpret_cast<char*>(&key_frame),sizeof(KeyFrame));
+            bone_key_frames_[bone].push_back(key_frame);
 
             // 最終フレームの更新
             last_frame_ = std::max(last_frame_, key_frame.frame_no);

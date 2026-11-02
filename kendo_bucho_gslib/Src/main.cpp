@@ -12,7 +12,7 @@ static const Vector2 FirstScreenSize{ 1920.0f,1080.0f };//スクリーンサイズの初期
 class MyGame : public Game {
 public:
     // コンストラクタ
-    MyGame() : Game{ (int)FirstScreenSize.x, (int)FirstScreenSize.y ,"DMFD",true } {}
+    MyGame() : Game{ (int)FirstScreenSize.x, (int)FirstScreenSize.y ,"KENDO",true } {}
     // 開始
     void start() override {
         // パイプラインステートの基本設定

@@ -455,6 +455,7 @@
     <ClInclude Include="Src\GTLib\GTLibCollision.h" />
     <ClInclude Include="Src\GTLib\GTLibMath.h" />
     <ClInclude Include="Src\GTLib\GTLibTextrueID.h" />
+    <ClInclude Include="Src\GTLib\GTTween.h" />
     <ClInclude Include="Src\GTLib\Input\GamePad.h" />
     <ClInclude Include="Src\GTLib\Input\Input.h" />
     <ClInclude Include="Src\GTLib\Input\KeyBoard.h" />

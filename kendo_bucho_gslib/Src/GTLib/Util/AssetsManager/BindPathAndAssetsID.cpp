@@ -3,6 +3,7 @@
 #include "GTLib/Util/SystemLog/CreatLog.h"
 #include "GTLib/GTLib.h"
 #include "GTLib/GTLibCollision.h"
+#include "GTLib/GTLibTextrueID.h"
 
 void LoadOriginData(std::string path, CreatLog& log) {
 	//アセットデータのパス読み込み
@@ -46,7 +47,7 @@ void BindPathAndAssetsID::Load(std::string genre, Row genre_list, AssetsData dat
 	else if (genre == genre_list.at(3))Graphics::load_effect(data.id_, data.path_.c_str(), data.scale_);
 	else if (genre == genre_list.at(4))Sound::load_bgm(data.id_, data.path_.c_str(), data.loop_);
 	else if (genre == genre_list.at(5))Sound::load_se(data.id_, data.path_.c_str(), data.play_count_, data.volume_);
-	else if (genre == genre_list.at(6))Graphics::load_texture(data.id_, data.path_.c_str());
+	else if (genre == genre_list.at(6))Graphics::load_texture(data.id_ + GTLibTextureID::Instance()->textrue_id_min(), data.path_.c_str());
 	//else if (genre == genre_list.at(7))gsLoadShader(data.id_, data.path_.c_str(), data.fragment_shader_name_.c_str());
 	//else if (genre == genre_list.at(8))gsLoadReflectionProbe(data.id_, data.path_.c_str());
 	//else if (genre == genre_list.at(9))gsLoadLightmap(data.id_, data.path_.c_str());
@@ -107,7 +108,7 @@ void BindPathAndAssetsID::Delete(std::string genre, Row genre_list, AssetsData d
 	else if (genre == genre_list.at(2))CollisionPhysics::delete_mesh_collider(data.id_);
 	else if (genre == genre_list.at(3))Graphics::delete_effect(data.id_);
 	else if (genre == genre_list.at(4) || genre == genre_list.at(5))Sound::delete_sound_effect(data.id_);
-	else if (genre == genre_list.at(6))Graphics::delete_texture(data.id_);
+	else if (genre == genre_list.at(6))Graphics::delete_texture(data.id_ + GTLibTextureID::Instance()->textrue_id_min());
 	//else if (genre == genre_list.at(7))gsDeleteShader(data.id_);
 	//else if (genre == genre_list.at(8))gsDeleteReflectionProbe(data.id_);
 	//else if (genre == genre_list.at(9))gsDeleteLightmap(data.id_);

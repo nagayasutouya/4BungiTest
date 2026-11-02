@@ -158,4 +158,3 @@ Vector3& operator /= (Vector3& lhs, float rhs) {
     lhs.z /= rhs;
     return lhs;
 }
-
