@@ -22,31 +22,19 @@ void MeshCollider::load(const std::string& file_name) {
     // ノードの読み込み
     size_t node_count{ 0 };
     // ノード数の読み込み
-    file >> node_count;
+    file.read(reinterpret_cast<char*>(&node_count), sizeof(size_t));
     nodes_.resize(node_count);
     for (Node& node : nodes_) {
-        file >> node.bounding_box.min_bound.x
-            >> node.bounding_box.min_bound.y
-            >> node.bounding_box.min_bound.z;
-        file >> node.bounding_box.max_bound.x
-            >> node.bounding_box.max_bound.y
-            >> node.bounding_box.max_bound.z;
-        file >> node.triangle_index >> node.num_triangles;
-        for (int& child : node.children) {
-            file >> child;
-        }
+        file.read(reinterpret_cast<char*>(&node), sizeof(Node));
     }
 
     // 三角形の読み込み
     size_t triangle_count{ 0 };
     // 三角形数の読み込み
-    file >> triangle_count;
+    file.read(reinterpret_cast<char*>(&triangle_count), sizeof(size_t));
     triangles_.resize(triangle_count);
     for (Triangle& tri : triangles_) {
-        file >> tri.vertices[0].x >> tri.vertices[0].y >> tri.vertices[0].z;
-        file >> tri.vertices[1].x >> tri.vertices[1].y >> tri.vertices[1].z;
-        file >> tri.vertices[2].x >> tri.vertices[2].y >> tri.vertices[2].z;
-        file >> tri.plane.normal.x >> tri.plane.normal.y >> tri.plane.normal.z >> tri.plane.d;
+        file.read(reinterpret_cast<char*>(&tri), sizeof(Triangle));
     }
 }
 // 球の衝突判定
