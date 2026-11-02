@@ -4,13 +4,13 @@
 
 // アニメーションファイル読み込み
 void AnimationSet::load(const std::string& file_path) {
-    std::ifstream file{ file_path };
+    std::ifstream file{ file_path, std::ios::binary };
     if (!file) {
         throw std::runtime_error("can not open " + file_path);
     }
     // アニメーション数の読み込み
-    int num_animations;
-    file >> num_animations;
+    int num_animations=0;
+    file.read(reinterpret_cast<char*>(&num_animations),sizeof(num_animations));
     animations_.resize(num_animations);
     for (Animation& animation : animations_) {
         // アニメーションデータの読み込み（ファイルストリームを渡す）

@@ -1064,6 +1064,9 @@
     <ClInclude Include="Src\GTLib\Util\Tween\Vector3Unit.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Src\GTLib\GTTween.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Mesh.hlsl" />

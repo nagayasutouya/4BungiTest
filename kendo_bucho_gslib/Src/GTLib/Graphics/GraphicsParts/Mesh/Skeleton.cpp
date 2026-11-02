@@ -5,7 +5,7 @@
 // ファイルの読み込み
 void Skeleton::load(const std::string& file_name) {
     // ファイルオープン
-    std::ifstream file{ file_name };
+    std::ifstream file{ file_name , std::ios::binary };
     if (!file) {
         throw std::runtime_error("can not open " + file_name);
     }
@@ -13,15 +13,17 @@ void Skeleton::load(const std::string& file_name) {
     clear();
     // ボーン数の読み込み
     int num_bone = 0;
-    file >> num_bone;
+    file.read(reinterpret_cast<char*>(&num_bone),sizeof(num_bone));
     for (int i = 0; i < num_bone; ++i) {
         // ボーンの読み込み
-        Bone bone;
-        file >> bone.name;
-        file >> bone.id;
-        file >> bone.parent_id;
-        file >> bone.parent_offset.x >> bone.parent_offset.y >> bone.parent_offset.z;
-        file >> bone.position.x >> bone.position.y >> bone.position.z;
+        Bone bone{};
+        char bone_name[128]{};
+        file.read(/*reinterpret_cast<char*>(&*/bone_name/*)*/ , sizeof(bone_name));
+        bone.name = bone_name;
+        file.read(reinterpret_cast<char*>(&bone.id), sizeof(int));
+        file.read(reinterpret_cast<char*>(&bone.parent_id), sizeof(int));
+        file.read(reinterpret_cast<char*>(&bone.parent_offset), sizeof(Vector3));
+        file.read(reinterpret_cast<char*>(&bone.position), sizeof(Vector3));
         bones_.push_back(bone);
     }
 }

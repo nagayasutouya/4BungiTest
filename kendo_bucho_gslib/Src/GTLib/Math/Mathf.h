@@ -25,6 +25,11 @@ namespace Mathf {
     float nth_power(float target, int n);
     // f ‚Ì•„†
     float sign(float f);
+    //üŒ`•âŠÔ (pwoer‚Í0`1)
+    template<typename T>
+    T LERP(float pwoer, T from, T goal){
+        return (from + ((goal - from) * pwoer));
+    }
 }
 
 #endif

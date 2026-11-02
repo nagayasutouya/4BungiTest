@@ -205,7 +205,7 @@ void PipelineSetup::create_pipeline_skinned_mesh(DXGI_FORMAT rtv_format, DXGI_FO
     ID3D10Blob* pCompilePS{};
     D3DCompileFromFile(L"Assets/Shader/Basic/SkinnedMesh.hlsl", NULL, NULL, "PS", "ps_5_0", compile_flag, 0, &pCompilePS, NULL);
 
-    // 入力レイアウトの設定
+    // 入力レイアウトの設定　頂点データのフォーマットを変更する　バッファ名,シェーダー側のID,頂点データのサイズを帰る場合もここDXGI_FORMAT_(byte数)_型名,先頭からのバイト数,一個の頂点に対して指定するタイプ,データをインスタン毎に送る場合の送る対象数
     D3D12_INPUT_ELEMENT_DESC input_elements[] = {
         { "POSITION",   0, DXGI_FORMAT_R32G32B32_FLOAT,    0,  0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
         { "NORMAL",     0, DXGI_FORMAT_R32G32B32_FLOAT,    0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
