@@ -11,12 +11,13 @@ class Animation;
 // スケルトンクラス
 class Skeleton {
 public:
-    struct Bone {                               // ボーン構造体
-        std::string             name;           // ボーン名
-        int                     id;             // ボーンID
-        int                     parent_id;      // 親ボーンID
-        Vector3                 parent_offset;  // 親ボーンへの相対座標
-        Vector3                 position;       // ボーンの絶対座標
+    // ボーン構造体
+    struct Bone {
+        std::string name;// ボーン名
+        int  id;// ボーンID
+        int  parent_id;// 親ボーンID
+        Vector3 parent_offset;// 親ボーンへの相対座標
+        Vector3 position;// ボーンの絶対座標
     };
 
 public:

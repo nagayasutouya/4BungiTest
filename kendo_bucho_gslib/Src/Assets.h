@@ -17,7 +17,7 @@ enum {
 
 enum {                      // テクスチャデータ
     //Texture_Skybox,         // スカイボックス
-    Texture_Title,          // タイトル
+    Texture_Title=100,          // タイトル
     Texture_Kendo,          // 剣道部長
     Texture_Karate,         // 空手部長
     Texture_Start,          // 開始メッセージ

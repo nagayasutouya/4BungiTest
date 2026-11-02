@@ -45,7 +45,7 @@ private:
     // 終了フレーム
     float last_frame_{ 0.0f };
     //アニメーション名
-    std::string name_{ "" };
+    std::string name_;
 };
 
 #endif

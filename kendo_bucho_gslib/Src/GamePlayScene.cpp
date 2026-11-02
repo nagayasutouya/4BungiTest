@@ -11,7 +11,7 @@
 // 開始
 void GamePlayScene::start() {
     // 剣道部長メッシュの読み込み
-    //Graphics::load_skinned_mesh(Mesh_Player, "Assets/model/Kendo/Kendo_mesh.txt", "Assets/model/Kendo/Kendo_skeleton.txt", "Assets/model/Kendo/Kendo_animations.txt");
+    Graphics::load_skinned_mesh(Mesh_Player, "Assets/Binary/kendo.mesh", "Assets/Binary/kendo.skel", "Assets/Binary/kendo.anim");
     // 剣道部長メッシュの読み込み
     //Graphics::load_instance_skinned_mesh(Mesh_Enemy, "Assets/model/Karate/Karate_mesh.txt", "Assets/model/Karate/Karate_skeleton.txt", "Assets/model/Karate/Karate_animations.txt");
     //Graphics::load_skinned_mesh(Mesh_Enemy, "Assets/model/Karate/Karate_mesh.txt", "Assets/model/Karate/Karate_skeleton.txt", "Assets/model/Karate/Karate_animations.txt");
@@ -19,7 +19,7 @@ void GamePlayScene::start() {
     // スカイボックス用テクスチャの読み込み
     //Graphics::load_mesh(Texture_Skybox, "Assets/Skydome/skydome_mesh.txt");
     // 校庭オクトリーの読み込み
-    //Graphics::load_mesh(Octree_Koutei, "Assets/model/Koutei/koutei_mesh.txt");
+    Graphics::load_mesh(Octree_Koutei, "Assets/Binary/koutei.mesh");
     // 校庭衝突判定用オクトリーの読み込み
     //Graphics::load_mesh(Octree_KouteiCollider, "Assets/model/Koutei/koutei_collider.oct");
 
@@ -74,7 +74,7 @@ void GamePlayScene::start() {
     // プレーヤーを追加
     world_.add_actor(new Player{ &world_, Vector3{ 0.0f, 0.0f, 0.0f } });
     // 敵生成の追加
-    world_.add_actor(new EnemyGenerator{ &world_});
+    //world_.add_actor(new EnemyGenerator{ &world_});
     //world_.add_actor(new BEnemyGenerator{ &world_});
     // レーダークラスを追加
     world_.add_actor(new Radar{ &world_ });
