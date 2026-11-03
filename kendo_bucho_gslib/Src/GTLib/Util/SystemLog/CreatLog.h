@@ -37,6 +37,7 @@ public:
 	void save();
 public:
 	const std::string LogFilePath{ "LocalLog/" };
+	const std::string RelativeLogFilePath{ "LocalLog\\" };//ƒƒO‚ÌÅ‰‚ÌƒpƒX
 private:
 	CSVReader csv_;
 	std::string path_;

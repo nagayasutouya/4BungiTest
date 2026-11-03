@@ -23,9 +23,9 @@ bool CollisionPhysics::CollisionSphereAndSphere(const Vector3& flom_pos, const f
 }
 
 // メッシュコライダ―ファイルの読み込み
-MeshCollider* CollisionPhysics::load_mesh_collider(std::uint32_t mesh_collider_id, const std::string& file_name) {
+MeshCollider* CollisionPhysics::load_mesh_collider(std::uint32_t mesh_collider_id, const std::string& node_file_name, const std::string& triangle_file_name) {
 	MeshCollider* mesh_c = new MeshCollider{};
-	mesh_c->load(file_name);
+	mesh_c->load(node_file_name,triangle_file_name);
 	mesh_colliders_[mesh_collider_id] = std::unique_ptr<MeshCollider>(mesh_c);
 	return mesh_c;
 }
