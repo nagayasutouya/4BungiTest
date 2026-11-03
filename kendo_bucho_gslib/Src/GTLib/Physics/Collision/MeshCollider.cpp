@@ -10,14 +10,19 @@ void MeshCollider::clear() {
     triangles_.clear();
 }
 // ファイルの読み込み
-void MeshCollider::load(const std::string& file_name) {
-    std::ifstream file{ file_name };
+void MeshCollider::load(const std::string& node_file_name, const std::string& triangle_file_name) {
+    load_node(node_file_name);
+    load_triangle(triangle_file_name);
+}
+//ノード読み込み
+void MeshCollider::load_node(const std::string& file_name){
+    std::ifstream file{ file_name, std::ios::binary };
     if (!file) {
         // ファイルがオープンできなかった
         throw std::runtime_error("can not open " + file_name);
     }
     // 消去
-    clear();
+    nodes_.clear();
 
     // ノードの読み込み
     size_t node_count{ 0 };
@@ -27,6 +32,16 @@ void MeshCollider::load(const std::string& file_name) {
     for (Node& node : nodes_) {
         file.read(reinterpret_cast<char*>(&node), sizeof(Node));
     }
+}
+//トライアングル読み込み
+void MeshCollider::load_triangle(const std::string& file_name){
+    std::ifstream file{ file_name , std::ios::binary };
+    if (!file) {
+        // ファイルがオープンできなかった
+        throw std::runtime_error("can not open " + file_name);
+    }
+    // 消去
+    triangles_.clear();
 
     // 三角形の読み込み
     size_t triangle_count{ 0 };
