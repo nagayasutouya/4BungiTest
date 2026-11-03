@@ -161,6 +161,7 @@ private:
 	bool check(int target, std::string from) {
 		return target == stoi(from);
 	}
+	//外部データを取り込む
 	AssetsData input(Row row, int cutegory_id, std::string genre_id) {
 		AssetsData result;
 		result.name_ = row.at(0);
@@ -172,18 +173,21 @@ private:
 			result.fragment_shader_name_ = row.at(3);
 		}
 		else if (genre_id == AssetsLoadGenreName::SE) {
-			result.play_count_ = stoi(row.at(3));
-			result.volume_ = stoi(row.at(4));
+			result.play_count_= stoi(row.at(3));
+			result.volume_=stoi(row.at(4));
 		}
 		else if (genre_id == AssetsLoadGenreName::BGM) {
-			result.loop_ = (stoi(row.at(3)) > 0) ? true : false;
+			result.loop_= (stoi(row.at(3))> 0)?true:false;
 		}
 		else if (genre_id == AssetsLoadGenreName::SkinnedMesh) {
 			result.skelton_path_ = row.at(3);
-			result.animation_path_ = row.at(4);
+			result.animation_path_=row.at(4);
 		}
 		else if (genre_id == AssetsLoadGenreName::Effect) {
 			result.scale_ = stof(row.at(3));
+		}
+		else if (genre_id == AssetsLoadGenreName::Octree) {
+			result.triangle_path_ = row.at(3);
 		}
 		return result;
 	}

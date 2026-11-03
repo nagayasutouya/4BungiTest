@@ -140,16 +140,10 @@ namespace Util {
 		return result;
 	}
 	float PlusOrMinus(const float target) {
-		if (target < 0.0f) {
-			return -1.0f;
-		}
-		return 1.0f;
+		return (target > 0.0f) ? 1.0f : (target < 0.0f) ? -1.0f : 0.0f;
 	}
 	int PlusOrMinus(const int target) {
-		if (target < 0) {
-			return -1;
-		}
-		return 1;
+		return (target > 0) ? 1 : (target < 0) ? -1 : 0;
 	}
 	//•¶Žš—ñ‚Ì•¶Žš”‚ð•Ô‚· ‚½‚¾‚µUTF-8‚É‚µ‚©Žg‚¦‚È‚¢
 	unsigned int StringCount(std::string data){

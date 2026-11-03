@@ -32,7 +32,7 @@ public:
     ~MeshCollider() = default;
 
     // ファイルの読み込み
-    void load(const std::string& file_name);
+    void load(const std::string& node_file_name, const std::string& triangle_file_name);
     // 球との衝突判定
     bool intersect_sphere(const Sphere& sphere, SphereHit* out_hit = nullptr,
         int max_iterations = 4) const;
@@ -43,6 +43,10 @@ public:
     void clear();
 
 private:
+    //ノード読み込み
+    void load_node(const std::string& file_name);
+    //トライアングル読み込み
+    void load_triangle(const std::string& file_name);
     // 内部探索用再帰関数 (球: 面領域)
     void traverse_sphere_face(const Node& node, Sphere& current_sphere,
         Vector3& total_push_out, bool& collided, float& max_penetration,

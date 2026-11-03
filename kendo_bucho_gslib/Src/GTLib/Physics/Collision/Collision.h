@@ -20,8 +20,7 @@ namespace CollisionPhysics {
 	bool CollisionSphereAndSphere(const Vector3& flom_pos, const float flom_radius, const Vector3& at_pos, const float at_radius );
 
     // メッシュコライダ―ファイルの読み込み
-    MeshCollider* load_mesh_collider(std::uint32_t mesh_collider_id,
-        const std::string& file_name);
+    MeshCollider* load_mesh_collider(std::uint32_t mesh_collider_id, const std::string& node_file_name, const std::string& triangle_file_name);
     // メッシュコライダ―の削除
     void delete_mesh_collider(std::uint32_t mesh_collider_id);
     // メッシュコライダ―の取得
